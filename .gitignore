@@ -47,3 +47,9 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+main.*
+
+!main.text
+!main.pdf
+!references.bib
