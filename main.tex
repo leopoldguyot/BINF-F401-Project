@@ -1,0 +1,85 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[T1]{fontenc}
+
+\usepackage[english]{babel}
+
+\usepackage{graphicx}
+
+\usepackage{multicol}
+
+\usepackage{floatrow}
+
+\usepackage[margin = 1in]{geometry}
+
+\usepackage{float}
+
+\usepackage[hidelinks, urlcolor=cyan]{hyperref}
+
+\usepackage{url}
+
+\usepackage{natbib}
+
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear,open={(},close={)}}
+
+\usepackage{csquotes}
+
+\usepackage{fancyhdr}
+
+\usepackage{lipsum}
+
+%\addbibresource{references.bib}
+
+\title{\Large BINF-F401 Project \\
+\huge Title}
+
+
+\author{
+	Draguet Simon
+	\and
+	Godin Maximilien
+	\and
+	Guyot Léopold
+	}
+
+\date{\today}
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength{\headheight}{32.3pt}
+\fancyhead{}\fancyfoot{}
+\fancyhead[L]{\includegraphics[scale = 0.05]{figures/LOGO_Universite _libre_bruxelles.png}}
+\fancyhead[R]{Title}
+\fancyfoot[R]{\thepage}
+
+\maketitle
+
+\begin{multicols}{2}
+	hallo
+\section{Introduction}
+\lipsum
+
+\section{Methods}
+\lipsum[4]
+\subsection{Data Retrieval}
+\begin{scriptsize}
+	\textbf{Associated script : \href{https://github.com/leopoldguyot/BINF-F401-Project/*}{.R}}
+\end{scriptsize}
+
+\lipsum[4]
+\subsection{Differential Expression Analysis}
+\lipsum[4]
+
+\section{Results and Discussion}
+\lipsum
+\subsection{Graphic exploration}
+\lipsum[5]
+
+\bibliography{references}
+
+\end{multicols}
+\end{document}
