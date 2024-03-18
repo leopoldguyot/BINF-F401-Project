@@ -50,6 +50,9 @@ rsconnect/
 
 main.*
 
-!main.text
+!main.tex
 !main.pdf
 !references.bib
+
+
+.DS_Store
