@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::styler, any::roxygen2, any::biocthis
+          extra-packages: styler, roxygen2, biocthis
           needs: styler, biocthis
 
       - name: Enable styler cache
