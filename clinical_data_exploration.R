@@ -18,6 +18,7 @@ distribution_plot <- function(data, variable, title){
               x = variable,
               y = "Frequency")
 }
+
 ######### Body #########
 clinical_data <- read.table("data/clinical_data.tsv",
  sep = "\t",
@@ -28,6 +29,7 @@ clinical_data$DTHVNT <- as.factor(clinical_data$DTHVNT)
 clinical_data$DTHHRDY <- as.factor(clinical_data$DTHHRDY)
 clinical_data$COHORT <- as.factor(clinical_data$COHORT)
 clinical_data$SMPTHNTS <- as.factor(clinical_data$SMPTHNTS)
+
 
 plot <- lapply(colnames(clinical_data)[-c(1:2, 13:14)], function(x){
     plot <- distribution_plot(clinical_data, x, x)
@@ -61,4 +63,41 @@ ggplot(data = melted_cor, aes(x=Var1, y=Var2, fill=value)) +
 ggplot(data = melted_cov, aes(x=Var1, y=Var2, fill=value)) +
     geom_tile()
 
+# mise a l'echelle de certaines variable 
+clinical_data_scale <- data.frame(clinical_data$SMPLID,clinical_data$SUBJID,
+                                  clinical_data$COHORT,clinical_data$SMPTHNTS,
+                                  clinical_data$SMPLID.1,clinical_data$IMGURL,
+                                  clinical_data$SEX,clinical_data$DTHHRDY,
+                                  clinical_data$DTHVNT)
+scaleAGE <- scale(clinical_data$AGE)
+scaleHGHT <- scale(clinical_data$HGHT)
+scaleWGHT <- scale(clinical_data$WGHT)
+scaleBMI <- scale(clinical_data$BMI)
+scaleTRISCHD <- scale(clinical_data$TRISCHD)
 
+clinical_data_scale$AGE_scale <- scaleAGE 
+clinical_data_scale$AGE <- clinical_data$AGE
+clinical_data_scale$HGHT_scale <- scaleHGHT
+clinical_data_scale$WGHT_scale <- scaleWGHT
+clinical_data_scale$BMI_scale <- scaleBMI
+clinical_data_scale$TRISCHD_scale <- scaleTRISCHD
+hist(scaleBMI)
+
+plot <- lapply(colnames(clinical_data_scale)[-c(1:2, 5:6)], function(x){
+  plot <- distribution_plot(clinical_data_scale, x, x)
+  path <- file.path("figures", "clinical_data_scale_var_dist", paste0(x, ".pdf"))
+  ggsave(filename = path,
+         plot,
+         width = 10,
+         height = 10)
+})
+
+# test de normalité 
+shapiro.test(clinical_data$AGE)
+shapiro <- lapply(clinical_data, function(x){
+  if(is.numeric(x)){
+    shapiro.test(x)
+  }
+})
+names(shapiro) <- names(clinical_data)
+shapiro
