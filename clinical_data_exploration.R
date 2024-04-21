@@ -91,7 +91,56 @@ plot <- lapply(colnames(clinical_data_scale)[-c(1:2, 5:6)], function(x){
          width = 10,
          height = 10)
 })
+# transformation Racine carré 
+clinical_data_racine_caree <- data.frame(clinical_data$SMPLID,clinical_data$SUBJID,
+                                  clinical_data$COHORT,clinical_data$SMPTHNTS,
+                                  clinical_data$SMPLID.1,clinical_data$IMGURL,
+                                  clinical_data$SEX,clinical_data$DTHHRDY,
+                                  clinical_data$DTHVNT)
+racineAGE <- sqrt(clinical_data$AGE)
+racineHGHT <- sqrt(clinical_data$HGHT)
+racineWGHT <- sqrt(clinical_data$WGHT)
+racineBMI <- sqrt(clinical_data$BMI)
+racineTRISCHD <- sqrt(clinical_data$TRISCHD)
+clinical_data_racine_caree$AGE_racine <- racineAGE 
+clinical_data_racine_caree$HGHT_racine <- racineHGHT
+clinical_data_racine_caree$WGHT_racine <- racineWGHT
+clinical_data_racine_caree$BMI_racine <- racineBMI
+clinical_data_racine_caree$TRISCHD_racine <- racineTRISCHD
 
+plot <- lapply(colnames(clinical_data_racine_caree)[-c(1:2, 5:6)], function(x){
+  plot <- distribution_plot(clinical_data_racine_caree, x, x)
+  path <- file.path("figures", "clinical_data_racine_caree_var_dist", paste0(x, ".pdf"))
+  ggsave(filename = path,
+         plot,
+         width = 10,
+         height = 10)
+})
+#transoformation log 
+clinical_data_log <- data.frame(clinical_data$SMPLID,clinical_data$SUBJID,
+                                         clinical_data$COHORT,clinical_data$SMPTHNTS,
+                                         clinical_data$SMPLID.1,clinical_data$IMGURL,
+                                         clinical_data$SEX,clinical_data$DTHHRDY,
+                                         clinical_data$DTHVNT)
+logAGE <- log(clinical_data$AGE)
+logHGHT <- log(clinical_data$HGHT)
+logWGHT <- log(clinical_data$WGHT)
+logBMI <- log(clinical_data$BMI)
+logTRISCHD <- log(clinical_data$TRISCHD)
+clinical_data_log$AGE_log <- logAGE 
+clinical_data_log$HGHT_log <- logHGHT
+clinical_data_log$WGHT_log <- logWGHT
+clinical_data_log$BMI_log <- logBMI
+clinical_data_log$TRISCHD_log <- logTRISCHD
+
+plot <- lapply(colnames(clinical_data_log)[-c(1:2, 5:6)], function(x){
+  plot <- distribution_plot(clinical_data_log, x, x)
+  path <- file.path("figures", "clinical_data_log_var_dist", paste0(x, ".pdf"))
+  ggsave(filename = path,
+         plot,
+         width = 10,
+         height = 10)
+})
 # test de normalité 
 shapiro.test(clinical_data$AGE)
 shapiro <- lapply(clinical_data, function(x){
@@ -101,3 +150,24 @@ shapiro <- lapply(clinical_data, function(x){
 })
 names(shapiro) <- names(clinical_data)
 shapiro
+#test de normalité sur donné transformé avec racine 
+shapiro_racine <- lapply(clinical_data_racine_caree, function(x){
+  if(is.numeric(x)){
+    shapiro.test(x)
+  }
+})
+shapiro_racine
+#test de normalité sur donnée transformé avec log 
+shapiro_log <- lapply(clinical_data_log, function(x){
+  if(is.numeric(x)){
+    shapiro.test(x)
+  }
+})
+shapiro_log
+#test de normalité sur donnée scale 
+shapiro_scale <- lapply(clinical_data_scale, function(x){
+  if(is.numeric(x)){
+    shapiro.test(x)
+  }
+})
+shapiro_scale
