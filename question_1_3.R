@@ -36,4 +36,4 @@ ggplot(data = clinical_data, aes(x = seq_along(res_age),y = res_age)) +
     geom_point() +
     geom_hline(yintercept = 0, linetype = "dashed", color = "red")
 
-
+clinical_data$test <- clinical_data$AGE - clinical_data$res_age
