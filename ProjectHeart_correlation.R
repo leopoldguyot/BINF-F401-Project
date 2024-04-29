@@ -158,3 +158,217 @@ leveneTest(log(val_matrix$AGE), factor(val_matrix$COHORT), data=val_matrix)
 
 model  <- lm(AGE ~ COHORT, data = val_matrix)
 shapiro.test(residuals(model))
+
+
+
+
+
+#Correlation between binary variables and quantitative variables
+
+shap_pval <- c()
+shap_name <- c()
+wilcox_pval <- c()
+wilcox_name <- c()
+
+#Sex and Age
+
+res <- shapiro.test(val_matrix$AGE[val_matrix$SEX=="Male"]) #not a normal distribution
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "AgeMale")
+res <- shapiro.test(val_matrix$AGE[val_matrix$SEX=="Female"]) #not normal
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "AgeFemale")
+
+res <- wilcox.test(AGE~SEX, data=val_matrix) #pval = 0.1524 => H0: pas de différence entre les deux groupes
+wilcox_pval <- c(wilcox_pval, res$p.value) #pas de corrélation entre l'âge et le sexe
+wilcox_name <- c(wilcox_name, 'AgeSex')
+#If we consider that the distrib are normal because central limit theorem
+t.test(AGE~SEX, data=val_matrix) #0.06 pas de réelle différence entre les deux moyennes
+
+#Sex and Height
+
+res <- shapiro.test(val_matrix$HGHT[val_matrix$SEX=="Male"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "HeightMale")
+res <- shapiro.test(val_matrix$HGHT[val_matrix$SEX=="Female"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "HeightFemale")
+
+res <- wilcox.test(HGHT~SEX, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'HeightSex')
+
+#Sex and Weight
+
+res <- shapiro.test(val_matrix$WGHT[val_matrix$SEX=="Male"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "WeightMale")
+res <- shapiro.test(val_matrix$WGHT[val_matrix$SEX=="Female"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "WeightFemale")
+
+res <- wilcox.test(WGHT~SEX, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'WeightSex')
+
+#Sex and BMI
+
+res <- shapiro.test(val_matrix$BMI[val_matrix$SEX=="Male"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "BMIMale")
+res <- shapiro.test(val_matrix$BMI[val_matrix$SEX=="Female"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "BMIFemale")
+
+res <- wilcox.test(BMI~SEX, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'BMISex')
+
+#Sex and Trisch
+
+res <- shapiro.test(val_matrix$TRISCHD[val_matrix$SEX=="Male"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "TRISCHDMale")
+res <- shapiro.test(val_matrix$TRISCHD[val_matrix$SEX=="Female"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "TRISCHDFemale")
+
+res <- wilcox.test(TRISCHD~SEX, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'TRISCHDSex')
+
+#Cohort and Age
+
+res <- shapiro.test(val_matrix$AGE[val_matrix$COHORT=="Postmortem"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "AgePM")
+res <- shapiro.test(val_matrix$AGE[val_matrix$COHORT=="Organ Donor (OPO)"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "AgeOD")
+
+res <- wilcox.test(AGE~COHORT, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'AgeCohort')
+
+#Sex and Height
+
+res <- shapiro.test(val_matrix$HGHT[val_matrix$COHORT=="Postmortem"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "HeightPM")
+res <- shapiro.test(val_matrix$HGHT[val_matrix$COHORT=="Organ Donor (OPO)"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "HeightOD")
+
+res <- wilcox.test(HGHT~COHORT, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'HeightCohort')
+
+#Sex and Weight
+
+res <- shapiro.test(val_matrix$WGHT[val_matrix$COHORT=="Postmortem"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "WeightPM")
+res <- shapiro.test(val_matrix$WGHT[val_matrix$COHORT=="Organ Donor (OPO)"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "WeightOD")
+
+res <- wilcox.test(WGHT~COHORT, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'WeightCohort')
+
+#Sex and BMI
+
+res <- shapiro.test(val_matrix$BMI[val_matrix$COHORT=="Postmortem"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "BMIPM")
+res <- shapiro.test(val_matrix$BMI[val_matrix$COHORT=="Organ Donor (OPO)"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "BMIOD")
+
+res <- wilcox.test(BMI~COHORT, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'BMICohort')
+
+#Sex and Trisch
+
+res <- shapiro.test(val_matrix$TRISCHD[val_matrix$COHORT=="Postmortem"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "TRISCHDPM")
+res <- shapiro.test(val_matrix$TRISCHD[val_matrix$COHORT=="Organ Donor (OPO)"])
+shap_pval <- c(shap_pval, res$p.value)
+shap_name <- c(shap_name, "TRISCHDOD")
+
+res <- wilcox.test(TRISCHD~COHORT, data=val_matrix)
+wilcox_pval <- c(wilcox_pval, res$p.value)
+wilcox_name <- c(wilcox_name, 'TRISCHDCohort')
+
+corrected_shap <- p.adjust(shap_pval, method = 'bonferroni')
+corrected_wilc <- p.adjust(wilcox_pval, method = 'bonferroni')
+shap_data <- data.frame(pval = shap_pval,
+                        pval_corrected = corrected_shap,
+                        names = shap_name)
+#only weight variable has a normal distribution in the different groups (pval > 0.05)
+t.test(WGHT~SEX, data=val_matrix) #means are different, then some correlation
+t.test(WGHT~COHORT, data=val_matrix) #means not different, no correlation
+
+wilcox_data <- data.frame(quant_var = c('Age', 'Height', 'Weight', 'BMI', 'Trisch'),
+                          sex = corrected_wilc[1:5],
+                          cohort = corrected_wilc[6:10])
+#H0 => no significant differences between the two groups
+#Thus, there is a correlation between the Sex variable and HGHT, WGHT and TRISCH
+#Also correlation between COHORT and AGE, HGHT and TRISCHT
+
+
+#Correlation between categorical variables => Cramer's V
+library(rcompanion)
+
+chisq.test(table(val_matrix$SEX, val_matrix$COHORT)) #p-val ptet à corriger, ici sont bien dépendantes
+cramerV(table(val_matrix$SEX, val_matrix$COHORT), bias.correct = TRUE) #correlation value, allowed because base on X2, non-param
+#0.1999
+#0 - 0.2 -> weak association
+#0.2 - 0.6 -> middle association
+#0.6 - 1 -> strong association
+
+chisq.test(table(val_matrix$SEX, val_matrix$DTHVNT)) #may be incorrect because some cells are very low => only consider No and Yes
+chisq.test(val_matrix$SEX[val_matrix$DTHVNT!='Unknown'],
+           val_matrix$DTHVNT[val_matrix$DTHVNT!='Unknown'])
+DTHVNT_remov <- as.data.frame.matrix(table(val_matrix$SEX, val_matrix$DTHVNT))
+DTHVNT_remov[2] <- NULL
+cramerV(as.matrix(DTHVNT_remov), bias.correct = TRUE) #0.1868
+
+chisq.test(table(val_matrix$SEX, val_matrix$DTHHRDY)) #may delete last column
+chisq.test(val_matrix$SEX[val_matrix$DTHHRDY!="Violent and Fast Death"],
+           val_matrix$DTHHRDY[val_matrix$DTHHRDY!="Violent and Fast Death"])
+DTHHRDY_table <- as.data.frame.matrix(table(val_matrix$SEX, val_matrix$DTHHRDY))
+DTHHRDY_table[5] <- NULL
+cramerV(as.matrix(DTHHRDY_table), bias.correct = TRUE) #0.2255
+
+chisq.test(table(val_matrix$COHORT, val_matrix$DTHVNT)) #may be incorrect
+chisq.test(val_matrix$COHORT[val_matrix$DTHVNT!='Unknown'],
+           val_matrix$DTHVNT[val_matrix$DTHVNT!='Unknown'])
+cramerV(table(val_matrix$COHORT,val_matrix$DTHVNT), bias.correct = TRUE) #0.8613
+
+chisq.test(table(val_matrix$COHORT, val_matrix$DTHHRDY)) #may be incorrect
+chisq.test(val_matrix$COHORT[val_matrix$DTHHRDY!="Violent and Fast Death"],
+           val_matrix$DTHHRDY[val_matrix$DTHHRDY!="Violent and Fast Death"])
+DTHHRDY_table2 <- as.data.frame.matrix(table(val_matrix$COHORT, val_matrix$DTHHRDY))
+DTHHRDY_table2[5] <- NULL
+cramerV(as.matrix(DTHHRDY_table2), bias.correct = TRUE) #0.8813
+
+chisq.test(table(val_matrix$DTHVNT, val_matrix$DTHHRDY)) #may be incorrect
+n_DTHVNT <- val_matrix$DTHVNT[val_matrix$DTHHRDY!="Violent and Fast Death"]
+n_DTHHRDY <- val_matrix$DTHHRDY[val_matrix$DTHHRDY!="Violent and Fast Death"]
+chisq.test(n_DTHVNT[n_DTHVNT!="Unknown"],
+           n_DTHHRDY[n_DTHVNT!="Unknown"])
+DTHHRDY_table <- as.data.frame.matrix(table(val_matrix$COHORT, val_matrix$DTHHRDY))
+DTHHRDY_table[5] <- NULL
+cramerV(table(n_DTHVNT, n_DTHHRDY), bias.correct = TRUE) #0.6855
+
+chisq_pval <- c(0.0006642102,0.001469577,0.0006295674,1.727819e-47,1.589829e-47,6.091008e-57)
+corr_chisq <- p.adjust(chisq_pval) #still below 0.05
+cramerCorr <- data.frame(SEX = c(1, 0.1999, 0.1868,0.2255),
+                         COHORT = c(0.1999,1,0.8613,0.8813),
+                         DTHVNT = c(0.1868,0.8613,1,0.6855),
+                         DTHHRDY = c(0.2255, 0.8813, 0.6855, 1))
+rownames(cramerCorr) <- c('SEX', 'COHORT', 'DTHVNT', 'DTHHRDY')
+corrplot(as.matrix(cramerCorr))
