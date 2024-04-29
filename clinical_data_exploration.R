@@ -141,6 +141,37 @@ plot <- lapply(colnames(clinical_data_log)[-c(1:2, 5:6)], function(x){
          width = 10,
          height = 10)
 })
+# Inverse Normal Transformation (rank based)
+clinical_data_Inverse_Normal_Transformation<- data.frame(clinical_data$SMPLID,clinical_data$SUBJID,
+                                clinical_data$COHORT,clinical_data$SMPTHNTS,
+                                clinical_data$SMPLID.1,clinical_data$IMGURL,
+                                clinical_data$SEX,clinical_data$DTHHRDY,
+                                clinical_data$DTHVNT)
+INT_AGE <-  qnorm((rank(clinical_data$AGE,na.last="keep")-0.5)/sum(!is.na(clinical_data$AGE)))
+INT_HGHT <-  qnorm((rank(clinical_data$HGHT,na.last="keep")-0.5)/sum(!is.na(clinical_data$HGHT)))
+INT_WGHT <-  qnorm((rank(clinical_data$WGHT,na.last="keep")-0.5)/sum(!is.na(clinical_data$WGHT)))
+INT_BMI <-  qnorm((rank(clinical_data$BMI,na.last="keep")-0.5)/sum(!is.na(clinical_data$BMI)))
+INT_TRISCHD <-  qnorm((rank(clinical_data$TRISCHD,na.last="keep")-0.5)/sum(!is.na(clinical_data$TRISCHD)))
+
+
+
+clinical_data_Inverse_Normal_Transformation$AGE_INT <- INT_AGE 
+clinical_data_Inverse_Normal_Transformation$HGHT_INT <- INT_HGHT
+clinical_data_Inverse_Normal_Transformation$WGHT_INT <- INT_WGHT
+clinical_data_Inverse_Normal_Transformation$BMI_INT <- INT_BMI
+clinical_data_Inverse_Normal_Transformation$TRISCHD_INT <- INT_TRISCHD
+hist(clinical_data_Inverse_Normal_Transformation$AGE_INT)
+
+plot <- lapply(colnames(clinical_data_Inverse_Normal_Transformation)[-c(1:2, 5:6)], function(x){
+  plot <- distribution_plot(clinical_data_Inverse_Normal_Transformation, x, x)
+  path <- file.path("figures", "clinical_data_Inverse_Normal_Transformation_var_dist", paste0(x, ".pdf"))
+  ggsave(filename = path,
+         plot,
+         width = 10,
+         height = 10)
+})
+
+
 # test de normalité 
 shapiro.test(clinical_data$AGE)
 shapiro <- lapply(clinical_data, function(x){
@@ -171,3 +202,15 @@ shapiro_scale <- lapply(clinical_data_scale, function(x){
   }
 })
 shapiro_scale
+# test de normalité  sur INT 
+shapiro_INT <- lapply(clinical_data_Inverse_Normal_Transformation, function(x){
+  if(is.numeric(x)){
+    shapiro.test(x)
+  }
+})
+shapiro_INT
+# save clinical_data_Inverse_Normal_Transformation 
+write.table(clinical_data_Inverse_Normal_Transformation, "data/clinical_data_Inverse_Normal_Transformation.tsv", sep="\t")
+test <- clinical_data_test <- read.table("data/clinical_data_Inverse_Normal_Transformation.tsv",
+                                    sep = "\t",
+                                    header = TRUE)
