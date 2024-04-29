@@ -13,7 +13,6 @@ RNAcount <- read.table(file = 'RNA_read_counts.tsv', sep = '\t', header = TRUE)
 
 #Q1 Explore clinical variables
 
-
 #AGE = Age at death
 #SEX = 1 (Male) & 2 (Female)
 #HGHT = height of donor (inch)
@@ -32,114 +31,6 @@ RNAcount <- read.table(file = 'RNA_read_counts.tsv', sep = '\t', header = TRUE)
   #1 = Yes
   #98 = Not Reported
   #99 = Unknown  
-
-
-#Q1.1 Distribution of the clinical variables
-
-
-  #sex distribution
-sex_df <- data.frame(
-  Gender=c("Male", "Female"), 
-  Quantity=c(length(clinical$SEX[clinical$SEX==1]), length(clinical$SEX[clinical$SEX==2]))
-  )
-
-ggplot(sex_df, aes(x=Gender, y=Quantity)) + 
-  geom_bar(stat='identity') +
-  ggtitle("Number of Males and Females")
-
-  #age distribution
-ggplot(clinical, aes(x=AGE)) + geom_density() + ggtitle("Distribution density of the age at death")
-
-  #women often live longer than men
-gender <- c()
-for (i in clinical$SEX){
-  if (i == 1){
-    gender <- c(gender, "Male")
-  }
-  else{
-    gender <- c(gender, "Female")
-  }
-}
-
-wm_df <- data.frame(
-  sex <- gender,
-  death <- clinical$AGE
-)
-
-ggplot(wm_df, aes(x=death, group=sex, colour=sex)) + 
-  geom_density() +
-  ggtitle('Distribution density of age at death by gender')
-
-  #height distribution (inch)
-ggplot(clinical, aes(x=HGHT)) + geom_density() + ggtitle("Distribution density of the height (inch)")
-height_cm_df <- data.frame(Height <- clinical$HGHT* 2.54)
-ggplot(height_cm_df, aes(x=Height)) + geom_density() + ggtitle("Distribution density of the height (cm)")
-
-  #women generally shorter
-height_df <- data.frame(
-  sex <- gender,
-  height <- clinical$HGHT * 2.54
-)
-
-ggplot(height_df, aes(x=height, group=sex, colour=sex)) +
-  geom_density() +
-  ggtitle('Distribition density of height (cm) by gender')
-
-  #weight (pounds)
-ggplot(clinical, aes(x=WGHT)) + geom_density() + ggtitle("Distribution density of the weight (pounds)")
-weight_kg_df <- data.frame(Weight <- clinical$WGHT * 0.45359237)
-ggplot(weight_kg_df, aes(x=Weight)) + geom_density() + ggtitle("Distribution density of the weight (kg)")
-
-  #BMI
-ggplot(clinical, aes(x=BMI)) + geom_density() + ggtitle("Distribution density of the body mass indicator")
-
-  #cohort
-cohort_df <- data.frame(
-  type=c("Postmortem", "Organ Donor"), 
-  values=c(length(clinical$COHORT[clinical$COHORT=='Postmortem']), length(clinical$COHORT[clinical$COHORT=='Organ Donor (OPO)']))
-)
-
-ggplot(cohort_df, aes(x=type, y=values)) + 
-  geom_bar(stat='identity') + 
-  ggtitle("Number of Donors and Postmortem")
-
-  #trischd, ischemic time
-ggplot(clinical, aes(x=TRISCHD)) + 
-  geom_density() + 
-  ggtitle("Distribution density of the ischemic time (min)")
-
-  #DTHHRDY = Hardy scale (type of death)
-hardy_scale <- c()
-for (i in clinical$DTHHRDY){
-  if (i == 0){hardy_scale <- c(hardy_scale, 'Ventilator Case')}
-  if (i == 1){hardy_scale <- c(hardy_scale, 'Violent and Fast Death')}
-  if (i == 2){hardy_scale <- c(hardy_scale, 'Fast Death of Natural Causes')}
-  if (i == 3){hardy_scale <- c(hardy_scale, 'Intermediate Death')}
-  if (i == 4){hardy_scale <- c(hardy_scale, 'Slow Death')}
-}
-
-hardy_df <- data.frame(
-  type <- hardy_scale,
-  number <- clinical$DTHHRDY
-)
-
-ggplot(hardy_df, aes(x=number, group=type, fill=type)) + 
-  geom_bar() +
-  ggtitle('Types of death')
-
-  ##DTHVNT (ventilator assistance)
-vent_df <- data.frame(
-  Types <- c('No', 'Yes', 'Not Reported', 'Unknown'),
-  Quantity <- c(length(clinical$DTHVNT[clinical$DTHVNT==0]),
-                length(clinical$DTHVNT[clinical$DTHVNT==1]),
-                length(clinical$DTHVNT[clinical$DTHVNT==98]),
-                length(clinical$DTHVNT[clinical$DTHVNT==99]))
-)
-
-ggplot(vent_df, aes(x=Types, y=Quantity, fill=Types)) + 
-  geom_bar(stat='identity') +
-  ggtitle("Ventilatory Assistance")
-
 
 #Correlation
 val_matrix <- cbind(clinical[3:8], clinical[10:12])
