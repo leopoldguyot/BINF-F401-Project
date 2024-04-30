@@ -365,10 +365,35 @@ DTHHRDY_table[5] <- NULL
 cramerV(table(n_DTHVNT, n_DTHHRDY), bias.correct = TRUE) #0.6855
 
 chisq_pval <- c(0.0006642102,0.001469577,0.0006295674,1.727819e-47,1.589829e-47,6.091008e-57)
-corr_chisq <- p.adjust(chisq_pval) #still below 0.05
+corr_chisq <- p.adjust(chisq_pval, method = 'bonferroni') #still below 0.05
 cramerCorr <- data.frame(SEX = c(1, 0.1999, 0.1868,0.2255),
                          COHORT = c(0.1999,1,0.8613,0.8813),
                          DTHVNT = c(0.1868,0.8613,1,0.6855),
                          DTHHRDY = c(0.2255, 0.8813, 0.6855, 1))
 rownames(cramerCorr) <- c('SEX', 'COHORT', 'DTHVNT', 'DTHHRDY')
 corrplot(as.matrix(cramerCorr))
+
+
+#logistic regression with binomial variables and quantitatives variables
+summary(glm(as.factor(SEX) ~ AGE, family=binomial, data=val_matrix)) #0.02397 slope not significant
+summary(glm(as.factor(SEX) ~ HGHT, family=binomial, data=val_matrix)) #0.8233
+summary(glm(as.factor(SEX) ~ WGHT, family=binomial, data=val_matrix)) #0.037508
+summary(glm(as.factor(SEX) ~ BMI, family=binomial, data=val_matrix)) #0.06833 #not significant
+summary(glm(as.factor(SEX) ~ TRISCHD, family=binomial, data=val_matrix)) #0.0012615
+summary(glm(as.factor(COHORT) ~ AGE, family=binomial, data=val_matrix)) #0.06545 slope
+summary(glm(as.factor(COHORT) ~ HGHT, family=binomial, data=val_matrix)) #0.10607
+summary(glm(as.factor(COHORT) ~ WGHT, family=binomial, data=val_matrix)) # 0.006206 #not significant
+summary(glm(as.factor(COHORT) ~ BMI, family=binomial, data=val_matrix)) #0.002597 not significant
+summary(glm(as.factor(COHORT) ~ TRISCHD, family=binomial, data=val_matrix)) #0.009701
+test <- c(0.0448, 6.15e-16, 1.7e-13, 0.0286, 0.00024, 6.82e-07, 0.000683, 0.0522, 0.928, 2e-16)
+test <- p.adjust(test, method = 'bonferroni')
+test
+
+log_reg <- data.frame(SEX = c(0, 0.8233, 0.037508, 0, 0.0012615),
+                      COHORT = c(0.06545,0.10607,0,0,0.009701))
+row.names(log_reg) <- c('AGE', 'HGHT', 'WGHT', 'BMI', 'TRSCHD')
+corrplot(as.matrix(log_reg))
+
+#ordinal logistic regression between categ and quanti variables
+library(nnet)
+summary(multinom(DTHVNT ~ AGE, data = val_matrix))
