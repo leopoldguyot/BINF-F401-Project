@@ -394,6 +394,61 @@ log_reg <- data.frame(SEX = c(0, 0.8233, 0.037508, 0, 0.0012615),
 row.names(log_reg) <- c('AGE', 'HGHT', 'WGHT', 'BMI', 'TRSCHD')
 corrplot(as.matrix(log_reg))
 
-#ordinal logistic regression between categ and quanti variables
-library(nnet)
-summary(multinom(DTHVNT ~ AGE, data = val_matrix))
+#Interclass correlation coefficient (between categ and quanti)
+library(irr)
+
+icc(data.frame(DTHVNT = val_matrix$DTHVNT, AGE = val_matrix$AGE),
+    model = 'twoway',
+    type = 'consistency') #no corr (pval > 0.05) 0.252 
+
+icc(data.frame(DTHVNT = val_matrix$DTHVNT, HGHT = val_matrix$HGHT),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.374 
+
+icc(data.frame(DTHVNT = val_matrix$DTHVNT, WGHT = val_matrix$WGHT),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.518 
+
+icc(data.frame(DTHVNT = val_matrix$DTHVNT, BMI = val_matrix$BMI),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.614 
+
+icc(data.frame(DTHVNT = val_matrix$DTHVNT, TRI = val_matrix$TRISCHD),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.515
+
+icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, AGE = val_matrix$AGE),
+    model = 'twoway',
+    type = 'consistency') #no corr (pval > 0.05) 0.108 
+
+icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, HGHT = val_matrix$HGHT),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.0802 
+
+icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, WGHT = val_matrix$WGHT),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.475 
+
+icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, BMI = val_matrix$BMI),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.649 
+
+icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, TRI = val_matrix$TRISCHD),
+    model = 'twoway',
+    type = 'consistency') #no corr 0.468
+
+icc_pval <- c(0.252, 0.374, 0.518, 0.614, 0.515, 0.108, 0.0802, 0.475, 0.649, 0.468)
+p.adjust(icc_pval, method='bonferroni')
+
+#Final matrix with all the different correlations
+AllCorr <- data.frame(COHORT = c(1, 0.1999, 0.06545,0.1060,0,0,0.009701,0.8613,0.8813),
+                      SEX = c(0,1,0,0.8233,0.03750,0,0.001201,0.1868,0.2255),
+                      AGE = c(0,0,1,0.07233,0.03892,0.02328,0.1882,0,0),
+                      HGHT = c(0,0,0,1,0.6984, 0.2001, 0.2282, 0,0),
+                      WGHT = c(0,0,0,0,1, 0.8356, 0.1531, 0,0),
+                      BMI = c(0,0,0,0,0, 1, 0.04044, 0,0),
+                      TRISCHD = c(0,0,0,0,0, 0, 1, 0,0),
+                      DTHVNT = c(0,0,0,0,0, 0, 0, 1,0.6855),
+                      DTHHRDY = c(0,0,0,0,0, 0, 0, 0,1))
+rownames(AllCorr) <- c('COHORT', 'SEX','AGE','HGHT','WGHT','BMI','TRISCHD', 'DTHVNT', 'DTHHRDY')
+corrplot(as.matrix(AllCorr))
