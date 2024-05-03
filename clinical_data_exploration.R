@@ -147,11 +147,11 @@ clinical_data_Inverse_Normal_Transformation<- data.frame(clinical_data$SMPLID,cl
                                 clinical_data$SMPLID.1,clinical_data$IMGURL,
                                 clinical_data$SEX,clinical_data$DTHHRDY,
                                 clinical_data$DTHVNT)
-INT_AGE <-  qnorm((rank(clinical_data$AGE,na.last="keep")-0.5)/sum(!is.na(clinical_data$AGE)))
-INT_HGHT <-  qnorm((rank(clinical_data$HGHT,na.last="keep")-0.5)/sum(!is.na(clinical_data$HGHT)))
-INT_WGHT <-  qnorm((rank(clinical_data$WGHT,na.last="keep")-0.5)/sum(!is.na(clinical_data$WGHT)))
-INT_BMI <-  qnorm((rank(clinical_data$BMI,na.last="keep")-0.5)/sum(!is.na(clinical_data$BMI)))
-INT_TRISCHD <-  qnorm((rank(clinical_data$TRISCHD,na.last="keep")-0.5)/sum(!is.na(clinical_data$TRISCHD)))
+INT_AGE <-  qnorm((rank(clinical_data$AGE,na.last="keep")-0.375)/(sum(!is.na(clinical_data$AGE))-2*0.375+1))
+INT_HGHT <-  qnorm((rank(clinical_data$HGHT,na.last="keep")-0.375)/(sum(!is.na(clinical_data$HGHT))-2*0.375+1))
+INT_WGHT <-  qnorm((rank(clinical_data$WGHT,na.last="keep")-0.5)/(sum(!is.na(clinical_data$WGHT))-2*0.375+1))
+INT_BMI <-  qnorm((rank(clinical_data$BMI,na.last="keep")-0.5)/(sum(!is.na(clinical_data$BMI))-2*0.375+1))
+INT_TRISCHD <-  qnorm((rank(clinical_data$TRISCHD,na.last="keep")-0.5)/(sum(!is.na(clinical_data$TRISCHD))-2*0.375+1))
 
 
 
@@ -210,7 +210,7 @@ shapiro_INT <- lapply(clinical_data_Inverse_Normal_Transformation, function(x){
 })
 shapiro_INT
 # save clinical_data_Inverse_Normal_Transformation 
-write.table(clinical_data_Inverse_Normal_Transformation, "data/clinical_data_Inverse_Normal_Transformation.tsv", sep="\t")
+write.table(clinical_data_Inverse_Normal_Transformation, "data/data_output.tsv", sep="\t")
 test <- clinical_data_test <- read.table("data/clinical_data_Inverse_Normal_Transformation.tsv",
                                     sep = "\t",
                                     header = TRUE)
