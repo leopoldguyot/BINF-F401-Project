@@ -35,13 +35,29 @@ RNAcount <- read.table(file = 'RNA_read_counts.tsv', sep = '\t', header = TRUE)
 #Correlation
 val_matrix <- cbind(clinical[3:8], clinical[10:12])
 val_matrix$COHORT <- as.numeric(factor(val_matrix$COHORT))
-M_corr <- cor(val_matrix)
+M_corr <- cor(val_matrix, method = 'spearman')
 corrplot(M_corr, method="circle")
 
+p_val_M_corr <- c(0.6228, 0.7948, 0.9113, 0.001322, 2.2e-16, 0.001282, 2.693e-05, 
+                  2.2e-16, 0.00193, 0.5186)
+p.adjust(p_val_M_corr, method='bonferroni') #stay the same
+cor.test(val_matrix$AGE,val_matrix$HGHT, method = 'spearman') #not significant
+cor.test(val_matrix$AGE,val_matrix$WGHT, method = 'spearman') #not significant
+cor.test(val_matrix$AGE,val_matrix$BMI, method = 'spearman') #not significant
+cor.test(val_matrix$AGE,val_matrix$TRISCHD, method = 'spearman') #significant
+
+cor.test(val_matrix$HGHT,val_matrix$WGHT, method = 'spearman') #significant
+cor.test(val_matrix$HGHT,val_matrix$BMI, method = 'spearman') #significant
+cor.test(val_matrix$HGHT,val_matrix$TRISCHD, method = 'spearman') #significant
+
+cor.test(val_matrix$WGHT,val_matrix$BMI, method = 'spearman') #significant
+cor.test(val_matrix$WGHT,val_matrix$TRISCHD, method = 'spearman') #significant
+
+cor.test(val_matrix$BMI,val_matrix$TRISCHD, method = 'spearman') # not significant
 
 #Q1.2. Are the clinical variables correlated ?
 
-library(corrr)
+#library(corrr)
 library(ggcorrplot)
 library(FactoMineR)
 library(factoextra)
@@ -107,9 +123,9 @@ fviz_screeplot(clinical_famd) #scree plot (the percentages of inertia explained 
 fviz_famd_var(clinical_famd, repel=TRUE) #to plot both quantitative and qualitative variables
 fviz_contrib(clinical_famd, "var", axes = 1) #to visualize the contribution of variables to the principal dimensions
 fviz_contrib(clinical_famd, "var", axes = 2)
-fviz_famd_var(clinical_famd, "quanti.var", repel = TRUE, col.var = "black") #correlation circle for quantitative data
+fviz_famd_var(clinical_famd, "quanti.var", repel = TRUE, col.var = "cos2",gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")) #correlation circle for quantitative data
 fviz_famd_var(clinical_famd, "quali.var", col.var = "black", repel=TRUE)
-
+fviz_cos2(clinical_famd, choice = "var", axes = 1:2)
 
 #correlation matrix with mixed-data (or maybe need to make ANOVA, chi-square and Pearson's correlation test)
 library(ggcorrplot)
@@ -394,48 +410,36 @@ log_reg <- data.frame(SEX = c(0, 0.8233, 0.037508, 0, 0.0012615),
 row.names(log_reg) <- c('AGE', 'HGHT', 'WGHT', 'BMI', 'TRSCHD')
 corrplot(as.matrix(log_reg))
 
-#Interclass correlation coefficient (between categ and quanti)
+#Intraclass correlation coefficient (between categ and quanti)
 library(irr)
 
-icc(data.frame(DTHVNT = val_matrix$DTHVNT, AGE = val_matrix$AGE),
-    model = 'twoway',
-    type = 'consistency') #no corr (pval > 0.05) 0.252 
+kruskal.test(AGE ~ DTHVNT, data = val_matrix) #0.0003567, not the same distrib per group 
+#using corr coef calc (sqrt(X2 / n_obs)) coef = 0.4815845
+sqrt(15.877/288) #0.2347945
 
-icc(data.frame(DTHVNT = val_matrix$DTHVNT, HGHT = val_matrix$HGHT),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.374 
+kruskal.test(HGHT ~ DTHVNT, data = val_matrix) #0.001951
+sqrt(12.479/288) #0.2081583
 
-icc(data.frame(DTHVNT = val_matrix$DTHVNT, WGHT = val_matrix$WGHT),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.518 
+kruskal.test(WGHT ~ DTHVNT, data = val_matrix) #0.07141
 
-icc(data.frame(DTHVNT = val_matrix$DTHVNT, BMI = val_matrix$BMI),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.614 
+kruskal.test(BMI ~ DTHVNT, data = val_matrix) #0.9119
 
-icc(data.frame(DTHVNT = val_matrix$DTHVNT, TRI = val_matrix$TRISCHD),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.515
+kruskal.test(TRISCHD ~ DTHVNT, data = val_matrix) # 2.2e-16
+sqrt(173.33/288) #0.7757837
 
-icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, AGE = val_matrix$AGE),
-    model = 'twoway',
-    type = 'consistency') #no corr (pval > 0.05) 0.108 
+kruskal.test(AGE ~ DTHHRDY, data = val_matrix) # 2.372e-05
+sqrt(26.62/288) #0.3040239
 
-icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, HGHT = val_matrix$HGHT),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.0802 
+kruskal.test(HGHT ~ DTHHRDY, data = val_matrix) # 9.619e-05
+sqrt(23.597/288) #0.2862412
 
-icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, WGHT = val_matrix$WGHT),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.475 
+kruskal.test(WGHT ~ DTHHRDY, data = val_matrix) # 0.0004999
+sqrt(19.998/288) #0.26351
 
-icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, BMI = val_matrix$BMI),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.649 
+kruskal.test(BMI ~ DTHHRDY, data = val_matrix) # 0.1106
 
-icc(data.frame(DTHHRDY = val_matrix$DTHHRDY, TRI = val_matrix$TRISCHD),
-    model = 'twoway',
-    type = 'consistency') #no corr 0.468
+kruskal.test(TRISCHD ~ DTHHRDY, data = val_matrix) # 2.2e-16
+sqrt(182.7/288) #0.7964766
 
 icc_pval <- c(0.252, 0.374, 0.518, 0.614, 0.515, 0.108, 0.0802, 0.475, 0.649, 0.468)
 p.adjust(icc_pval, method='bonferroni')
@@ -443,11 +447,11 @@ p.adjust(icc_pval, method='bonferroni')
 #Final matrix with all the different correlations
 AllCorr <- data.frame(COHORT = c(1, 0.1999, 0.06545,0.1060,0,0,0.009701,0.8613,0.8813),
                       SEX = c(0,1,0,0.8233,0.03750,0,0.001201,0.1868,0.2255),
-                      AGE = c(0,0,1,0.07233,0.03892,0.02328,0.1882,0,0),
-                      HGHT = c(0,0,0,1,0.6984, 0.2001, 0.2282, 0,0),
-                      WGHT = c(0,0,0,0,1, 0.8356, 0.1531, 0,0),
-                      BMI = c(0,0,0,0,0, 1, 0.04044, 0,0),
-                      TRISCHD = c(0,0,0,0,0, 0, 1, 0,0),
+                      AGE = c(0,0,1,0,0,0,0.188337165,0.2347945,0.3040239),
+                      HGHT = c(0,0,0,1,0.68294460, 0.18884719, 0.24466244, 0.2081583,0.2862412),
+                      WGHT = c(0,0,0,0,1, 0.82440147, 0.18198056, 0,0.26351),
+                      BMI = c(0,0,0,0,0, 1, 0, 0,0),
+                      TRISCHD = c(0,0,0,0,0, 0, 1, 0.7757837,0.7964766),
                       DTHVNT = c(0,0,0,0,0, 0, 0, 1,0.6855),
                       DTHHRDY = c(0,0,0,0,0, 0, 0, 0,1))
 rownames(AllCorr) <- c('COHORT', 'SEX','AGE','HGHT','WGHT','BMI','TRISCHD', 'DTHVNT', 'DTHHRDY')
