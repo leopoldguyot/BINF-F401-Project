@@ -1,0 +1,9 @@
+- BMI pas corr mais model COHORT HARDY significatif 
+- forward selection model
+-add DTHVNT to the models
+- citer les packages et les fonctions
+
+- Semaine prochaine :
+    - Léopold : Expression diff function
+    - 1. Comment adapter l'expression diff lorsqu'on a plus que 2 catégories
+    - 2. Comment adapter l'expression diff à des variables numériques

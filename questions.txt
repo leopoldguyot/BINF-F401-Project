@@ -1,5 +1,0 @@
-- Correlation entre qualitatif et quantitatif (convert qualitatif to numeric)
-- Signification donneur d'organe et postmortem
-- Normalisation variable 
-- Diff entre catégories de var qualitative
-- Residu de modèles avec variables d'interet
