@@ -3,8 +3,9 @@ library(dplyr)
 
 # Replace with the path of the output data
 clinical_data <- read.table("data_output/clinical_data_normalized.tsv",
- sep = "\t",
- header = TRUE)
+    sep = "\t",
+    header = TRUE
+)
 
 clinical_data$SEX <- as.factor(clinical_data$SEX)
 clinical_data$DTHVNT <- as.factor(clinical_data$DTHVNT)
@@ -13,15 +14,16 @@ clinical_data$COHORT <- as.factor(clinical_data$COHORT)
 clinical_data$SMPTHNTS <- as.factor(clinical_data$SMPTHNTS)
 
 clinical_data$DTHHRDY_3 <- recode(clinical_data$DTHHRDY,
-"0" = "slow", "1" = "fast", "2" = "fast", "3" = "intermediate", "4" = "slow")
+    "0" = "slow", "1" = "fast", "2" = "fast", "3" = "intermediate", "4" = "slow"
+)
 
-technical_var_formula <- paste(" ~ ", paste(c("COHORT","TRISCHD", "DTHHRDY"), collapse = " + "))
+technical_var_formula <- paste(" ~ ", paste(c("COHORT", "TRISCHD", "DTHHRDY"), collapse = " + "))
 
-technical_var_formula_3 <- paste(" ~ ", paste(c("COHORT","TRISCHD", "DTHHRDY_3"), collapse = " + "))
+technical_var_formula_3 <- paste(" ~ ", paste(c("COHORT", "TRISCHD", "DTHHRDY_3"), collapse = " + "))
 
-result <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x){
+result <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x) {
     print(paste(x, technical_var_formula))
-    if (is.numeric(clinical_data[[x]])){
+    if (is.numeric(clinical_data[[x]])) {
         model <- lm(data = clinical_data, formula = paste(x, technical_var_formula))
     } else {
         model <- glm(data = clinical_data, formula = paste(x, technical_var_formula), family = "binomial")
@@ -29,9 +31,9 @@ result <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x){
     list(variable = x, model = model)
 })
 
-result_3 <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x){
+result_3 <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x) {
     print(paste(x, technical_var_formula))
-    if (is.numeric(clinical_data[[x]])){
+    if (is.numeric(clinical_data[[x]])) {
         model <- lm(data = clinical_data, formula = paste(x, technical_var_formula_3))
     } else {
         model <- glm(data = clinical_data, formula = paste(x, technical_var_formula_3), family = "binomial")
@@ -70,8 +72,8 @@ clinical_data$RES_HGHT <- result_hght$residuals
 clinical_data$RES_WGHT <- result_wght$residuals
 clinical_data$RES_BMI <- result_bmi$residuals
 
-ggplot(data = clinical_data, aes(x = seq_along(RES_AGE),y = RES_AGE)) +
+ggplot(data = clinical_data, aes(x = seq_along(RES_AGE), y = RES_AGE)) +
     geom_point() +
     geom_hline(yintercept = 0, linetype = "dashed", color = "red")
 
-write.table(clinical_data, "data_output/clinical_data_corrected.tsv", sep="\t")
+write.table(clinical_data, "data_output/clinical_data_corrected.tsv", sep = "\t")
