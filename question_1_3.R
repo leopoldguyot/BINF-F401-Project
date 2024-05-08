@@ -1,5 +1,5 @@
 # Replace with the path of the output data
-clinical_data <- read.table("data/clinical_data.tsv",
+clinical_data <- read.table("data/data_output.tsv",
  sep = "\t",
  header = TRUE)
 
