@@ -160,12 +160,12 @@ INT_TRISCHD <-  qnorm((rank(clinical_data$TRISCHD,na.last="keep")-0.5)/(sum(!is.
 
 
 
-clinical_data_Inverse_Normal_Transformation$AGE_INT <- INT_AGE 
-clinical_data_Inverse_Normal_Transformation$HGHT_INT <- INT_HGHT
-clinical_data_Inverse_Normal_Transformation$WGHT_INT <- INT_WGHT
-clinical_data_Inverse_Normal_Transformation$BMI_INT <- INT_BMI
-clinical_data_Inverse_Normal_Transformation$TRISCHD_INT <- INT_TRISCHD
-hist(clinical_data_Inverse_Normal_Transformation$AGE_INT)
+clinical_data_Inverse_Normal_Transformation$AGE <- INT_AGE 
+clinical_data_Inverse_Normal_Transformation$HGHT <- INT_HGHT
+clinical_data_Inverse_Normal_Transformation$WGHT <- INT_WGHT
+clinical_data_Inverse_Normal_Transformation$BMI <- INT_BMI
+clinical_data_Inverse_Normal_Transformation$TRISCHD <- INT_TRISCHD
+hist(clinical_data_Inverse_Normal_Transformation$AGE)
 
 plot <- lapply(colnames(clinical_data_Inverse_Normal_Transformation)[-c(1:2, 5:6)], function(x){
   plot <- distribution_plot(clinical_data_Inverse_Normal_Transformation, x, x)
