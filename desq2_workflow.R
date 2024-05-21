@@ -19,11 +19,6 @@ diff_exp <- function(features_count, sample_table, design) {
 
     deseq_obj <- deseq_obj[rowSums(assay(deseq_obj)) > 0, ] # removing rows containing only zeros
 
-    count_depth <- tibble(sample = colnames(deseq_obj), SeqDepth = colSums(assay(deseq_obj))) %>%
-        ggplot(aes(x = sample, y = SeqDepth)) +
-        geom_col() +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
     deseq_obj <- DESeq(deseq_obj) # Running the differential analysis (normalization + stats test)
 
     return(deseq_obj)
@@ -36,9 +31,9 @@ count_depth <- function(deseq_obj) {
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 }
 
-volcano_plot <- function(deseq_obj, contrast, title = "") {
+volcano_plot <- function(deseq_obj, name, title = "") {
     # contrast: cf. DESeq2 documentation (results)
-    res <- results(deseq_obj, contrast = contrast)
+    res <- results(deseq_obj, name = name)
     res <- as_tibble(res, rownames = "gene")
     res %>%
         filter(!is.na(padj)) %>%
@@ -55,8 +50,8 @@ volcano_plot <- function(deseq_obj, contrast, title = "") {
         theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 }
 
-significant_features_count <- function(deseq_obj, contrast, padj_th = 0.05, fold_th = 1) {
-    res <- results(deseq_obj, contrast)
+significant_features_count <- function(deseq_obj, name, padj_th = 0.05, fold_th = 1) {
+    res <- results(deseq_obj, name = name)
     res <- as_tibble(res, rownames = "gene")
     res %>%
         filter(padj < padj_th & abs(log2FoldChange) > fold_th) %>%
