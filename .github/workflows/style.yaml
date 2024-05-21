@@ -7,9 +7,13 @@ on:
 
 name: Style
 
+permissions: read-all
+
 jobs:
   style:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -27,7 +31,7 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::styler, any::roxygen2, any::biocthis
-          needs: styler, biocthis
+          needs: styler
 
       - name: Enable styler cache
         run: styler::cache_activate()
