@@ -39,7 +39,7 @@ count_depth <- function(deseq_obj) {
 volcano_plot <- function(deseq_obj, contrast, title = "") {
     # contrast: cf. DESeq2 documentation (results)
     res <- results(deseq_obj, contrast = contrast)
-
+    res <- as_tibble(res, rownames = "gene")
     res %>%
         filter(!is.na(padj)) %>%
         ggplot(aes(
@@ -57,8 +57,8 @@ volcano_plot <- function(deseq_obj, contrast, title = "") {
 
 significant_features_count <- function(deseq_obj, contrast, padj_th = 0.05, fold_th = 1) {
     res <- results(deseq_obj, contrast)
+    res <- as_tibble(res, rownames = "gene")
     res %>%
         filter(padj < padj_th & abs(log2FoldChange) > fold_th) %>%
-            nrow()
+        nrow()
 }
-
