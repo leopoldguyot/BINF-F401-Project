@@ -44,17 +44,22 @@ for(i in 1:5) {
   global_res <- diff_exp(features_count, sample_data, design)
   vec_global_res <- c(vec_global_res,global_res)
 }
+
 for(i in 1:5){
   print(resultsNames(vec_global_res[[i]]))
   print(volcano_plot(vec_global_res[[i]], 
                       name = resultsNames(vec_global_res[[i]])[2],
                       title = non_tech_var[i]))
+  print(paste("significant_features_count:",
+              significant_features_count(vec_global_res[[i]],
+                             name = resultsNames(vec_global_res[[i]])[2])))
+  
 }
-significant_features_count(global_res, name = "SEX_2_vs_1")
-significant_features_count(vec_global_res[[4]],
-                           name = resultsNames(vec_global_res[[4]])[2])
+
+
+
 results(vec_global_res[[4]],name = resultsNames(vec_global_res[[4]])[2])%>% 
   as.tibble(rownames = "gene") %>%
   filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
   View()  
-        
+
