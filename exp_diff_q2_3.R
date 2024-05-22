@@ -43,7 +43,15 @@ for(i in 1:5) {
   print(design)
   global_res <- diff_exp(features_count, sample_data, design)
   vec_global_res <- c(vec_global_res,global_res)
+  
 }
+saveRDS(vec_global_res, "data_output/desq2_outputs/global_res_Q2_3.rds")
+
+
+
+vec_global_res <- readRDS("data_output/desq2_outputs/global_res_Q2_3.rds", refhook = NULL)
+
+
 
 for(i in 1:5){
   print(resultsNames(vec_global_res[[i]]))
