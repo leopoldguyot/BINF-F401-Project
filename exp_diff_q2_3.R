@@ -16,11 +16,16 @@ features_count <- t(as.matrix(features_count))
 features_count <- features_count + 1 # Adding a pseudo count
 
 non_tech_var <- c('AGE','SEX','HGHT','WGHT','BMI') 
+
 confounding_technical_variables <- c('COHORT','DTHHRDY_3','DTHHRDY_3',
                                      'DTHHRDY_3',
                                      'DTHHRDY_3 + COHORT')
 
-
+"""
+confounding_technical_variables <- c('COHORT','DTHHRDY','DTHHRDY',
+                                     'DTHHRDY',
+                                     'DTHHRDY + COHORT')
+"""
 
 # avec mapply et apply 
 
