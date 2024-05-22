@@ -20,54 +20,49 @@ confounding_technical_variables <- c('COHORT','DTHHRDY_3','DTHHRDY_3',
                                      'DTHHRDY_3',
                                      'DTHHRDY_3 + COHORT')
 
-design <- as.formula(" ~ DTHHRDY_3")
-vec_global_res <- c()
-'''
-lapply(non_tech_var,function(i){
-  X <- paste("~",i)
-  design <- as.formula(X)
-  global_res <- diff_exp(features_count, sample_data, design)
-  vec_global_res <- c(vec_global_res,global_res)
-  
-  return(null)
-})
-for(i in vec_global_res ){
-  print(resultsNames(i))
-}
-'''
 
-for(i in 1:5) {
-  print(i)
-  X <- paste("~",non_tech_var[[i]],"+",confounding_technical_variables[[i]])
-  design <- as.formula(X)
-  print(design)
+
+# avec mapply et apply 
+
+asssociationsVar <- function(name,name2){
+  
+  design <- as.formula(paste("~",name,"+",name2))
   global_res <- diff_exp(features_count, sample_data, design)
-  vec_global_res <- c(vec_global_res,global_res)
+  saveRDS(global_res, paste("data_output/desq2_outputs/",name,"_Q2_3", ".rds", sep = ''))
+  return(NULL)
   
 }
-saveRDS(vec_global_res, "data_output/desq2_outputs/global_res_Q2_3.rds")
 
-
-
-vec_global_res <- readRDS("data_output/desq2_outputs/global_res_Q2_3.rds", refhook = NULL)
-
-
-
-for(i in 1:5){
-  print(resultsNames(vec_global_res[[i]]))
-  print(volcano_plot(vec_global_res[[i]], 
-                      name = resultsNames(vec_global_res[[i]])[2],
-                      title = non_tech_var[i]))
+getfile <- function(name){
+  
+  file_diff_expret <- readRDS(paste0("data_output/desq2_outputs/",
+                                     name,"_Q2_3",".rds"), refhook = NULL)
+  
+  print(resultsNames(file_diff_expret[0]))
+  print(volcano_plot(file_diff_expret, 
+                     name = resultsNames(file_diff_expret[0])[2],
+                     title =paste(resultsNames(file_diff_expret[0])[2],
+                                  "with adjustment for the confounding technical variables") ))
   print(paste("significant_features_count:",
-              significant_features_count(vec_global_res[[i]],
-                             name = resultsNames(vec_global_res[[i]])[2])))
+              significant_features_count(file_diff_expret,
+                                         name = resultsNames(file_diff_expret[0])[2])))
+  results(file_diff_expret,name = resultsNames(file_diff_expret[0])[2])%>% 
+    as.tibble(rownames = "gene") %>%
+    filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+    View(title = paste("Significant Results for", name)) 
   
+  return(NULL)
 }
 
 
+mapply(asssociationsVar,non_tech_var,confounding_technical_variables)
 
-results(vec_global_res[[4]],name = resultsNames(vec_global_res[[4]])[2])%>% 
-  as.tibble(rownames = "gene") %>%
-  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
-  View()  
+
+lapply(non_tech_var, getfile)
+
+
+
+
+
+
 
