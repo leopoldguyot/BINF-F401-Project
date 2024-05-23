@@ -10,7 +10,7 @@ sample_data$DTHHRDY <- as.factor(sample_data$DTHHRDY)
 sample_data$COHORT <- as.factor(sample_data$COHORT)
 sample_data$SMPTHNTS <- as.factor(sample_data$SMPTHNTS)
 row.names(sample_data) <- sample_data$SMPLID
-
+sample_data$DTHHRDY_3 <- as.factor(sample_data$DTHHRDY_3)
 features_count <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE, row.names = 1)
 features_count <- t(as.matrix(features_count))
 features_count <- features_count + 1 # Adding a pseudo count
@@ -64,10 +64,4 @@ mapply(asssociationsVar,non_tech_var,confounding_technical_variables)
 
 
 lapply(non_tech_var, getfile)
-
-
-
-
-
-
 
