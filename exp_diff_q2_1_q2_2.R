@@ -48,14 +48,56 @@ asssociationsVar <- function(name){
 lapply(var_names, asssociationsVar)
 
 
+resultsNames(AGE)
+results(HGHT, name = "AGE") %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
 
-count_depth(DTHHRDY)
+resultsNames(SEX)
+results(SEX, contrast = c("SEX", '2', '1')) %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(HGHT)
+results(HGHT, name = "HGHT") %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(WGHT)
+results(WGHT, name = "WGHT") %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(BMI)
+results(BMI, name = "BMI") %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(COHORT)
+results(COHORT, contrast = c("COHORT", 'Postmortem', 'Organ Donor (OPO)')) %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(TRISCHD)
+results(TRISCHD, name = "TRISCHD") %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+resultsNames(DTHVNT)
+results(DTHVNT, contrast = c("DTHVNT", '1', '0')) %>% 
+  as.tibble(rownames = "gene") %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+  View()
+
+
 resultsNames(DTHHRDY)
-volcano_plot(DTHHRDY, name = "DTHHRDY_1_vs_0", title = "DTHHRDY volcano plot")
-volcano_plot(DTHHRDY, name = "DTHHRDY_2_vs_0", title = "DTHHRDY volcano plot")
-significant_features_count(DTHHRDY, name = "DTHHRDY_1_vs_0")
-significant_features_count(DTHHRDY, name = "DTHHRDY_2_vs_0")
-
 results(DTHHRDY, contrast = c("DTHHRDY", '1', '0')) %>% 
   as.tibble(rownames = "gene") %>%
   filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
@@ -66,11 +108,3 @@ results(DTHHRDY, contrast = c("DTHHRDY", '2', '0')) %>%
   filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
   View()
 
-count_depth(HGHT)
-resultsNames(HGHT)
-volcano_plot(HGHT, name = "HGHT", title = "Height volcano plot")
-significant_features_count(HGHT, name = "HGHT")
-results(HGHT, name = "HGHT") %>% 
-  as.tibble(rownames = "gene") %>%
-  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
-  View()
