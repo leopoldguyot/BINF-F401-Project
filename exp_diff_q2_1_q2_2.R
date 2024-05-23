@@ -47,7 +47,6 @@ asssociationsVar <- function(name){
 
 lapply(var_names, asssociationsVar)
 
-
 resultsNames(AGE)
 results(HGHT, name = "AGE") %>% 
   as.tibble(rownames = "gene") %>%
@@ -107,4 +106,45 @@ results(DTHHRDY, contrast = c("DTHHRDY", '2', '0')) %>%
   as.tibble(rownames = "gene") %>%
   filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
   View()
+
+#####
+getfile2 <- function(name){
+  
+  file_diff_expret <- readRDS(paste0("data_output/desq2_outputs/",
+                                     name,".rds"), refhook = NULL)
+  
+  print(resultsNames(file_diff_expret[0]))
+  print(volcano_plot(file_diff_expret, 
+                     name = resultsNames(file_diff_expret[0])[2],
+                     title =resultsNames(file_diff_expret[0])[2] ))
+  print(paste("significant_features_count:",
+              significant_features_count(file_diff_expret,
+                                         name = resultsNames(file_diff_expret[0])[2])))
+  results(file_diff_expret,name = resultsNames(file_diff_expret[0])[2])%>% 
+    as.tibble(rownames = "gene") %>%
+    filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+    View(title = paste("Significant Results for",resultsNames(file_diff_expret[0])[2] )) 
+  if(name == 'DTHHRDY'){
+    print(volcano_plot(file_diff_expret, 
+                       name = resultsNames(file_diff_expret[0])[3],
+                       title =resultsNames(file_diff_expret[0])[3] ))
+    print(paste("significant_features_count:",
+                significant_features_count(file_diff_expret,
+                                           name = resultsNames(file_diff_expret[0])[3])))
+    results(file_diff_expret,name = resultsNames(file_diff_expret[0])[3])%>% 
+      as.tibble(rownames = "gene") %>%
+      filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
+      View(title = paste("Significant Results for", resultsNames(file_diff_expret[0])[3])) 
+    
+  }
+  
+  return(NULL)
+}
+
+lapply(var_names, getfile2)
+
+
+
+
+
 
