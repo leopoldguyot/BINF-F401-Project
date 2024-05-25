@@ -1,21 +1,20 @@
 source("desq2_workflow.R")
 library(tidyverse)
-sample_data <- read.table("data_output/clinical_data_normalized.tsv", sep = "\t", header = TRUE)
-sample_data$DTHHRDY_3 <- recode(sample_data$DTHHRDY,
-                                  "0" = "slow", "1" = "fast", "2" = "fast",
-                                  "3" = "intermediate", "4" = "slow" )
+sample_data <- read.table("data_output/clinical_data_preprocessed.tsv", sep = "\t", header = TRUE, stringsAsFactors = TRUE)
+
 sample_data$SEX <- as.factor(sample_data$SEX)
 sample_data$DTHVNT <- as.factor(sample_data$DTHVNT)
 sample_data$DTHHRDY <- as.factor(sample_data$DTHHRDY)
 sample_data$COHORT <- as.factor(sample_data$COHORT)
 sample_data$SMPTHNTS <- as.factor(sample_data$SMPTHNTS)
 row.names(sample_data) <- sample_data$SMPLID
-sample_data$DTHHRDY_3 <- as.factor(sample_data$DTHHRDY_3)
+sample_data$DTHHRDY_3 <- relevel(sample_data$DTHHRDY_3, ref = "slow")
+
 features_count <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE, row.names = 1)
 features_count <- t(as.matrix(features_count))
 features_count <- features_count + 1 # Adding a pseudo count
 
-non_tech_var <- c('AGE','SEX','HGHT','WGHT','BMI') 
+non_tech_var <- c('AGE_cat','SEX','HGHT_cat','WGHT_cat','BMI_cat') 
 
 confounding_technical_variables <- c('COHORT','DTHHRDY_3','DTHHRDY_3',
                                      'DTHHRDY_3',
@@ -64,4 +63,3 @@ mapply(asssociationsVar,non_tech_var,confounding_technical_variables)
 
 
 lapply(non_tech_var, getfile)
-

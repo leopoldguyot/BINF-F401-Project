@@ -14,7 +14,6 @@ complete_df <- cbind(clinical_data_clean, normalized)
 complete_df$DTHHRDY_3 <- recode(complete_df$DTHHRDY,
     "0" = "slow", "1" = "fast", "2" = "fast", "3" = "intermediate", "4" = "slow"
 )
-
 breaks_age <- c(-Inf, 55, Inf)
 breaks_hght <- c(-Inf, 69, Inf)
 breaks_wght <- c(-Inf, 180, Inf)
@@ -27,6 +26,9 @@ complete_df$HGHT_cat <- cut(complete_df$HGHT, breaks = breaks_hght, labels = c("
 complete_df$WGHT_cat <- cut(complete_df$WGHT, breaks = breaks_wght, labels = c("0-180", "181+"))
 complete_df$BMI_cat <- cut(complete_df$BMI, breaks = breaks_bmi, labels = c("0-27", "28+"))
 complete_df$TRISCHD_cat <- cut(complete_df$TRISCHD, breaks = breaks_trischd, labels = c("0-500", "501+"))
+
+discard_id <- complete_df$SMPLID[complete_df$DTHVNT %in% c(99)]
+complete_df <- complete_df[!(complete_df$DTHVNT %in% c(99)),]
 
 # Save the new data
 write.table(complete_df, "data_output/clinical_data_preprocessed.tsv", sep = "\t", row.names = FALSE)

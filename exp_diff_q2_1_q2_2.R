@@ -1,4 +1,4 @@
-setwd("C:/Users/Draguet/Documents/GitHub/BINF-F401-Project")
+#setwd("C:/Users/Draguet/Documents/GitHub/BINF-F401-Project")
 
 source("desq2_workflow.R")
 library(tidyverse)
@@ -29,6 +29,7 @@ for (i in sample_data$DTHHRDY) {
 }
 sample_data$DTHHRDY <- hardy_scale
 
+sample_data$DTHHRDY_3 <- relevel(sample_data$DTHHRDY_3, ref = "slow")
 #discarding samples with DTHVNT unknown
 discard_id <- sample_data$SMPLID[sample_data$DTHVNT %in% c(99)]
 sample_data <- sample_data[!(sample_data$DTHVNT %in% c(99)),]
@@ -115,32 +116,21 @@ getfile2 <- function(name){
   
   file_diff_expret <- readRDS(paste0("data_output/desq2_outputs/",
                                      name,".rds"), refhook = NULL)
-  
-  print(resultsNames(file_diff_expret[0]))
-  print(volcano_plot(file_diff_expret, 
-                     name = resultsNames(file_diff_expret[0])[2],
-                     title =resultsNames(file_diff_expret[0])[2] ))
-  print(paste("significant_features_count:",
-              significant_features_count(file_diff_expret,
-                                         name = resultsNames(file_diff_expret[0])[2])))
-  results(file_diff_expret,name = resultsNames(file_diff_expret[0])[2])%>% 
-    as.tibble(rownames = "gene") %>%
-    filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
-    View(title = paste("Significant Results for",resultsNames(file_diff_expret[0])[2] )) 
-  if(name == 'DTHHRDY'){
+  print(resultsNames(file_diff_expret))
+  for (i in 2:length(resultsNames(file_diff_expret))) {
+    print(paste("Results for", resultsNames(file_diff_expret)[i]))
     print(volcano_plot(file_diff_expret, 
-                       name = resultsNames(file_diff_expret[0])[3],
-                       title =resultsNames(file_diff_expret[0])[3] ))
+                       name = resultsNames(file_diff_expret)[i],
+                       title =paste(resultsNames(file_diff_expret)[i],
+                                    "without adjustment for the confounding technical variables") ))
     print(paste("significant_features_count:",
                 significant_features_count(file_diff_expret,
-                                           name = resultsNames(file_diff_expret[0])[3])))
-    results(file_diff_expret,name = resultsNames(file_diff_expret[0])[3])%>% 
+                                           name = resultsNames(file_diff_expret)[i])))
+    results(file_diff_expret,name = resultsNames(file_diff_expret)[i])%>% 
       as.tibble(rownames = "gene") %>%
       filter(padj < 0.05 & abs(log2FoldChange) > 1) %>% 
-      View(title = paste("Significant Results for", resultsNames(file_diff_expret[0])[3])) 
-    
+      View(title = paste("Significant Results for", resultsNames(file_diff_expret)[i])) 
   }
-  
   return(NULL)
 }
 
