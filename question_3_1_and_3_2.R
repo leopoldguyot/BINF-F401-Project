@@ -29,10 +29,13 @@ diff_exp <- function(features_count, sample_table, design, name) {
     write.table(result_table, file = filename, sep = "\t", row.names = TRUE)
     return(NULL)
 }
+
 clinical_data <- read.table("data_output/clinical_data_preprocessed.tsv", sep = "\t", header = TRUE)
 cluster_data <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE)
+cluster_data[-1] <- log10(cluster_data[-1] + 1)
 sample_table <- merge(clinical_data, cluster_data, by = "SMPLID")
 rownames(sample_table) <- sample_table$SMPLID
+
 
 technical_confounders <- "COHORT + DTHHRDY_3 + TRISCHD + DTHVNT"
 designs <- colnames(cluster_data)[-1] %>% map(~as.formula(paste("~", .x)))
