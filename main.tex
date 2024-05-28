@@ -31,6 +31,10 @@
 
 \usepackage{lipsum}
 
+\usepackage{adjustbox}
+\usepackage{rotating}
+\usepackage[table,xcdraw]{xcolor}
+
 %\addbibresource{references.bib}
 
 \title{\Large BINF-F401 Project \\
@@ -122,6 +126,68 @@ Logistic regression is used to determine the correlation between a quantitative 
 \end{figure}
 
 Looking at all the results together, we can see that there is a significant correlation between gender and height, which can simply be explained by the fact that men are generally taller than women. The correlation between height and weight, as well as between weight and BMI, can be explained as described above. Nevertheless, the absence of any significant correlation between height and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. There is also a correlation between cohort and both type of death (DTHHRDY) and use of artificial ventilation before death (DTHVNT). There is a certain logic behind these correlations: the cohort variable divides people into organ donors and postmortem donors, i.e. victims of brain or cardiac death, thus depending on the type of death, but we can also consider that people with brain death are generally assisted with artificial ventilation before death. There also seems to be a correlation between the time between the individual's death and the removal of his or her organs and the type of death, but also the presence of a ventilatory apparatus. Finally, DTHVNT and DTHHRDY are also correlated.
+
+\begin{table*}[t]
+\footnotesize
+\makebox[\linewidth]{
+\begin{tabular}{|c|c c|c|c c|c c|c c|c|c c|c|cc|}
+\cline{2-8}
+    \hline & \multicolumn{2}{c|}{\rotatebox{90}{AGE}} & \rotatebox{90}{SEX} & \multicolumn{2}{c|}{\rotatebox{90}{HGHT}} & \multicolumn{2}{c|}{\rotatebox{90}{WGHT}} & \multicolumn{2}{c|}{\rotatebox{90}{BMI}} & \rotatebox{90}{COHORT} & \multicolumn{2}{c|}{\rotatebox{90}{TRISCHD}} & \rotatebox{90}{DTHVNT} & \multicolumn{2}{c|}{\rotatebox{90}{DTHHRDY}} \\
+    \hline 
+\rotatebox{90}{Cluster} &
+  \rotatebox{90}{Normalized} &
+  \rotatebox{90}{Categorical (56+ vs -56)} &
+  \rotatebox{90}{Female vs Male} &
+  \rotatebox{90}{Normalized} &
+  \rotatebox{90}{Categorical (71+ vs -71)} &
+  \rotatebox{90}{Normalized} &
+  \rotatebox{90}{Categorical (181+ vs -181)} &
+  \rotatebox{90}{Normalized} &
+  \rotatebox{90}{Categorical (28+ vs -28)} &
+  \rotatebox{90}{PostMortem vs OrganDonor} &
+  \rotatebox{90}{Normalized} &
+  \rotatebox{90}{Categorical (50+ vs -50)} &
+  \rotatebox{90}{Yes vs No} &
+  \rotatebox{90}{Intermediate vs Slow} &
+  \rotatebox{90}{Fast vs Slow} \\
+  \hline
+0 &  & \cellcolor[HTML]{FDFF89}1,22 & \cellcolor[HTML]{B4F5F2}-1,26 &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,98 &  & \cellcolor[HTML]{FDFF89}1,78 & \cellcolor[HTML]{B4F5F2}-1,49 & \cellcolor[HTML]{FDFF89}2,10 & \cellcolor[HTML]{FDFF89}2,00 \\
+1 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+2 &  & \cellcolor[HTML]{FDFF89}1,87 & \cellcolor[HTML]{B4F5F2}-1,99 &  &  &  & \cellcolor[HTML]{FDFF89}1,15 &  & \cellcolor[HTML]{FDFF89}1,70 & \cellcolor[HTML]{FDFF89}2,46 &  & \cellcolor[HTML]{FDFF89}2,36 & \cellcolor[HTML]{B4F5F2}-2,38 & \cellcolor[HTML]{FDFF89}1,71 & \cellcolor[HTML]{FFC702}2,85 \\
+3 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,24 &  &  &  &  &  \\
+4 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+5 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,55 &  & \cellcolor[HTML]{FDFF89}1,19 & \cellcolor[HTML]{B4F5F2}-1,41 &  &  \\
+6 &  &  & \cellcolor[HTML]{FDFF89}1,70 & \cellcolor[HTML]{B4F5F2}-1,02 & \cellcolor[HTML]{B4F5F2}-2,32 &  &  &  &  & \cellcolor[HTML]{6F94FF}-5,33 &  & \cellcolor[HTML]{6F94FF}-5,91 & \cellcolor[HTML]{F56B00}6,27 & \cellcolor[HTML]{6F94FF}-6,34 & \cellcolor[HTML]{6F94FF}-5,90 \\
+7 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,10 &  &  &  &  &  \\
+8 &  &  & \cellcolor[HTML]{FDFF89}1,03 &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-2,31 &  & \cellcolor[HTML]{B4F5F2}-2,02 & \cellcolor[HTML]{FDFF89}2,17 & \cellcolor[HTML]{B4F5F2}-2,25 & \cellcolor[HTML]{B4F5F2}-2,02 \\
+9 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,17 &  &  &  &  &  \\
+10 &  & \cellcolor[HTML]{B4F5F2}-1,53 & \cellcolor[HTML]{FDFF89}1,07 &  & \cellcolor[HTML]{4AD7FF}-2,69 &  & \cellcolor[HTML]{4AD7FF}-2,60 &  &  & \cellcolor[HTML]{6F94FF}-6,72 & \cellcolor[HTML]{B4F5F2}-1,12 & \cellcolor[HTML]{6F94FF}-6,90 & \cellcolor[HTML]{F56B00}7,35 & \cellcolor[HTML]{6F94FF}-6,41 & \cellcolor[HTML]{6F94FF}-7,12 \\
+11 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+12 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,32 &  &  & \cellcolor[HTML]{FDFF89}1,03 &  &  \\
+13 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+14 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,84 &  & \cellcolor[HTML]{B4F5F2}-1,72 & \cellcolor[HTML]{FDFF89}1,78 & \cellcolor[HTML]{B4F5F2}-1,62 & \cellcolor[HTML]{B4F5F2}-1,58 \\
+15 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,25 &  & \cellcolor[HTML]{FDFF89}1,04 & \cellcolor[HTML]{B4F5F2}-1,03 &  &  \\
+16 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,48 &  & \cellcolor[HTML]{FDFF89}1,19 & \cellcolor[HTML]{B4F5F2}-1,07 & \cellcolor[HTML]{FDFF89}1,41 &  \\
+17 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,42 &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,20 \\
+18 &  &  &  &  &  & \cellcolor[HTML]{FFC702}4,40 &  & \cellcolor[HTML]{FFC702}3,12 &  &  & \cellcolor[HTML]{6F94FF}-5,25 &  &  &  &  \\
+19 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+20 &  &  & \cellcolor[HTML]{FDFF89}1,02 &  &  &  &  &  &  & \cellcolor[HTML]{B4F5F2}-2,38 &  & \cellcolor[HTML]{B4F5F2}-2,07 & \cellcolor[HTML]{FDFF89}2,44 & \cellcolor[HTML]{B4F5F2}-2,43 & \cellcolor[HTML]{B4F5F2}-2,26 \\
+21 &  &  & \cellcolor[HTML]{B4F5F2}-1,09 &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,83 &  & \cellcolor[HTML]{FDFF89}1,60 & \cellcolor[HTML]{B4F5F2}-1,69 & \cellcolor[HTML]{FDFF89}1,68 & \cellcolor[HTML]{FDFF89}1,73 \\
+22 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,47 &  & \cellcolor[HTML]{FDFF89}1,22 & \cellcolor[HTML]{B4F5F2}-1,26 & \cellcolor[HTML]{FDFF89}1,23 & \cellcolor[HTML]{FDFF89}1,02 \\
+23 &  &  & \cellcolor[HTML]{FDFF89}1,28 &  & \cellcolor[HTML]{B4F5F2}-1,56 &  &  &  &  & \cellcolor[HTML]{4AD7FF}-4,53 &  & \cellcolor[HTML]{4AD7FF}-4,22 & \cellcolor[HTML]{F56B00}5,19 & \cellcolor[HTML]{6F94FF}-5,27 & \cellcolor[HTML]{4AD7FF}-4,91 \\
+24 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}2,19 &  & \cellcolor[HTML]{FDFF89}1,93 & \cellcolor[HTML]{B4F5F2}-1,61 & \cellcolor[HTML]{FDFF89}2,22 & \cellcolor[HTML]{FDFF89}2,09 \\
+25 &  &  & \cellcolor[HTML]{FDFF89}1,59 &  & \cellcolor[HTML]{B4F5F2}-1,42 &  &  &  &  & \cellcolor[HTML]{6F94FF}-5,75 &  & \cellcolor[HTML]{6F94FF}-5,21 & \cellcolor[HTML]{F56B00}5,58 & \cellcolor[HTML]{6F94FF}-6,35 & \cellcolor[HTML]{6F94FF}-5,25 \\
+26 &  &  &  &  &  &  &  &  &  & \cellcolor[HTML]{FDFF89}1,72 &  & \cellcolor[HTML]{FDFF89}1,17 & \cellcolor[HTML]{B4F5F2}-1,46 & \cellcolor[HTML]{FDFF89}1,28 & \cellcolor[HTML]{FDFF89}1,57 \\
+27 &  &  &  &  & \cellcolor[HTML]{B4F5F2}-1,14 &  &  &  &  & \cellcolor[HTML]{4AD7FF}-3,09 &  & \cellcolor[HTML]{4AD7FF}-2,62 & \cellcolor[HTML]{FFC702}2,92 & \cellcolor[HTML]{4AD7FF}-3,27 & \cellcolor[HTML]{4AD7FF}-2,85 \\
+28 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+29 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+30 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+31 &  & \cellcolor[HTML]{B4F5F2}-1,57 &  &  & \cellcolor[HTML]{B4F5F2}-1,47 &  & \cellcolor[HTML]{B4F5F2}-1,72 &  & \cellcolor[HTML]{B4F5F2}-1,10 & \cellcolor[HTML]{4AD7FF}-4,27 & \cellcolor[HTML]{B4F5F2}-1,38 & \cellcolor[HTML]{4AD7FF}-4,64 & \cellcolor[HTML]{F56B00}5,01 & \cellcolor[HTML]{6F94FF}-5,77 & \cellcolor[HTML]{4AD7FF}-4,42 \\
+\hline
+\end{tabular}}
+\caption{Significant fold changes for each variable considered in this project, we also considered to categorize the continous data as a possible way to have more significant results.}
+\label{tab:Q2FC}
+\end{table*}
 
 \subsection{Impact of technical variables on clinical variables}
 
