@@ -30,6 +30,36 @@ diff_exp <- function(features_count, sample_table, design, name) {
     return(NULL)
 }
 
+extract_count_significant <- function(result_table, padj_th = 0.05, fold_th = 1) {
+    res <- as_tibble(result_table, rownames = "gene")
+    return(res %>%
+        filter(padj < padj_th & abs(log2FoldChange) > fold_th) %>%
+        nrow())
+}
+
+extract_count_wrapper <- function(result_folder, padj_th = 0.05, fold_th = 1) {
+    result_files <- list.files(result_folder, pattern = "*.tsv", full.names = TRUE)
+    significant_results <- list()
+    for (file in result_files) {
+        result_table <- read.table(file, sep = "\t", header = TRUE)
+        name <- gsub(".*\\/(.*)\\.tsv", "\\1", file)
+        significant_results[[name]] <- extract_count_significant(result_table)
+    }
+    return(significant_results)
+}
+
+report_up_regulated <- function(result_table, padj_th = 0.05, fold_th = 1, name) {
+    res <- as_tibble(result_table, rownames = "gene")
+    res <- res %>%
+        filter(padj < padj_th & log2FoldChange > fold_th) %>%
+        arrange(desc(log2FoldChange)) %>%
+        slice_head(n = 10) %>%
+        select(gene, log2FoldChange, padj)
+    
+    write.table(res, paste0("data_output/significant_q3/", name, ".tsv"), sep = "\t", row.names = FALSE)
+}
+
+
 clinical_data <- read.table("data_output/clinical_data_preprocessed.tsv", sep = "\t", header = TRUE)
 cluster_data <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE)
 cluster_data[-1] <- log10(cluster_data[-1] + 1)
@@ -48,3 +78,22 @@ rna_counts <- read.table("data/RNA_read_counts_filtered.tsv", sep = "\t", header
 rownames(rna_counts) <- rna_counts$Name
 rna_counts <- as.matrix(rna_counts[-c(1:2, ncol(rna_counts))])
 lapply(names(full_designs), function(x) diff_exp(rna_counts, sample_table, full_designs[[x]], x))
+
+# results exploration
+bonferonni <- 0.05/ncol(cluster_data[-1])
+
+significant_count <- extract_count_wrapper("data_output/desq2_outputs_q3/", padj_th = bonferonni, fold_th = 1)
+non_confounders_elements <- significant_count[grep("confounders", names(significant_count), invert = TRUE)]
+confounders_elements <- significant_count[grep("confounders", names(significant_count))]
+
+
+significant_count_df <- data.frame(cluster = names(non_confounders_elements),
+ count_non_confounders = unlist(non_confounders_elements),
+  count_confounders = unlist(confounders_elements))
+write.table(significant_count_df, "data_output/significant_q3/significant_count.tsv", sep = "\t", row.names = FALSE)
+
+lapply(list.files("data_output/desq2_outputs_q3/", pattern = "*.tsv", full.names = TRUE), function(x) {
+    result_table <- read.table(x, sep = "\t", header = TRUE)
+    name <- gsub(".*\\/(.*)\\.tsv", "\\1", x)
+    report_up_regulated(result_table, padj_th = bonferonni, fold_th = 1, name)
+})
