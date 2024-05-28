@@ -1,5 +1,7 @@
 #GSEA
+#https://biostatsquid.com/fgsea-tutorial-gsea/
 library('fgsea')
+library('ggplot2')
 
 
 matrix_to_list <- function(pws){
@@ -25,42 +27,94 @@ prepare_gmt <- function(genes_data){
     mat[,i] <- as.numeric(hidden %in% gmt[[i]])
   }
   # take only the gene that are in genes_data 
-  hidden1 <- intersect(genes, hidden)
+  hidden1 <- intersect(genes_data, hidden)
+  print(class(hidden1))
   # filter for gene sets with more than 5 genes annotated
-  mat <- mat[hidden1, colnames(mat)[which(colSums(mat[hidden1,])>5)]] 
+  mat <- mat[hidden1, colnames(mat)[which(colSums(mat[hidden1,])>5)]]
   
   final_list <- matrix_to_list(mat)
 
 
 }
-# prepare background gene 
-bg_genes <- prepare_gmt() # mettre gene exp diff 
 
-
-
-# prepare ranked list of gene 
-
-
-# rune GSEA 
-
-GSEAres <- fgsea(pathways = bg_genes, # List of gene sets to check
-                 stats = rankings,
-                 scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
-                 minSize = 10,
-                 maxSize = 500,
-                 nproc = 1) # for parallelisation
-
-
-
-
-
-#### test 
-hidden <- unique(unlist(gmt))
-names(gmt)
-mat <- matrix(NA, dimnames = list(hidden, names(gmt)),
-              nrow = length(hidden), ncol = length(gmt))
-for (i in 1:dim(mat)[2]){
-  mat[,i] <- as.numeric(hidden %in% gmt[[i]])
+GSEA <- function(name,transcript_count){
+  # prepare bg_gene 
+  genes_diff <- read.table(paste0("data_output/desq2_outputs_q3/",name,"_confounders.tsv"),
+                           sep = "\t", header = TRUE, stringsAsFactors = TRUE)
+  genes_diff$Name <- row.names(genes_diff)
+  merged_df <- merge(genes_diff, transcript_count[, c("Description", "Name")], by = "Name", all.x = FALSE)
+  genes1 <- merged_df$Description
+  bg_genes <- prepare_gmt(genes1)
+  # ranking 
+  rankings <- sign(genes_diff$log2FoldChange)*(-log10(genes_diff$padj))  # ou juste utulise log2foldchange 
+  names(rankings) <- merged_df$Description
+  rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
+  #plot(rankings)
+  print(max(rankings))# si infini error fgsea 
+  print(min(rankings))
+  if (max(rankings) == "Inf" || min(rankings) == "INF" ){
+    max_ranking <- max(rankings[is.finite(rankings)])
+    min_ranking <- min(rankings[is.finite(rankings)])
+    rankings <- replace(rankings, rankings > max_ranking, max_ranking * 10)
+    rankings <- replace(rankings, rankings < min_ranking, min_ranking * 10)
+    rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
+    }
+  
+  GSEAres <- fgsea(pathways = bg_genes, # List of gene sets to check
+                   stats = rankings,
+                   scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
+                   minSize = 10,
+                   maxSize = 1000,
+                   nproc = 1) # for parallelisation
+  filename = 'data_output/fgsea_result/'
+  #saveRDS(GSEAres, file = paste0(filename,name,'_gsea_results.rds'))
+  topPathwaysUp <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
+  topPathwaysDown <- GSEAres[ES < 0][head(order(padj), n = 10), pathway]
+  topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
+  plot <- plotGseaTable(bg_genes[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
+  ggsave(filename = paste0(filename, name,"_cofunder", "_top_patways.png"), plot = plot,width = 20, height = 8)
+  plot2 <- plotEnrichment(bg_genes[[head(GSEAres[order(padj), ], 1)$pathway]],
+                 rankings) + 
+    labs(title = head(GSEAres[order(padj), ], 1)$pathway)
+  ggsave(filename = paste0(filename, name,"_cofunder", "_enriched pathway.png"), plot = plot2,width = 20, height = 8)
+  
+  return(NULL)
 }
-mat2 <- mat[hidden, colnames(mat)[which(colSums(mat[hidden1,])>5)]]
-final_list <- matrix_to_list(mat2)
+
+features_count <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE, row.names = 1)
+transcript_count <- read.table("data/RNA_read_counts.tsv", sep = "\t", header = TRUE, stringsAsFactors = TRUE)
+cluster_name<- names(features_count)[c(1,2,3)]
+lapply(cluster_name, GSEA,transcript_count = transcript_count)
+
+
+
+#######
+GSEA_result <- function(name){
+  df <- as.data.frame(readRDS(paste0("data_output/fgsea_result/",name,"_gsea_results.rds")
+                              , refhook = NULL))
+  significant_pathways <- df[df$padj < 0.01, ]
+  print(paste("significant_pathways for",name,":",nrow(significant_pathways)))
+  filtered_df <- df[df$ES > 0, ]
+  ordered_df <- filtered_df[order(filtered_df$pval), ]
+  topPathwaysUp <- ordered_df[10, ]
+  topPathwaysDown <- ordered_df[length(nrow(ordered_df)-10, ]
+  topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
+  #pdf(file = paste0(filename, '_gsea_top30pathways.pdf'), width = 20, height = 15)
+  plotGseaTable(bg_genes[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
+  #dev.off()
+  return(NULL)
+}
+
+cluster_name2 <- names(features_count)[c(1,2,3)]
+lapply(cluster_name2 , GSEA_result)
+
+df <- as.data.frame(readRDS(paste0("data_output/fgsea_result/","Mophological.cluster.G4_28","_gsea_results.rds")
+                            , refhook = NULL))
+significant_pathways <- df[df$padj < 0.01, ]
+filtered_df <- df[df$ES > 0, ]
+ordered_df <- filtered_df[order(filtered_df$pval), ]
+topPathwaysUp <- ordered_df[1:10, ]
+topPathwaysDown <- ordered_df[(nrow(ordered_df)-10):nrow(ordered_df), ]
+topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
+plotGseaTable(bg_genes[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
+
