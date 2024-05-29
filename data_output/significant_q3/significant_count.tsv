@@ -1,4 +1,4 @@
-"cluster"	"count_non_confounders"	"count_confounders"
+"cluster"	"count_non_confounders"	"count_confounders" 
 "Mophological.cluster.G4_0"	53	2
 "Mophological.cluster.G4_1"	40	23
 "Mophological.cluster.G4_10"	99	4

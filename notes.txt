@@ -9,3 +9,21 @@
     - 3. + nouveau résultats dans excel Simon
 
 => tourner Q3
+
+
+Ecriture:
+
+Q2:
+Méthode :Leo
+2.1: Simon
+2.2: Simon
+2.3: Max
+
+Q3:
+3.1: Leo
+3.2: Max
+3.3: Simon
+
+Annexes:
+- 32x2 Exp diff rna
+- 32x2 Exp diff set
