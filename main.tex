@@ -38,7 +38,7 @@
 %\addbibresource{references.bib}
 
 \title{\Large BINF-F401 Project \\
-\huge Title}
+\huge Analysis of the morphological clusters from heart and there associations with clinical and transcriptomic data.}
 
 
 \author{
@@ -57,7 +57,7 @@
 \setlength{\headheight}{32.3pt}
 \fancyhead{}\fancyfoot{}
 \fancyhead[L]{\includegraphics[scale = 0.05]{figures/LOGO_Universite _libre_bruxelles.png}}
-\fancyhead[R]{Title}
+\fancyhead[R]{Analysis of the morphological clusters from heart.}
 \fancyfoot[R]{\thepage}
 
 \maketitle
@@ -67,10 +67,10 @@
 \section{Introduction}
 R \citep{R:2024}
 
-\section{exploration of  clinical variables}
+\section{Exploration of  clinical variables}
 Description des variables .....  
 
-\subsection{Distribution of the variables }
+\subsection{Distribution of the variables}
 
 \begin{scriptsize}	
 	
@@ -107,16 +107,29 @@ Principal Component Analysis (PCA) is a method of determining individual profile
 	\label{fig:lvlMap}
 \end{figure}
 
-The correlation circle allows us to represent quantitative variables according to the relationships they might have with each other, and the degree of explanation of these variables provided by the chosen dimensions. In this case, the two dimensions represented together explain only 48.72\% of the data, suggesting a certain complexity. 
+The correlation circle allows us to represent quantitative variables according to the relationships they might have with each other, and the degree of explanation of these variables provided by the chosen dimensions. 
+In this case, the two dimensions represented together explain only 48.72\% of the data, suggesting a certain complexity. 
 This graph shows some correlation between the variables height (HGHT), weight (WGHT) and body mass index (BMI), which is not surprising given that taller people tend to be heavier, and also given that BMI is a function of height and weight. 
-There also appears to be a correlation between age (AGE) and ischemic time (TRISCHD), i.e. the time between an individual's death and organ removal. This last observation is more difficult to explain intuitively. We can, however, point out that the variable AGE is weakly explained by the first two dimensions chosen, since its vector is close to the origin. This indicates that this possible correlation may not be significant, since by considering other dimensions, the vectors could be significantly far apart.
+There also appears to be a correlation between age (AGE) and ischemic time (TRISCHD), i.e. the time between an individual's death and organ removal. 
+This last observation is more difficult to explain intuitively. 
+We can, however, point out that the variable AGE is weakly explained by the first two dimensions chosen, since its vector is close to the origin. 
+This indicates that this possible correlation may not be significant, since by considering other dimensions, the vectors could be significantly far apart.
 
-In contrast to the correlation circle, the level map represents the different categories or levels of categorical variables. We can already see that gender is close to different clusters. It would seem that there is a correlation between gender and type of death in these data, given that women seem to be more prone to ventilatory problems than men, which would explain the presence of a respirator before the person's death (Yes). It also appears that women are more likely than men to be organ donors. This graph therefore shows a certain correlation between gender and organ donation, type of death, but also between type of death and the presence or absence of a respiratory system prior to death.
+In contrast to the correlation circle, the level map represents the different categories or levels of categorical variables. 
+We can already see that gender is close to different clusters. 
+It would seem that there is a correlation between gender and type of death in these data, given that women seem to be more prone to ventilatory problems than men, which would explain the presence of a respirator before the person's death (Yes). 
+It also appears that women are more likely than men to be organ donors. This graph therefore shows a certain correlation between gender and organ donation, type of death, but also between type of death and the presence or absence of a respiratory system prior to death.
 
-Although these graphs illustrate the presence of possible correlations, they do not give any indication of their intensity, as they are not quantified. This quantification of correlation is particularly complex, as there is no correlation coefficient that can be applied to either quantitative or qualitative variables, or between these two types of variable. It was therefore decided to use different coefficients depending on the type of comparison, although this choice does not allow all correlations to be compared with each other. 
-Correlations between quantitative variables were established using the cor() function with Spearman's method. This correlation was chosen because it does not require normally distributed variables, which is not the case for most of the variables considered. This coefficient is the only one to consider negative correlations.
-Cramer's V was used to determine correlations between categorical variables, a coefficient based on the Chi-square statistic, and which is non-parametric. This correlation was calculated using the cramerV() function in the rcompanion package, with a bias correction given that this test tends to overestimate the relationships between categorical variables.
-Logistic regression is used to determine the correlation between a quantitative variable and a binomial categorical variable, in this case gender and cohort. Finally, Cramer's V is applied to the H statistic of the Kruskall-Willis test between categorical and quantitative variables, as this statistic is the Kruskall-Willis chi-square. This application simply involves calculating the square root of the H statistic divided by the number of observations, the H statistic coming from the kruskall.willis() function.
+Although these graphs illustrate the presence of possible correlations, they do not give any indication of their intensity, as they are not quantified. 
+This quantification of correlation is particularly complex, as there is no correlation coefficient that can be applied to either quantitative or qualitative variables, or between these two types of variable. 
+It was therefore decided to use different coefficients depending on the type of comparison, although this choice does not allow all correlations to be compared with each other. 
+Correlations between quantitative variables were established using the cor() function with Spearman's method. 
+This correlation was chosen because it does not require normally distributed variables, which is not the case for most of the variables considered. 
+This coefficient is the only one to consider negative correlations.
+Cramer's V was used to determine correlations between categorical variables, a coefficient based on the Chi-square statistic, and which is non-parametric. 
+This correlation was calculated using the cramerV() function in the rcompanion package, with a bias correction given that this test tends to overestimate the relationships between categorical variables.
+Logistic regression is used to determine the correlation between a quantitative variable and a binomial categorical variable, in this case gender and cohort. 
+Finally, Cramer's V is applied to the H statistic of the Kruskall-Willis test between categorical and quantitative variables, as this statistic is the Kruskall-Willis chi-square. This application simply involves calculating the square root of the H statistic divided by the number of observations, the H statistic coming from the kruskall.willis() function.
 
 \begin{figure}[H]
 	\centering
@@ -125,7 +138,13 @@ Logistic regression is used to determine the correlation between a quantitative 
 	\label{fig:allCor}
 \end{figure}
 
-Looking at all the results together, we can see that there is a significant correlation between gender and height, which can simply be explained by the fact that men are generally taller than women. The correlation between height and weight, as well as between weight and BMI, can be explained as described above. Nevertheless, the absence of any significant correlation between height and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. There is also a correlation between cohort and both type of death (DTHHRDY) and use of artificial ventilation before death (DTHVNT). There is a certain logic behind these correlations: the cohort variable divides people into organ donors and postmortem donors, i.e. victims of brain or cardiac death, thus depending on the type of death, but we can also consider that people with brain death are generally assisted with artificial ventilation before death. There also seems to be a correlation between the time between the individual's death and the removal of his or her organs and the type of death, but also the presence of a ventilatory apparatus. Finally, DTHVNT and DTHHRDY are also correlated.
+Looking at all the results together, we can see that there is a significant correlation between gender and height, which can simply be explained by the fact that men are generally taller than women. 
+The correlation between height and weight, as well as between weight and BMI, can be explained as described above. 
+Nevertheless, the absence of any significant correlation between height and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. 
+There is also a correlation between cohort and both type of death (DTHHRDY) and use of artificial ventilation before death (DTHVNT). 
+There is a certain logic behind these correlations: the cohort variable divides people into organ donors and postmortem donors, i.e. victims of brain or cardiac death, thus depending on the type of death, but we can also consider that people with brain death are generally assisted with artificial ventilation before death. 
+There also seems to be a correlation between the time between the individual's death and the removal of his or her organs and the type of death, but also the presence of a ventilatory apparatus. 
+Finally, DTHVNT and DTHHRDY are also correlated.
 
 \begin{table*}[t]
 \footnotesize
@@ -207,6 +226,44 @@ Upon conducting linear regression (generalized linear regression in the case of 
 Subsequently, linear regression (or generalize d linear regression) was rerun for each variable of interest, utilizing only the significant technical variables from the overall models.
 The residuals of these models were stored for further analysis.
 These residuals represent the data of interest with the unwanted effects of the technical variables removed, providing a clearer understanding of the clinical data.
+
+\section{Association between clinical variables and morphological data}
+
+\subsection{Method}
+
+To investigate the relationship between clinical and morphological data, we treated this problem as a differential expression analysis. 
+In this case, the clinical data represents the samples metadata and the morphological data the features. 
+This approach allow us to take advantage of the numerous tools and methods developed for differential expression analysis.
+Here we used the DEseq2 package \citep{DESeq2:2014}. The strength of DESeq2 is that it does correct the morphological count matrix to take into account potential bias. 
+These bias are for instance the difference in the total count between samples and the difference in library composition that can lead to bad normalisation if not taken into account. 
+To execute this normalisation, DESeq2 will compute geometric mean for each morphological cluster. 
+Then, it will use these values and create a new matrix that consists of the counts divided by their associated geometric mean. 
+After that it will use this new matrix to build scaling factors for each sample, and finally applying this scaling factor to the original counts.
+
+For the question 2.1 and 2.2 we used the each clinical variable and each technical variable as the contrast for the design of the differential analysis.
+For the question 2.3 we used a contrast composed of each clinical variable plus the technical variables that were significantly associated with the clinical variable in the previous section.
+By doing that we ensure that we adjust the analysis to take into account the confonding effect of the technical variables.
+Note that for numerical variables, we used the rank-based inverse normal transformated values obtained in the Question 1.1.
+
+We also decided to make extra analysis by converting the numeric clinical data to binary data. By doing this we assume to obtain more significant results. 
+This can be explained by the fact that the DESeq2 method will in the case of continous variable report the log2 fold change per unit of change of that variable.
+Therefore for variables with an high range of value, the fold change will be very low. By using binary variable we can increase the fold change and therefore the significance of the results.
+The binary conversion was done by taking the median of the variable as the threshold to separate the two categories.
+
+Some other changes have been made for this analysis, they are listed in the following:
+\begin{itemize}
+	\item  The Hardy scale variable was converted to an 3 categories variable, by grouping the intermediate and slow categories together (cf. Q1)
+	\item  Samples with DTHVNT unknown were discarded
+	\item  A pseudo-count of 1 was added to the count matrix to avoid log transformation of 0 values
+\end{itemize}
+
+
+As for the interpretation of the results, we decided to fix the threshold values as follow, alpha at 0.05 and log2 fold change at 1.
+
+
+\subsection{Clinical data vs. morphological data}
+\subsection{Technical data vs. morphological data}
+\subsection{Adjusted clinical data vs. morphological data}
 
 \bibliography{references}
 
