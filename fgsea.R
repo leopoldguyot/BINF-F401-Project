@@ -80,7 +80,8 @@ GSEA <- function(name,transcript_count){
   ggsave(filename = paste0(filename, name,"_cofunder", "_enriched pathway.png"), plot = plot2,width = 20, height = 8)
   GSEA_filtered <- GSEAres[pathway %in% topPathways]
   GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
-  write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_non_conf","_fgseaRes.txt"),
+  GSEA_filtered$padj <- GSEA_filtered$padj /32 
+  write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_conf","_fgseaRes.txt"),
               sep = "\t", row.names = FALSE)
   return(NULL)
 }
@@ -118,11 +119,16 @@ GSEA2 <- function(name,transcript_count){
   topPathwaysUp <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
   topPathwaysDown <- GSEAres[ES < 0][head(order(padj), n = 10), pathway]
   topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
-  plot <- plotGseaTable(bg_genes[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
-  ggsave(filename = paste0(filename, name,"_top_patways.png"), plot = plot,width = 20, height = 8)
-  plot2 <- plotEnrichment(bg_genes[[head(GSEAres[order(padj), ], 1)$pathway]],rankings) + 
-    labs(title = head(GSEAres[order(padj), ], 1)$pathway)
-  ggsave(filename = paste0(filename, name,"_enriched pathway.png"), plot = plot2,width = 20, height = 8)
+  #plot <- plotGseaTable(bg_genes[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
+  #ggsave(filename = paste0(filename, name,"_top_patways.png"), plot = plot,width = 20, height = 8)
+  #plot2 <- plotEnrichment(bg_genes[[head(GSEAres[order(padj), ], 1)$pathway]],rankings) + 
+    #labs(title = head(GSEAres[order(padj), ], 1)$pathway)
+  #ggsave(filename = paste0(filename, name,"_enriched pathway.png"), plot = plot2,width = 20, height = 8)
+  GSEA_filtered <- GSEAres[pathway %in% topPathways]
+  GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
+  GSEA_filtered$padj <- GSEA_filtered$padj /32 
+  write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_fgseaRes.txt"),
+              sep = "\t", row.names = FALSE)
   return(NULL)
 }
 
@@ -151,4 +157,7 @@ GSEA_filtered <- GSEA[pathway %in% topPathways]
 GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
 fwrite(GSEA_filtered[1:5,c(-2,-4,-7,-8)], file="data_output/table_reactome/fgseaRes.txt", sep="\t", sep2=c("", " ", ""))
 write.table(GSEA_filtered[1:5,c(-2,-4,-7,-8)],file="data_output/table_reactome/fgseaRes2.txt",sep = "\t", row.names = FALSE)
+
+setwd("/Users/godinmax/Desktop/bioinf/geno_projet ")
+
 
