@@ -262,7 +262,34 @@ As for the interpretation of the results, we decided to fix the threshold values
 
 
 \subsection{Clinical data vs. morphological data}
+
+As a reminder, the clinical variables correspond to AGE, SEX, HGHT, WGHT and BMI. The results of the association of these variables with morphological clusters therefore correspond to the first five columns of Table \ref{tab:Q2FC}.
+For the AGE variable, we can see that there are no significant results, no fold change, simply by considering the standardized values of this variable. Nevertheless, by dividing these values into two age groups of over and under 56, we can observe 4 clusters with significant characteristics. Clusters 0 and 2 have positive fold change values, indicating that these two clusters are made up of parts of samples from donors aged over 56, unlike clusters 10 and 31. 
+
+In terms of sex, clusters 0, 2 and 21 have negative values, indicating a greater representation of male donors in these clusters, in contrast to clusters 6, 8, 10, 20, 23 and 25. It should be noted, however, that a relatively large number of clusters are characterized by females, even though these represent a certain minority of the data used. 
+
+With normalized values for individual height, only cluster 6 shows a fold change whose negative value seems to indicate a certain number of shorter donors. This cluster is also repeated when we categorize this variable, but with a more pronounced fold change. We also find clusters 10, 23, 25, 27 and 31. All these clusters have a negative fold change for this categorized variable, indicating the presence of sample parts from relatively smaller donors, measuring less than 71 inch or 180cm. The term 'relatively' is important here, as the median is particularly high in this dataset.
+
+According to the normalized values of individual weights, we only observe a particularly positive fold change for cluster 18, which disappears when we consider this variable categorically. This observation can be explained by the fact that, in the case of a continuous variable, the fold change should be considered as the increase in the number of tiles in a cluster as the values of the variable increase. In other words, the positive value for cluster 18 indicates that, as we consider values with increasingly large weights, the number of tiles corresponding to these weights will become larger and larger. Thus, cluster 18 comprises a smaller number of tiles from low-weight donors, and a larger number of tiles from higher-weight donors. The absence of this cluster in the categorical column may be explained by a rather even distribution of these weight values on either side of the median. This particularity of cluster 18 could also be explained by the fact that it contains very few tiles (32.4k) compared with the majority of clusters (more or less 200k). In the categorical part, cluster 2 seems to be made up preferentially of tiles from donors over 181 pounds, or 82.1 kg, unlike clusters 10 and 31.
+
+The same observations regarding cluster 18 can be made with the BMI variable. Furthermore, once again, cluster 2 has a positive value indicating a greater presence of donors with a BMI of over 28, i.e. in obese or overweight conditions (U.S. Center For Disease Control And Prevention, 2022), unlike cluster 31.
+
+From a more global point of view, clusters 10 and 31 are particularly similar, and this similarity can be explained by the fact that they are very close to each other in the morphological atlas of the organ studied. As such, they have similar characteristics, as the different tiles that constitute them largely originate from the same anterior cluster (G3\_C1). The different results also underline the correlations determined previously, notably the correlation between sex and height, and between weight and BMI.
+
 \subsection{Technical data vs. morphological data}
+
+Technical variables include COHORT, TRISCHD, DTHVNT and DTHHRDY. Their associations with the various clusters are therefore shown in the last 4 columns of Table \ref{tab:Q2FC}. 
+
+The COHORT variable represents the type of organ donor, and since we are comparing the post-mortem class with simple organ donors, positive values correspond to a higher proportion of tiles from post-mortem, brain-dead donors. Particularly negative values can be seen for clusters 6, 10, 23, 25, 27 and 31, indicating a particularly high proportion of classic organ donors.
+
+Comparing normalized and categorized ischemic time, we can again see that cluster 18 returns a significant result in the former case, but not the latter. Following the same logic as above, we can assume that this cluster contains a significant proportion of tiles from organs with relatively low ischemic times, but that the distribution of these times within the cluster does not appear to differ significantly on either side of the overall median. Surprisingly, this kind of result only appears for cluster 18. Although a negative value here corresponds to an ischemic time of less than 50 minutes, and vice-versa for positive values.
+
+As previously mentioned, the DTHVNT variable corresponds to the presence or absence of respiratory assistance prior to the patient's death. Since we are comparing the presence with the absence of such assistance, positive results correspond to a relative abundance of individuals with respiratory assistance in the cluster, and vice versa for negative values. A certain inverse relationship can be observed between the COHORT and DTHVNT variables: among common clusters, the results are of opposite signs, and the importance of these values is comparable. This observation can be explained by the fact that there is a correlation between these two variables. Comparison with the TRISCHD results, which are of opposite sign for common clusters, highlights the correlation that also exists between the two variables. 
+
+The DTHHRDY variable contains the types of death, considered here as slow, intermediate and fast. The last two types are compared with slow death. We can see that the vast majority of clusters with a result for one comparison also return a result of the same sign for the other comparison. Thus, a double positive result implies that the cluster contains mainly tiles from people with relatively rapid or intermediate death, and by extension a very small amount of tiles from patients with slow death. Conversely, a double-negative result implies that the cluster is particularly characterized by slow deaths. Cluster 16, on the other hand, is characterized by intermediate death, and cluster 17 by only a low rate of rapid death. As before, these results also express correlations between DTHHRDY and the variables COHORT, TRISCHD and DTHVNT. 
+
+Looking at all the values, several clusters stand out for their absolute fold change values for each technical variable, but also for the presence of certain patterns. For example, clusters 6, 10, 23, 25, 27 and 31 each have particularly negative values, except for the DTHVNT variable, which has very positive values. These similarities also appear in the morphological atlas, in terms of their position in relation to each other. We've already highlighted the fact that clusters 10 and 31 follow one another, but clusters 23, 27 and 6 also follow one another, but are simply separated by a different cluster. Since they are relatively close, we can assume that some of their similarities can be explained by tiles from previous clusters (G3) in common. Conversely, some clusters have positive values for all technical variables except DTHVNT, i.e. clusters 0, 2, 21, 22, 24 and 26. Their positions in the morpholigic atlas allow us to determine that their tiles come from common clusters, notably G3\_C7.
+
 \subsection{Adjusted clinical data vs. morphological data}
 
 \section{Association between morphological data and gene expression}
@@ -289,6 +316,8 @@ fgsea take as input a ranked list of or genes differentially expressed, we ranke
 
 
 \bibliography{references}
+
+U.S. Center For Disease Control And Prevention 2022, \textit{About Adult BMI}, accessed 4 June 2024, https://www.cdc.gov/healthyweight/assessing/bmi/adult\_bmi/index.html 
 
 \end{multicols}
 \end{document}
