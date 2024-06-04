@@ -265,6 +265,29 @@ As for the interpretation of the results, we decided to fix the threshold values
 \subsection{Technical data vs. morphological data}
 \subsection{Adjusted clinical data vs. morphological data}
 
+\section{Association between morphological data and gene expression}
+\subsection{...}
+\subsection{Gene Set Enrichment Analysis}
+GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
+The process involves calculating an ES value for each pathway, then generating random gene sets of the same size and calculating an ES for each of these random sets. .The P-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
+
+Here, we are going to use FGSEA (Fast Gene Set Enrichment Analysis), which efficiently estimates the GSEA P-value for a collection of pathways. It uses FGSEA-simple and FGSEA-multilevel on the pathways that have a low P-value.
+
+FGSEA-simple calculates the estimated P-values efficiently and simultaneously for the whole collection of gene sets but with limited accuracy. It is based on the idea that random gene set samples can be shared between different input pathways. It estimates the P-value of a pathway with the largest gene set size “M” as a proportion of a sample of random gene sets of size KM, having the same or more extreme ES value as the pathway. For other pathways “j”, it constructs a set of independent samples of size Kj (Kj < KM) by considering the prefixes in each sample of the larger random gene set and then estimates the P-value using the set of independent samples. It also uses the idea that using the larger random gene sets, the ES values for all the prefixes can be calculated efficiently using a square root heuristic. It uses a variant of the enrichment curve where the enrichment curve is constructed starting with the gene that is the most upregulated to the most downregulated, with the curve going right if the gene is not present in the pathway and up if it is present. Then the enrichment score can be determined using the point that is furthest from the diagonal.
+
+FGSEA-multilevel can estimate low P-values accurately but for individual gene sets. It is based on a multilevel split Monte Carlo scheme. It calculates the probability of a random gene set of size K to have an enrichment score no less than $\gamma$, where $\gamma$ is an ES value > 0 given as input. Successively, the method finds ES levels ($l_i$) where the probability of ES being greater than the ES levels ($l_i$) is equal to $2^{-i}$. Finally, the method stops when $ l_i $becomes greater than $\gamma$ and when the P-value approaches $2^{-i}$.
+
+fgsea take as input a ranked list of or genes differentially expressed, we ranked them by significance and by the direction of the change using the formula:
+
+ $ RANK =sign(FC)* -log_{10}(p-value)  $
+ 
+ Where FC is the log2(fold change).We used this formula instead of the log2fold to take into account genes with a large fold change but non-significant. At the top, we have the most significant and up-regulated genes, and at the bottom, the most significant down-regulated genes. Then it needs a list of gene sets. We used “c2.cp.reactome.v7.5.1.symbols.gmt”. This list of gene sets has been filtered to only contain genes  that are present in the ranked list of differentially expressed genes and with at least 5 genes present. Finaly, we run fgsea and exclude pathways that have gene set with a length under 10 and pathways with a gene set of over 1000 genes 
+
+
+
+
+
+
 \bibliography{references}
 
 \end{multicols}
