@@ -328,7 +328,57 @@ fgsea take as input a ranked list of or genes differentially expressed, we ranke
 \textcolor{red} { ajouter si p-val petit inf  }
  Where FC is the log2(fold change).We used this formula instead of the log2fold to take into account genes with a large fold change but non-significant. At the top, we have the most significant and up-regulated genes, and at the bottom, the most significant down-regulated genes. Then it needs a list of gene sets. We used “c2.cp.reactome.v7.5.1.symbols.gmt”. This list of gene sets has been filtered to only contain genes  that are present in the ranked list of differentially expressed genes and with at least 5 genes present. Finaly, we run fgsea and exclude pathways that have gene set with a length under 10 and pathways with a gene set of over 1000 genes 
 
-
+\begin{table*}[t]
+\footnotesize
+\makebox[\linewidth]{
+\begin{tabular}{|c |c |c |c| c | c| c|}
+\cline{1-5}
+    \hline & \multicolumn{1}{c|}{\rotatebox{90}{AGE adjusted for  COHORT }} &  \multicolumn{1}{c|}{\rotatebox{90}{SEX adjusted for DTHHRDY  } }  & \multicolumn{1}{c|}{\rotatebox{90}{HGHT adjusted for DTHHRDY }} & \multicolumn{1}{c|}{\rotatebox{90}{WGHT adjusted for DTHHRDY }} & \multicolumn{1}{c|}{\rotatebox{90}{BMI adjusted for DTHHRDY + COHORT }}  \\
+    \hline 
+\rotatebox{90}{Cluster} &
+  \rotatebox{0}{Categorical (56+ vs -56)} &
+  \rotatebox{0}{Female vs Male} &
+  \rotatebox{0}{Categorical (71+ vs -71)} &
+  \rotatebox{0}{Categorical (181+ vs -181)} &
+  \rotatebox{0}{Categorical (28+ vs -28)}  \\
+  \hline
+0 &  &  & &  &   \\
+1 &  &  &  &  &      \\
+2 &  &  &  &   & \\
+3 &  &  &  &  &    \\
+4 &  &  &  &  &   \\
+5 &  &  &  &  &   \\
+6 &  &  &  & \cellcolor[HTML]{B4F5F2}-1,02 &\\
+7 &  &  &  &  &    \\
+8 &  &  & &  &   \\
+9 &  &  &  &  &   \\
+10 &  &  &  \cellcolor[HTML]{B4F5F2}-1.32 & \cellcolor[HTML]{B4F5F2}-1.41 \\
+11 &  &  &  &  &   \\
+12 &  &  &  &  &    \\
+13 &  &  &  &  &   \\
+14 &  &  &  &  &  \\
+15 &  &  &  &  &   \\
+16 &  &  &  &  &    \\
+17 &  &  &  &  &   \\
+18 &  &  &  &  &   \\
+19 &  &  &  &  &    \\
+20 &  &  &  &  &  \\
+21 &  &  &  &  &   \\
+22 &  &  &  &  &  \\
+23 &  &  & &  &  \\
+24 &  &  &  &  &  \\
+25 &  &  & &  &\\
+26 &  &  &  &  &   \\
+27 &  &  &  &  \cellcolor[HTML]{FDFF89}1.07 &  \\
+28 &  &  &  &  & \\
+29 &  &  &  &  & \\
+30 &  &  &  &  &  \\
+31 &  &  &  &  &  \\
+\hline
+\end{tabular}}
+\caption{Significant fold changes for each non-technical variable adjusted for their confounding technical variables.}
+\label{tab:Q2FC}
+\end{table*}
 
 
 
