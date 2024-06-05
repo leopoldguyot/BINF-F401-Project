@@ -57,7 +57,7 @@
 \setlength{\headheight}{32.3pt}
 \fancyhead{}\fancyfoot{}
 \fancyhead[L]{\includegraphics[scale = 0.05]{figures/LOGO_Universite _libre_bruxelles.png}}
-\fancyhead[R]{Analysis of the morphological clusters from heart.}
+\fancyhead[R]{Analysis of the morphological clusters from heart}
 \fancyfoot[R]{\thepage}
 
 \maketitle
@@ -272,7 +272,7 @@ With normalized values for individual height, only cluster 6 shows a fold change
 
 According to the normalized values of individual weights, we only observe a particularly positive fold change for cluster 18, which disappears when we consider this variable categorically. This observation can be explained by the fact that, in the case of a continuous variable, the fold change should be considered as the increase in the number of tiles in a cluster as the values of the variable increase. In other words, the positive value for cluster 18 indicates that, as we consider values with increasingly large weights, the number of tiles corresponding to these weights will become larger and larger. Thus, cluster 18 comprises a smaller number of tiles from low-weight donors, and a larger number of tiles from higher-weight donors. The absence of this cluster in the categorical column may be explained by a rather even distribution of these weight values on either side of the median. This particularity of cluster 18 could also be explained by the fact that it contains very few tiles (32.4k) compared with the majority of clusters (more or less 200k). In the categorical part, cluster 2 seems to be made up preferentially of tiles from donors over 181 pounds, or 82.1 kg, unlike clusters 10 and 31.
 
-The same observations regarding cluster 18 can be made with the BMI variable. Furthermore, once again, cluster 2 has a positive value indicating a greater presence of donors with a BMI of over 28, i.e. in obese or overweight conditions (U.S. Center For Disease Control And Prevention, 2022), unlike cluster 31.
+The same observations regarding cluster 18 can be made with the BMI variable. Furthermore, once again, cluster 2 has a positive value indicating a greater presence of donors with a BMI of over 28, i.e. in obese or overweight conditions \citep{cdc_all_2022}, unlike cluster 31.
 
 From a more global point of view, clusters 10 and 31 are particularly similar, and this similarity can be explained by the fact that they are very close to each other in the morphological atlas of the organ studied. As such, they have similar characteristics, as the different tiles that constitute them largely originate from the same anterior cluster (G3\_C1). The different results also underline the correlations determined previously, notably the correlation between sex and height, and between weight and BMI.
 
@@ -334,8 +334,6 @@ fgsea take as input a ranked list of or genes differentially expressed, we ranke
 
 
 \bibliography{references}
-
-U.S. Center For Disease Control And Prevention 2022, \textit{About Adult BMI}, accessed 4 June 2024, https://www.cdc.gov/healthyweight/assessing/bmi/adult\_bmi/index.html 
 
 \end{multicols}
 \end{document}

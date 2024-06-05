@@ -27,3 +27,23 @@ Q3:
 Annexes:
 - 32x2 Exp diff rna
 - 32x2 Exp diff set
+
+
+à relire:
+
+- Section 2.2
+- Section 3.2 et 3.3
+- Section 3.1
+
+Todo:
+
+- Section 1 intro => LEO
+- Début section 2 informations variable => MAX
+- 2.1 => MAX
+- 2.3 => LEO
+- 3.4 => MAX
+- 4.1 => LEO
+- 4.2 => MAX
+- 4.3 => SIMON
+
+- Creer Annexes avec les tableaux (NES) => LEO
