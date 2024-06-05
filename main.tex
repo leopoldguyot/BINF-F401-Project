@@ -293,8 +293,26 @@ Looking at all the values, several clusters stand out for their absolute fold ch
 \subsection{Adjusted clinical data vs. morphological data}
 
 \section{Association between morphological data and gene expression}
-\subsection{...}
-\subsection{Gene Set Enrichment Analysis}
+\subsection{Association analyses at the level of the transcript}
+
+We performed a detailed differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster. Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
+
+Differential analysis was conducted for each of the 32 clusters to determine the transcripts that varied significantly in function of the clusters.
+
+
+To ensure robust results, an additional differential analysis was performed correcting for potential confounding effects of technical variables.
+
+The following criteria where used to determine the significance of the results:
+\begin{itemize}
+    \item \textbf{Log2 Fold Change Threshold}: A threshold of 1 was set to consider significant changes in gene expression.
+    \item \textbf{Adjusted P-value Threshold}: P-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
+\end{itemize}
+
+For each cluster, we report the following:
+\begin{enumerate}
+    \item Number of significant up-regulated and down-regulated genes, identified based on the set thresholds.
+    \item Top 10 most significant up-regulated genes, ranked by the adjusted p-value.
+\end{enumerate}\subsection{Gene Set Enrichment Analysis}
 GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
 The process involves calculating an ES value for each pathway \textcolor{red} { ajouter comment calculer ES }, then generating random gene sets of the same size and calculating an ES for each of these random sets. .The P-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
 
