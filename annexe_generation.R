@@ -12,10 +12,9 @@ doc_head <- c("\\documentclass{article}",
               "\\usepackage{subcaption}",
               "\\usepackage{hyperref}",
               "\\usepackage{geometry}",
-              "\\usepackage{tabularx}", 
-              "\\geometry{a4paper, top=2cm, bottom=2cm, left=1cm, right=1cm}",
+              "\\geometry{a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm}",
               "\\begin{document}",
-              "\\title{Annexe}",
+              "\\title{Annexe 1: Top 10 significant results by cluster}",
               "\\maketitle",
               "\\tableofcontents",
               "\\newpage")
@@ -74,7 +73,7 @@ for (i in 1:length(q3_1_df)) {
         write("No significant transcript", "annexe.tex", append=TRUE, sep="\n")
         next
     }
-    latex_code <- capture.output(print(xtable(q3_1_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_df)[i]), label=paste0("tab:q3_1_", names(q3_1_df)[i]), digits=4), type = "latex", table.placement = "H", tabular.environment = 'tabularx', width = "\\textwidth"))
+    latex_code <- capture.output(print(xtable(q3_1_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_df)[i]), label=paste0("tab:q3_1_", names(q3_1_df)[i]), digits=4), type = "latex", table.placement = "H"))
 
     write(latex_code, "annexe.tex", append=TRUE, sep="\n")
 }
@@ -86,7 +85,7 @@ for (i in 1:length(q3_1_conf_df)) {
         write("No significant transcript", "annexe.tex", append=TRUE, sep="\n")
         next
     }
-    latex_code <- capture.output(print(xtable(q3_1_conf_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_1_conf_", names(q3_1_conf_df)[i]), digits=4), type = "latex", table.placement = "H", tabular.environment = 'tabularx', width = "\\textwidth"))
+    latex_code <- capture.output(print(xtable(q3_1_conf_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_1_conf_", names(q3_1_conf_df)[i]), digits=4), type = "latex", table.placement = "H"))
 
     write(latex_code, "annexe.tex", append=TRUE, sep="\n")
 }
@@ -99,7 +98,8 @@ for (i in 1:length(q3_2_df)) {
         next
     }
     table <- q3_2_df[[i]][1:10, -3]
-    latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_df)[i]), label=paste0("tab:q3_2_", names(q3_2_df)[i]), digits=4), type = "latex", table.placement = "H", tabular.environment = 'tabularx', width = "\\textwidth"))
+    table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
+    latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_df)[i]), label=paste0("tab:q3_2_", names(q3_2_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
     write(latex_code, "annexe.tex", append=TRUE, sep="\n")
 }
@@ -112,7 +112,8 @@ for (i in 1:length(q3_2_conf_df)) {
         next
     }
     table <- q3_2_conf_df[[i]][1:10, -3]
-    latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_2_conf_", names(q3_2_conf_df)[i]), digits=4), type = "latex", table.placement = "H", tabular.environment = 'tabularx', width = "\\textwidth"))
+    table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
+    latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_2_conf_", names(q3_2_conf_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
     write(latex_code, "annexe.tex", append=TRUE, sep="\n")
 }
