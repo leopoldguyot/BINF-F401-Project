@@ -291,6 +291,19 @@ The DTHHRDY variable contains the types of death, considered here as slow, inter
 Looking at all the values, several clusters stand out for their absolute fold change values for each technical variable, but also for the presence of certain patterns. For example, clusters 6, 10, 23, 25, 27 and 31 each have particularly negative values, except for the DTHVNT variable, which has very positive values. These similarities also appear in the morphological atlas, in terms of their position in relation to each other. We've already highlighted the fact that clusters 10 and 31 follow one another, but clusters 23, 27 and 6 also follow one another, but are simply separated by a different cluster. Since they are relatively close, we can assume that some of their similarities can be explained by tiles from previous clusters (G3) in common. Conversely, some clusters have positive values for all technical variables except DTHVNT, i.e. clusters 0, 2, 21, 22, 24 and 26. Their positions in the morpholigic atlas allow us to determine that their tiles come from common clusters, notably G3\_C7.
 
 \subsection{Adjusted clinical data vs. morphological data}
+The analysis was redone for non-technical variables to incorporate adjustments for confounding variables. The non-technical variables include AGE, SEX, HGHT, WGHT, and BMI. These variables were adjusted for variations  of the technicals variables found to be dependent on them (cf. section 2.3). 
+Adjustments were applied only to categorized variables as they yielded more meaningful results.
+
+Comparing Table 1 and Table 2, we observed significant changes. Initially, AGE displayed associations with 4 clusters. However, after adjustments, no clusters remained associated with AGE. This indicates that the clusters found in Table 1 were influenced by the confounding variable COHORT.
+For SEX, initially, 9 clusters were associated. However, after adjustment, SEX showed no association with any cluster, suggesting that the associations observed previously were due to the influence of DTHHTRDY.
+
+Regarding HGHT, adjustments reduced the number of associated clusters from 6 to 1(cluster 10). This cluster was the only one associated with HGHT, showing a log2 fold change of -1.32, indicating that it was 0.40 times less prevalent in individuals with a height over 71 pounds . 
+
+For WGHT, while initially, 3 clusters were associated, after adjustment, these associations disappeared, and 3 other clusters became associated. Cluster 6 was 0.49 times less prevalent in individuals with a weight over 181 units, with a log2 fold change of -1.02. Cluster 11 exhibited an even lower prevalence (0.38 times) with a log2 fold change of -1.41, while Cluster 27 was 2.09 times more prevalent in this group, with a log2 fold change of 1.07.
+
+Lastly, for BMI, initially 2 clusters were associated. However, after adjustment, no clusters remained associated. 
+
+
 
 \section{Association between morphological data and gene expression}
 \subsection{Association analyses at the level of the transcript}
@@ -321,6 +334,7 @@ Here, we are going to use FGSEA (Fast Gene Set Enrichment Analysis), which effic
 FGSEA-simple calculates the estimated P-values efficiently and simultaneously for the whole collection of gene sets but with limited accuracy. It is based on the idea that random gene set samples can be shared between different input pathways. It estimates the P-value of a pathway with the largest gene set size “M” as a proportion of a sample of random gene sets of size KM, having the same or more extreme ES value as the pathway. For other pathways “j”, it constructs a set of independent samples of size Kj (Kj < KM) by considering the prefixes in each sample of the larger random gene set and then estimates the P-value using the set of independent samples. It also uses the idea that using the larger random gene sets, the ES values for all the prefixes can be calculated efficiently using a square root heuristic. It uses a variant of the enrichment curve where the enrichment curve is constructed starting with the gene that is the most upregulated to the most downregulated, with the curve going right if the gene is not present in the pathway and up if it is present. Then the enrichment score can be determined using the point that is furthest from the diagonal.
 
 FGSEA-multilevel can estimate low P-values (P-value < $10{-6}$) accurately but for individual gene sets. It is based on a multilevel split Monte Carlo scheme. It calculates the probability of a random gene set of size K to have an enrichment score no less than $\gamma$, where $\gamma$ is an ES value > 0 given as input. Successively, the method finds ES levels ($l_i$) where the probability of ES being greater than the ES levels ($l_i$) is equal to $2^{-i}$. Finally, the method stops when $ l_i $becomes greater than $\gamma$ and when the P-value approaches $2^{-i}$.
+\citep{korotkevich2016fast}
 
 fgsea take as input a ranked list of or genes differentially expressed, we ranked them by significance and by the direction of the change using the formula:
 
