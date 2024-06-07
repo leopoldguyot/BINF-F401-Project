@@ -12,14 +12,18 @@ clinical_data$DTHVNT <- as.factor(clinical_data$DTHVNT)
 clinical_data$DTHHRDY <- as.factor(clinical_data$DTHHRDY)
 clinical_data$COHORT <- as.factor(clinical_data$COHORT)
 clinical_data$SMPTHNTS <- as.factor(clinical_data$SMPTHNTS)
+clinical_data$DTHVNT <- as.factor(clinical_data$DTHVNT)
 
+clinical_data <- clinical_data %>%
+    filter(DTHVNT != "99")
 clinical_data$DTHHRDY_3 <- recode(clinical_data$DTHHRDY,
     "0" = "slow", "1" = "fast", "2" = "fast", "3" = "intermediate", "4" = "slow"
 )
 
-technical_var_formula <- paste(" ~ ", paste(c("COHORT", "TRISCHD", "DTHHRDY"), collapse = " + "))
+technical_var_formula <- paste(" ~ ", paste(c("COHORT", "TRISCHD", "DTHVNT", "DTHHRDY"), collapse = " + "))
 
-technical_var_formula_3 <- paste(" ~ ", paste(c("COHORT", "TRISCHD", "DTHHRDY_3"), collapse = " + "))
+technical_var_formula_3 <- paste(" ~ ", paste(c("COHORT", "TRISCHD","DTHVNT", "DTHHRDY_3"), collapse = " + "))
+
 
 result <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x) {
     print(paste(x, technical_var_formula))
@@ -42,15 +46,16 @@ result_3 <- lapply(c("AGE", "SEX", "HGHT", "WGHT", "BMI"), function(x) {
 })
 summary(result[[1]]$model) # AGE is dependent of the cohort
 summary(result[[2]]$model) # no significant association for the SEX
-summary(result[[3]]$model) # no significant association for the HGHT
+summary(result[[3]]$model) # HGHT is dependent of the cohort and DTHHRDY
 summary(result[[4]]$model) # no significant association for the WGHT
 summary(result[[5]]$model) # no significant association for the BMI
 
+#with hardy scale with 3 categories
 summary(result_3[[1]]$model) # AGE is dependent of the cohort
 summary(result_3[[2]]$model) # SEX is dependent of the DTHHRDY *
 summary(result_3[[3]]$model) # HGHT is dependent of the DTHHRDY **
 summary(result_3[[4]]$model) # WGHT is dependent of the DTHHRDY ***
-summary(result_3[[5]]$model) # BMI is dependent of the DTHHRDY and cohort *
+summary(result_3[[5]]$model) # BMI is dependent of the DTHHRDY
 
 # Maybe we could add interaction between technical variables to the models
 

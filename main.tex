@@ -341,7 +341,7 @@ From the preceding section where correlations between variables were examined, c
 Age was anticipated to be associated with TRISCHD, DTHHRDY, and COHORT, while height and weight were expected to be linked to the same variables.
 Additionally, sex appeared correlated with DTHHRDY and COHORT. Surprisingly, BMI seemed uncorrelated with any technical variables.
 
-For the technical variable DTHHRDY, a decision was made to group certain categories into three new categories: slow, intermediate, and fast.
+For the technical variable DTHHRDY, a decision was made to group the categories into three new categories: slow, intermediate, and fast.
 This choice was made since more observations by categories would enhance statistical power.
 
 Upon conducting linear regression (generalized linear regression in the case of the categorical variable sex), it was observed that age was dependent on cohort, sex was dependent on DTHHRDY, height was dependent on DTHHRDY, weight was dependent on DTHHRDY, and, surprisingly, BMI was dependent on both DTHHRDY and COHORT.
@@ -349,6 +349,8 @@ Upon conducting linear regression (generalized linear regression in the case of 
 Subsequently, linear regression (or generalize d linear regression) was rerun for each variable of interest, utilizing only the significant technical variables from the overall models.
 The residuals of these models were stored for further analysis.
 These residuals represent the data of interest with the unwanted effects of the technical variables removed, providing a clearer understanding of the clinical data.
+
+As we we will see in a next section, we decided to not use the residuals for the differential expression analysis. This is because the method used (DESeq2 \citep{DESeq2:2014}), allow to use the technical variables as a contrast in the design of the analysis. By doing that we can adjust the analysis to take into account the confonding effect of the technical variables.
 
 \section{Association between clinical variables and morphological data}
 
