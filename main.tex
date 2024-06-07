@@ -484,6 +484,13 @@ From a purely numerical point of view, all clusters contain 102 significant gene
 
 Among these common genes, ENSG00000215182.8 and ENSG00000223609.7 are present in 5 clusters, while ENSG00000095752.6, ENSG00000159261.10 and ENSG00000163435.15 are present in 4 clusters. Some of these genes are also found in common clusters, notably 11, 16, 21, 22, 23 and 26. But these similarities do not correspond to common morphological profiles, whether or not confounding effects are considered. 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/final_analysis/SigGenesConsideringConf}
+	\caption{Correlation matrix of all the variables}
+	\label{fig:genesOcc}
+\end{figure}
+
 ENSG00000215182.8 corresponds to the MUC5AC gene encoding mucin-5AC, a glycoprotein that forms a gel mainly in gastric and respiratory epithelia. This gel protects the mucosa from infection and chemical damage in the gastric and respiratory tracts. This gene is also expressed in cardiac myxoma (ref), a very common cardiac tumor corresponding to an abnormal mass of tissue. This tumor is biologically benign, but functionally malignant due to its position in the heart and the emboli it can generate (ref). This gene is up-regulated in clusters 3, 12, 16, 20 and 29, but they do not share common morphological profiles or similar death patterns. One might expect the presence of this gene to imply rapid deaths, since emboli can lead to relatively fulminant deaths, but the absence of this observation indicates that, for the majority of individuals considered, this myxoma was not the cause of their death. 
 
 ENSG00000223609.7 is the HBD gene coding for the delta subunit of hemoglobin, a constituent of one type of erythrocyte. Expression of this gene in the heart may, at first glance, appear suspicious, since erythrocyte formation takes place mainly in the bone marrow. However, expression of this gene is also observed in various types of tissue, including cardyomyocytes (ref), the cardiac muscles that make up a very large part of the heart. The gene appears to be particularly expressed in clusters 0, 4, 11, 15 and 16, suggesting that these clusters are made up of a large number of cardiac muscle cells. 
@@ -494,9 +501,32 @@ ENSG00000159261.10, better known as CLDN14, is a gene encoding claudin 14, a mem
 
 Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E74 like ETS transcription factor 3, a transcription factor involved in the inflammatory response, up-regulation of transcription by RNA polymerase II. It's quite astonishing that this gene is particularly expressed in the heart, and what's more that it's among the 5 most present genes in the various clusters, since this gene shouldn't be expressed in the heart or that this expression is detectable. Indeed, it has been estimated that this gene is only detected in organs of epithelial origin, and it should be noted that the heart is of mesodermal origin (ref). Nevertheless, this gene appears to be expressed in clusters 5, 11, 26 and 28.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/final_analysis/SimilGenes}
+	\caption{Correlation matrix of all the variables}
+	\label{fig:similGenes}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/final_analysis/SimilConsideringConf}
+	\caption{Correlation matrix of all the variables}
+	\label{fig:similGenesConf}
+\end{figure}
+
 In addition to the biological analysis of these genes, it is also interesting to consider the number of significant genes in common between each cluster. First of all, we can see the importance of confounding effects, with a large number of similarities disappearing completely or decreasing drastically. One might also expect to observe the same patterns as in Table 1, since these results are also driven by clinical variables, but several examples demonstrate that this is not the case. Cluster 0 shares 7 genes with cluster 28, not taking confounding effects into account, but the latter is not linked to any significant fold change, and therefore shows no particular pattern according to the variables. Cluster 0 also contains 5 genes in common with clusters 29, which also have no particular profile, 21 and 26, which are relatively similar to 0, 5 and 17, which have very few similar or inverse fold changes. On the other hand, it's not surprising to observe a genetic similarity between clusters 6 and 10 (Table 2), as they show negative fold changes for the weight variable, indicating profiles with low enough weight not to impact particular pathologies.
 
 For this project, pathways are also studied and, as with genes, confounding effects have been considered. Among the significant pathways, 180 are present in the top 10 of at least one cluster, and 58 are present in more than one cluster. It can also be noted that 121 different pathways are present with data that do not consider the confounding effect, for 52 present in more than one cluster. These results seem to indicate that the confounding effects induce greater similarities between the different clusters, even at the level of the biological pathways detected, since the number of unique pathways among the top 10 is lower.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/final_analysis/PathwaysWithConf}
+	\caption{Correlation matrix of all the variables}
+	\label{fig:path}
+\end{figure}
 
 Scavenging of heme from plasma is the pathway present in the greatest number of clusters. Free heme can have detrimental effects on tissues, causing cell damage by disrupting lipid bilayers through membrane intercalation, but also by promoting the conversion of low-density lipoproteins into cytotoxic oxidized products (ref). These hemes are released into the plasma following intravascular hemolysis, a breakdown of erythrocytes in the blood vessels, releasing their constituents, including heme. Given that this pathway corresponds to a cellular protection system against a potential plasma constituent, a blood constituent, the clusters displaying this pathway (3, 9, 13, 16, 21, 22, 24 and 26) are probably made up of tiles from regions of the heart in direct contact with blood, i.e. the tissue lining the atria and ventricles. 
 
