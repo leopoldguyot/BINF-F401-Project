@@ -128,7 +128,7 @@ By examining the clinical variables through histograms, we can visualize their d
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/AGE}
 	\caption{Age distribution histogram }
-	\label{fig:corCircle}
+	\label{fig:ageDistrib}
 \end{figure}
 
 To now if the continuous variable were normally distributed, we used a Shapiro-Wilk test. The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. However, for WGHT, it was higher than 5 , so we didn’t reject the null hypothesis (Table X ) . 
@@ -154,7 +154,7 @@ To now if the continuous variable were normally distributed, we used a Shapiro-W
 \end{tabular}
 \end{center}
 \caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
-\label{tab:Q2FC}
+\label{tab:swInt}
 \end{table}
 
 
@@ -192,7 +192,7 @@ where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and
 \end{tabular}
 \end{center}
 \caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
-\label{tab:Q2FC}
+\label{tab:swInt2}
 \end{table}
 
 
@@ -202,14 +202,14 @@ If we look at the discrete variable, we can see that we don't have a balanced di
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/SEX}
 	\caption{SEX distribution histogram }
-	\label{fig:corCircle}
+	\label{fig:sexDistrib}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/DTHHRDY}
 	\caption{DTHHRDY distribution histogram }
-	\label{fig:corCircle}
+	\label{fig:dthhrdyDistrib}
 \end{figure}
 
 \subsection{Correlations between the clinical variables}
@@ -555,7 +555,7 @@ The creation of C4 and C2 activators is a pathway which, as its name suggests, a
 \hline
 \end{tabular}}
 \caption{Significant fold changes for each non-technical variable adjusted for their confounding technical variables.}
-\label{tab:Q2FC}
+\label{tab:Q2bFC}
 \end{table*}
 
 
