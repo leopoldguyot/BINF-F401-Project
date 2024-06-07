@@ -68,8 +68,29 @@
 R \citep{R:2024}
 
 \section{Exploration of  clinical variables}
-Description des variables .....  
 
+There are 13 variables present in the clinical dataset, let's take a look at what it corresponds to . 
+The variable AGE corresponds to the age at the time of death of the individual.
+The variable SEX corresponds to the sex of the donor, where 1 represents Male and 2 represents Female.
+The variable HGHT corresponds to the height of the donor, measured in inches.
+The variable WGHT corresponds to weight of the donor, measured in pounds. 
+The variable BMI corresponds to an indicator of the body fat of the donor, calculated based on the ratio of weight to height. Using this formula: 
+\\
+
+$ BMI = (703*weight)/(height)^2$ 
+\\
+
+The variables described previously correspond to the non-technical variables.Now lest's look at the technical variable. 
+The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). 
+The variable TRISCHD corresponds to the time in minutes between the death of the donor and the collection of tissues.
+The variable DTHHRDY corresponds to the classification of death, where: 0 corresponds to ventilator cases before death (expected death),1 corresponds to violent and fast death due to accident,2 corresponds to violent and fast death due to natural causes,3 corresponds to patients who were ill but death was unexpected, and 4 corresponds to slow death (with a terminal phase longer than 1 day). 
+The variable DTHVNT corresponds to three classes:0, the donor was not directly on a ventilator after death, 1 the donor was directly on a ventilator after death, 99 If it is not known.
+
+Finaly let's look at the miscellaneous clinical data. 
+The variable SUBJID corresponds to the GTEx Public Donor ID. 
+The variable SMPLID to  the GTEx ID of the organ. 
+The variable SMPTHNTS corresponds to notes that were taken by the pathologist who examined the histological slices. 
+The variable IMGURL corresponds to a link to an interactively zoomable high-resolution scan of the histological slice. 
 \subsection{Distribution of the variables}
 
 \begin{scriptsize}	
@@ -93,17 +114,24 @@ To now if the continuous variable were normally distributed, we used a Shapiro-W
 	\setlength{\tabcolsep}{0.5pt}
 	\begin{tabular}{ |c|c|c|c|c|c| } 
 	\hline 
-	& AGE & HGHT & WGHT & BMI & TRISCHD \\[0.2cm] 
-	 \hline
-	 P-value &\small $1.14*10^{-11} $  & \small $2.38*10^{-05} $ & \small $ 0.22 $ & \small $6.54*10^{-05}  $ & \small $7.70*10^{-11}$ \\ [0.2cm]
-	 \hline
+	& P-value   \\[0.2cm] 
+	\hline
+	 AGE &\small $1.14*10^{-11} $   \\ [0.1cm]
+	\hline
+	 HGHT &\small $2.38*10^{-05} $  \\[0.1cm]
+	\hline
+	 WGHT & \small $ 0.22 $  \\[0.1cm]
+	\hline
+	 BMI &   \small $6.54*10^{-05}  $ \\[0.1cm]
+	\hline
+	 TRISCHD &\small $7.70*10^{-11}$ \\[0.1cm]
+	\hline
 	 
 \end{tabular}
 \end{center}
-\caption{Result of the Shapiro-Willk test on the continuous variables }
+\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
 \label{tab:Q2FC}
 \end{table}
-
 
 
 
