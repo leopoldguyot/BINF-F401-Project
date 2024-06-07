@@ -78,16 +78,87 @@ Description des variables .....
 \end{scriptsize}
 
 By examining the clinical variables through histograms, we can visualize their distribution. Most of the continuous variables do not seem to follow a normal distribution. For instance, the variable AGE appears to be asymmetric, exhibiting a right skew (fig X).
-To now if the continuous variable were normally distributed, we used a Shapiro-Wilk test. The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. However, for WGHT, it was higher than 5 , so we didn’t reject the null hypothesis (table X ) . 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/AGE}
+	\caption{Age distribution histogram }
+	\label{fig:corCircle}
+\end{figure}
+
+To now if the continuous variable were normally distributed, we used a Shapiro-Wilk test. The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. However, for WGHT, it was higher than 5 , so we didn’t reject the null hypothesis (Table X ) . 
+
+\begin{table}[H]
+\begin{center}
+	\setlength{\tabcolsep}{0.5pt}
+	\begin{tabular}{ |c|c|c|c|c|c| } 
+	\hline 
+	& AGE & HGHT & WGHT & BMI & TRISCHD \\[0.2cm] 
+	 \hline
+	 P-value &\small $1.14*10^{-11} $  & \small $2.38*10^{-05} $ & \small $ 0.22 $ & \small $6.54*10^{-05}  $ & \small $7.70*10^{-11}$ \\ [0.2cm]
+	 \hline
+	 
+\end{tabular}
+\end{center}
+\caption{Result of the Shapiro-Willk test on the continuous variables }
+\label{tab:Q2FC}
+\end{table}
+
+
+
+
+
+
 
 To do further analysis, we need them to be normally distributed. We tried to apply various transformations like log, square root, square. Only the square transformation successfully normalized the AGE sample. 
-Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT). that first convert the variable into ranks, then map it to a normal distribution. 
+Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT) (Table X)  . that first convert the variable into ranks, then map it to a normal distribution. 
+\\
 
 $ Y^t_{i}=  \Phi^{-1}(r-C/N-2C+1) $
+\\
 
 where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and $\Phi^{-1}$ denotes the standard normal quantile (or probit) function.For the value of C we use C=3/8 \citep{beasley2009rank}.
 
-If we look at the discrete variable, we can see that we don't have a balanced distribution. For example, for the variable AGE, there are more than twice as many males as females (fig x). For DTHHRDY, we can observe that most of the deaths occurred in ventilator cases (fig x). When conducting analysis, it's essential to keep these observations in mind as they can significantly influence the interpretation. 
+\begin{table}[H]
+\begin{center}
+	\setlength{\tabcolsep}{0.5pt}
+	\begin{tabular}{ |c|c|c|c|c|c| } 
+	\hline 
+	& P-value   \\[0.2cm] 
+	\hline
+	 AGE &\small $0.11 $   \\ [0.1cm]
+	\hline
+	 HGHT & \small $0.063 $ \\[0.1cm]
+	\hline
+	 WGHT & \small $ 1 $   \\[0.1cm]
+	\hline
+	 BMI &  \small $1 $\\[0.1cm]
+	\hline
+	 TRISCHD &\small $1$  \\[0.1cm]
+	\hline
+	 
+\end{tabular}
+\end{center}
+\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
+\label{tab:Q2FC}
+\end{table}
+
+
+If we look at the discrete variable, we can see that we don't have a balanced distribution. For example, for the variable SEX, there are more than twice as many males as females (fig x). For DTHHRDY, we can observe that most of the deaths occurred in ventilator cases (fig x). When conducting analysis, it's essential to keep these observations in mind as they can significantly influence the interpretation. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/SEX}
+	\caption{SEX distribution histogram }
+	\label{fig:corCircle}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/DTHHRDY}
+	\caption{DTHHRDY distribution histogram }
+	\label{fig:corCircle}
+\end{figure}
 
 \subsection{Correlations between the clinical variables}
 
@@ -300,7 +371,7 @@ For SEX, initially, 9 clusters were associated. However, after adjustment, SEX s
 
 Regarding HGHT, adjustments reduced the number of associated clusters from 6 to 1(cluster 10). This cluster was the only one associated with HGHT, showing a log2 fold change of -1.32, indicating that it was 0.40 times less prevalent in individuals with a height over 71 pounds . 
 
-For WGHT, while initially, 3 clusters were associated, after adjustment, these associations disappeared, and 3 other clusters became associated. Cluster 6 was 0.49 times less prevalent in individuals with a weight over 181 units, with a log2 fold change of -1.02. Cluster 11 exhibited an even lower prevalence (0.38 times) with a log2 fold change of -1.41, while Cluster 27 was 2.09 times more prevalent in this group, with a log2 fold change of 1.07.
+For WGHT, while initially, 3 clusters were associated, after adjustment, these associations disappeared, and 3 other clusters became associated. Cluster 6 was 0.49 times less prevalent in individuals with a weight over 181 pounds , with a log2 fold change of -1.02. Cluster 11 exhibited an even lower prevalence (0.38 times) with a log2 fold change of -1.41, while Cluster 27 was 2.09 times more prevalent in this group, with a log2 fold change of 1.07.
 
 Lastly, for BMI, initially 2 clusters were associated. However, after adjustment, no clusters remained associated. 
 
