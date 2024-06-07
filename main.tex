@@ -65,7 +65,31 @@
 \begin{multicols}{2}
 
 \section{Introduction}
-R \citep{R:2024}
+
+In this project, we investigated the relationship between morphological clusters from heart samples and their associated clinical data and their transcriptomic data.
+The data used in this project comes from the GTEx project, a large-scale study that aims to characterize the human transcriptome and its association with genetic variation.
+The GTEx project provides a large dataset that includes clinical data, transcriptomic data, and histological images from various tissues, including the heart.
+
+
+The morphological clusters based on the histological images were obtained as follow by the laboratory of Pr. Vincent Detours: 
+
+First each histological slide numeric image was divided into 5000 squares.
+Then each square was encoded into a 512 features vector using a deep learning model (bottleneck of a encoder/decoder learning procedure). 
+Then, the 512 features vector were used to cluster the squares into 32 clusters.
+Therefore, for each sample (histological slide) we have a 32 features vector that represent the number of square of each cluster present in the sample.
+This approach allow us to convert the complexity of an image to a count vector. 
+This allow the use of different statistical methods to investigate the relationship between the morphological clusters and other variables.
+
+Associated with each sample we also have clinical data that include information about the donor and technical data, that inform us about the way the sample was collected.
+Transcriptomic data is also available for each sample. 
+
+In this project, we first explored the clinical data to understand the distribution of the variables and their correlation.
+Then we investigated the relationship between these clinical variables and the morphological clusters.
+Finally, we looked at the relationship between the transcriptomic data and the morphological clusters.
+
+During this project, we used the R programming language \citep{R:2024} for all the analysis. Some utility packages were also used, such as the \textit{tidyverse} suite \citep{tidyverse} and \textit{xtable} \citep{xtable}.
+All the scripts used for the analysis are available on the following GitHub repository: \url{https://github.com/leopoldguyot/BINF-F401-Project}.
+For each section, the associated script is indicated at the start of the section.
 
 \section{Exploration of  clinical variables}
 
@@ -408,24 +432,26 @@ Lastly, for BMI, initially 2 clusters were associated. However, after adjustment
 \section{Association between morphological data and gene expression}
 \subsection{Association analyses at the level of the transcript}
 
-We performed a detailed differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster. Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
+We performed a differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster. Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
 
 Differential analysis was conducted for each of the 32 clusters to determine the transcripts that varied significantly in function of the clusters.
 
 
-To ensure robust results, an additional differential analysis was performed correcting for potential confounding effects of technical variables.
+To verify our results, an additional differential analysis was performed correcting for potential confounding effects of technical variables.
 
 The following criteria where used to determine the significance of the results:
 \begin{itemize}
-    \item \textbf{Log2 Fold Change Threshold}: A threshold of 1 was set to consider significant changes in gene expression.
-    \item \textbf{Adjusted P-value Threshold}: P-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
+    \item Log2 Fold Change Threshold: A threshold of 1 was set to consider significant changes in gene expression.
+    \item Adjusted P-value Threshold: P-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
 \end{itemize}
 
 For each cluster, we report the following:
-\begin{enumerate}
+\begin{itemize}
     \item Number of significant up-regulated and down-regulated genes, identified based on the set thresholds.
     \item Top 10 most significant up-regulated genes, ranked by the adjusted p-value.
-\end{enumerate}\subsection{Gene Set Enrichment Analysis}
+\end{itemize}
+
+\subsection{Gene Set Enrichment Analysis}
 GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
 The process involves calculating an ES value for each pathway. ES score are calculated by walking down the list of the ranked genes and increase a running-sum statistics if the gene is present in the set of gene for  a pathways and decreasing it if it is not present. The magnitude of the increase or decrease  depends of the correlation of the gene with the phenotype (\textcolor{red} {cluster ?}). The ES score of the pathways would be the running-sum statistics that is the farther from zero. 
 Then generating random gene sets of the same size and calculating an ES for each of these random sets. .The P-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
