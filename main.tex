@@ -365,6 +365,8 @@ To execute this normalisation, DESeq2 will compute geometric mean for each morph
 Then, it will use these values and create a new matrix that consists of the counts divided by their associated geometric mean. 
 After that it will use this new matrix to build scaling factors for each sample, and finally applying this scaling factor to the original counts.
 
+(Add pval test)
+
 For the question 2.1 and 2.2 we used the each clinical variable and each technical variable as the contrast for the design of the differential analysis.
 For the question 2.3 we used a contrast composed of each clinical variable plus the technical variables that were significantly associated with the clinical variable in the previous section.
 By doing that we ensure that we adjust the analysis to take into account the confonding effect of the technical variables.
