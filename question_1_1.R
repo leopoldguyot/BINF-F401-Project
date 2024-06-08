@@ -180,8 +180,8 @@ clinical_data_Inverse_Normal_Transformation <- clinical_data[c(
 INT_AGE <- qnorm((rank(clinical_data$AGE, na.last = "keep") - 0.375) / (sum(!is.na(clinical_data$AGE)) - 2 * 0.375 + 1))
 INT_HGHT <- qnorm((rank(clinical_data$HGHT, na.last = "keep") - 0.375) / (sum(!is.na(clinical_data$HGHT)) - 2 * 0.375 + 1))
 INT_WGHT <- qnorm((rank(clinical_data$WGHT, na.last = "keep") - 0.5) / (sum(!is.na(clinical_data$WGHT)) - 2 * 0.375 + 1))
-INT_BMI <- qnorm((rank(clinical_data$BMI, na.last = "keep") - 0.5) / (sum(!is.na(clinical_data$BMI)) - 2 * 0.375 + 1))
-INT_TRISCHD <- qnorm((rank(clinical_data$TRISCHD, na.last = "keep") - 0.5) / (sum(!is.na(clinical_data$TRISCHD)) - 2 * 0.375 + 1))
+INT_BMI <- qnorm((rank(clinical_data$BMI, na.last = "keep") - 0.375) / (sum(!is.na(clinical_data$BMI)) - 2 * 0.375 + 1))
+INT_TRISCHD <- qnorm((rank(clinical_data$TRISCHD, na.last = "keep") - 0.375) / (sum(!is.na(clinical_data$TRISCHD)) - 2 * 0.375 + 1))
 
 
 
@@ -190,7 +190,7 @@ clinical_data_Inverse_Normal_Transformation$HGHT <- INT_HGHT
 clinical_data_Inverse_Normal_Transformation$WGHT <- INT_WGHT
 clinical_data_Inverse_Normal_Transformation$BMI <- INT_BMI
 clinical_data_Inverse_Normal_Transformation$TRISCHD <- INT_TRISCHD
-hist(clinical_data_Inverse_Normal_Transformation$AGE)
+hist(clinical_data_Inverse_Normal_Transformation$HGHT)
 
 plot <- lapply(colnames(clinical_data_Inverse_Normal_Transformation)[-c(1:2, 5:6)], function(x) {
     plot <- distribution_plot(clinical_data_Inverse_Normal_Transformation, x, x)
