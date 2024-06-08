@@ -1,6 +1,0 @@
-"pathway"	"padj"	"ES"	"NES"
-NA	NA	NA	NA
-NA	NA	NA	NA
-NA	NA	NA	NA
-NA	NA	NA	NA
-NA	NA	NA	NA
