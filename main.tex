@@ -502,6 +502,49 @@ For each cluster we reported the top  10 most significant up-regulated genes. Th
 
 \subsection{Technical and biological analysis}
 
+\begin{table}[h]
+\begin{tabular}{lll}
+Cluster & Count non confounders & Count confounders \\ \hline
+0 & 53 & 2 \\
+1 & 40 & 23 \\
+10 & 99 & 4 \\
+11 & 612 & 86 \\
+12 & 21 & 12 \\
+13 & 126 & 13 \\
+14 & 68 & 25 \\
+15 & 35 & 3 \\
+16 & 622 & 40 \\
+17 & 140 & 81 \\
+18 & 8 & 7 \\
+19 & 197 & 53 \\
+2 & 9 & 0 \\
+20 & 144 & 19 \\
+21 & 54 & 1 \\
+22 & 207 & 9 \\
+23 & 190 & 7 \\
+24 & 38 & 1 \\
+25 & 63 & 8 \\
+26 & 34 & 2 \\
+27 & 55 & 12 \\
+28 & 60 & 10 \\
+29 & 452 & 165 \\
+3 & 120 & 11 \\
+30 & 15 & 8 \\
+31 & 10 & 0 \\
+4 & 1360 & 117 \\
+5 & 55 & 5 \\
+6 & 86 & 2 \\
+7 & 37 & 23 \\
+8 & 2797 & 378 \\
+9 & 17 & 2 \\ \hline
+Total & 7824 & 1129
+\end{tabular}
+\caption{Number of significant genes per cluster and according to the confounder's effect or not}
+\label{tab:sigCount}
+\end{table}
+
+From the table above, we can see that when the confounding effect is taken into account, a very large number of genes are no longer considered significant: this number is practically divided by 7. This observation allows us to estimate that the effect of the technical variables was particularly important.
+
 From a purely numerical point of view, all clusters contain 102 significant genes, 47 of which are present in more than one cluster. However, when the confounding effects of technical variables are taken into account, these numbers fall to 82 significant genes for 24 genes common to several clusters. 
 
 Among these common genes, ENSG00000215182.8 and ENSG00000223609.7 are present in 5 clusters, while ENSG00000095752.6, ENSG00000159261.10 and ENSG00000163435.15 are present in 4 clusters. Some of these genes are also found in common clusters, notably 11, 16, 21, 22, 23 and 26. But these similarities do not correspond to common morphological profiles, whether or not confounding effects are considered. 
@@ -517,11 +560,11 @@ ENSG00000215182.8 corresponds to the MUC5AC gene encoding mucin-5AC, a glycoprot
 
 ENSG00000223609.7 is the HBD gene coding for the delta subunit of hemoglobin, a constituent of one type of erythrocyte. Expression of this gene in the heart may, at first glance, appear suspicious, since erythrocyte formation takes place mainly in the bone marrow. However, expression of this gene is also observed in various types of tissue, including cardyomyocytes  \citep{Keller2022}, the cardiac muscles that make up a very large part of the heart. The gene appears to be particularly expressed in clusters 0, 4, 11, 15 and 16, suggesting that these clusters are made up of a large number of cardiac muscle cells. 
 
-ENSG00000095752.6 also designates the IL11 gene, coding for interleukin 11, a protein of the gp130 cytokine family. This cytokine stimulates the development of immunoglobulin-producing B cells in relation to T cells, thus playing a role in the induction of an immune response. The expression of this protein is also linked to a cardiac pathology, cardiac fibrosis, i.e. an accumulation of extracellular matrix to enable healing and tissue repair after some form of aggression. This pathology is not necessarily the main cause of organ dysfunction  \citep{Sweeney2023}. This gene is significantly expressed in clusters 3, 4, 17 and 29.
+ENSG00000095752.6 also designates the IL11 gene, coding for interleukin 11, a protein of the gp130 cytokine family. This cytokine stimulates the development of immunoglobulin-producing B cells in relation to T cells, thus playing a role in the induction of an immune response. The expression of this protein is also linked to a cardiac pathology, cardiac fibrosis, i.e. an accumulation of extracellular matrix to enable healing and tissue repair after some form of aggression. This pathology is not necessarily the main cause of organ dysfunction  \citep{Sweeney2023}. This gene is significantly overexpressed in clusters 3, 4, 17 and 29.
 
 ENSG00000159261.10, better known as CLDN14, is a gene encoding claudin 14, a membrane protein that enables the formation of tight junctions between cells. This gene is expressed in clusters 3, 4, 16 and 28. Disconcertingly, clusters 4 and 16 are up-regulated for this gene and HBD, the latter indicating the presence of cardiac muscles, which do not have tight junctions  \citep{Severs1985}. Nevertheless, the presence of this type of intercellular junction may well be present in the heart, since it contains various epithelial tissues, such as the endocardium.
 
-Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E74 like ETS transcription factor 3, a transcription factor involved in the inflammatory response, up-regulation of transcription by RNA polymerase II. It's quite astonishing that this gene is particularly expressed in the heart, and what's more that it's among the 5 most present genes in the various clusters, since this gene shouldn't be expressed in the heart or that this expression is detectable. Indeed, it has been estimated that this gene is only detected in organs of epithelial origin, and it should be noted that the heart is of mesodermal origin. Nevertheless, this gene appears to be expressed in clusters 5, 11, 26 and 28.
+Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E74 like ETS transcription factor 3, a transcription factor involved in the inflammatory response, up-regulation of transcription by RNA polymerase II. It's quite astonishing that this gene is particularly expressed in the heart, and what's more that it's among the 5 most present genes in the various clusters, since this gene shouldn't be expressed in the heart or that this expression is detectable. Indeed, it has been estimated that this gene is only detected in organs of epithelial origin, and it should be noted that the heart is of mesodermal origin. Nevertheless, this gene appears to be overexpressed in clusters 5, 11, 26 and 28.
 
 \begin{figure}[H]
 	\centering
@@ -540,7 +583,7 @@ Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E7
 
 In addition to the biological analysis of these genes, it is also interesting to consider the number of significant genes in common between each cluster. First of all, we can see the importance of confounding effects, with a large number of similarities disappearing completely or decreasing drastically. One might also expect to observe the same patterns as in Table 1, since these results are also driven by clinical variables, but several examples demonstrate that this is not the case. Cluster 0 shares 7 genes with cluster 28, not taking confounding effects into account, but the latter is not linked to any significant fold change, and therefore shows no particular pattern according to the variables. Cluster 0 also contains 5 genes in common with clusters 29, which also have no particular profile, 21 and 26, which are relatively similar to 0, 5 and 17, which have very few similar or inverse fold changes. On the other hand, it's not surprising to observe a genetic similarity between clusters 6 and 10 (Table 2), as they show negative fold changes for the weight variable, indicating profiles with low enough weight not to impact particular pathologies.
 
-For this project, pathways are also studied and, as with genes, confounding effects have been considered. Among the significant pathways, 180 are present in the top 10 of at least one cluster, and 58 are present in more than one cluster. It can also be noted that 121 different pathways are present with data that do not consider the confounding effect, for 52 present in more than one cluster. These results seem to indicate that the confounding effects induce greater similarities between the different clusters, even at the level of the biological pathways detected, since the number of unique pathways among the top 10 is lower.
+For this project, pathways are also studied and, as with genes, confounding effects have been considered. Among the detected pathways, 180 are present in the top 10 of at least one cluster, and 58 are present in more than one cluster. It can also be noted that 121 different pathways are present with data that do not consider the confounding effect, for 52 present in more than one cluster. These results seem to indicate that the confounding effects induce greater similarities between the different clusters, even at the level of the biological pathways detected, since the number of unique pathways among the top 10 is lower.
 
 
 \begin{figure}[H]
