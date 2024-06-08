@@ -14,14 +14,14 @@ doc_head <- c("\\documentclass{article}",
               "\\usepackage{geometry}",
               "\\geometry{a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm}",
               "\\begin{document}",
-              "\\title{Annexe 1: Top 10 significant results by cluster}",
+              "\\title{Annex 1: Top 10 significant results by cluster}",
               "\\maketitle",
               "\\tableofcontents",
               "\\newpage")
 
 doc_end <- c("\\end{document}")
 
-write(doc_head, "annexe.tex", append = FALSE, sep = "\n")
+write(doc_head, "annex.tex", append = FALSE, sep = "\n")
 
 
 # add tables
@@ -66,56 +66,56 @@ for (i in 1:length(q3_2)) {
 q3_2_conf_df <- q3_2_conf_df[order(as.numeric(names(q3_2_conf_df)))]
 # write tables
 
-write("\\section{Q3.1 Top 10 up-regulated transcripts without adjustement for confondant effect}", "annexe.tex", append=TRUE, sep="\n")
+write("\\section{Q3.1 Top 10 up-regulated transcripts without adjustement for confondant effect}", "annex.tex", append=TRUE, sep="\n")
 for (i in 1:length(q3_1_df)) {
-    write(paste("\\subsection{Cluster", names(q3_1_df)[i], "}"), "annexe.tex", append=TRUE, sep="\n")
+    write(paste("\\subsection{Cluster", names(q3_1_df)[i], "}"), "annex.tex", append=TRUE, sep="\n")
     if (nrow(q3_1_df[[i]]) == 0) {
-        write("No significant transcript", "annexe.tex", append=TRUE, sep="\n")
+        write("No significant transcript", "annex.tex", append=TRUE, sep="\n")
         next
     }
     latex_code <- capture.output(print(xtable(q3_1_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_df)[i]), label=paste0("tab:q3_1_", names(q3_1_df)[i]), digits=4), type = "latex", table.placement = "H"))
 
-    write(latex_code, "annexe.tex", append=TRUE, sep="\n")
+    write(latex_code, "annex.tex", append=TRUE, sep="\n")
 }
 
-write("\\section{Q3.1 Top 10 up-regulated transcript with adjustement for confondant effect}", "annexe.tex", append=TRUE, sep="\n")
+write("\\section{Q3.1 Top 10 up-regulated transcript with adjustement for confondant effect}", "annex.tex", append=TRUE, sep="\n")
 for (i in 1:length(q3_1_conf_df)) {
-    write(paste("\\subsection{Cluster", names(q3_1_conf_df)[i], "}"), "annexe.tex", append=TRUE, sep="\n")
+    write(paste("\\subsection{Cluster", names(q3_1_conf_df)[i], "}"), "annex.tex", append=TRUE, sep="\n")
     if (nrow(q3_1_conf_df[[i]]) == 0) {
-        write("No significant transcript", "annexe.tex", append=TRUE, sep="\n")
+        write("No significant transcript", "annex.tex", append=TRUE, sep="\n")
         next
     }
     latex_code <- capture.output(print(xtable(q3_1_conf_df[[i]], caption=paste("Top 10 up-regulated transcripts for cluster", names(q3_1_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_1_conf_", names(q3_1_conf_df)[i]), digits=4), type = "latex", table.placement = "H"))
 
-    write(latex_code, "annexe.tex", append=TRUE, sep="\n")
+    write(latex_code, "annex.tex", append=TRUE, sep="\n")
 }
 
-write("\\section{Q3.2 Top 10 up-regulated pathways without adjustement for confondant effect}", "annexe.tex", append=TRUE, sep="\n")
+write("\\section{Q3.2 Top 10 up-regulated pathways without adjustement for confondant effect}", "annex.tex", append=TRUE, sep="\n")
 for (i in 1:length(q3_2_df)) {
-    write(paste("\\subsection{Cluster", names(q3_2_df)[i], "}"), "annexe.tex", append=TRUE, sep="\n")
+    write(paste("\\subsection{Cluster", names(q3_2_df)[i], "}"), "annex.tex", append=TRUE, sep="\n")
     if (nrow(q3_2_df[[i]]) == 0) {
-        write("No significant pathway", "annexe.tex", append=TRUE, sep="\n")
+        write("No significant pathway", "annex.tex", append=TRUE, sep="\n")
         next
     }
     table <- q3_2_df[[i]][1:10, -3]
     table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
     latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_df)[i]), label=paste0("tab:q3_2_", names(q3_2_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
-    write(latex_code, "annexe.tex", append=TRUE, sep="\n")
+    write(latex_code, "annex.tex", append=TRUE, sep="\n")
 }
 
-write("\\section{Q3.2 Top 10 up-regulated pathways with adjustement for confondant effect}", "annexe.tex", append=TRUE, sep="\n")
+write("\\section{Q3.2 Top 10 up-regulated pathways with adjustement for confondant effect}", "annex.tex", append=TRUE, sep="\n")
 for (i in 1:length(q3_2_conf_df)) {
-    write(paste("\\subsection{Cluster", names(q3_2_conf_df)[i], "}"), "annexe.tex", append=TRUE, sep="\n")
+    write(paste("\\subsection{Cluster", names(q3_2_conf_df)[i], "}"), "annex.tex", append=TRUE, sep="\n")
     if (nrow(q3_2_conf_df[[i]]) == 0) {
-        write("No significant pathway", "annexe.tex", append=TRUE, sep="\n")
+        write("No significant pathway", "annex.tex", append=TRUE, sep="\n")
         next
     }
     table <- q3_2_conf_df[[i]][1:10, -3]
     table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
     latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_2_conf_", names(q3_2_conf_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
-    write(latex_code, "annexe.tex", append=TRUE, sep="\n")
+    write(latex_code, "annex.tex", append=TRUE, sep="\n")
 }
 
-write(doc_end, "annexe.tex", append=TRUE, sep="\n")
+write(doc_end, "annex.tex", append=TRUE, sep="\n")

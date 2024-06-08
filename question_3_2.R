@@ -60,7 +60,7 @@ GSEA <- function(name,transcript_count){
     rankings <- replace(rankings, rankings < min_ranking, min_ranking * 10)
     rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
     }
-  
+
   GSEAres <- fgsea(pathways = bg_genes, # List of gene sets to check
                    stats = rankings,
                    scoreType = 'std', # in this case we have both positif  and negative rankings
@@ -70,12 +70,9 @@ GSEA <- function(name,transcript_count){
   filename = 'data_output/fgsea_result/'
   #filename2= 'data_output/fgsea_result2/'
   #saveRDS(GSEAres, file = paste0(filename2,name,'_gsea_results.rds'))
-  topPathwaysUp <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
-  topPathwaysDown <- GSEAres[ES < 0][head(order(padj), n = 10), pathway]
-  topPathways <- c(topPathwaysUp, rev(topPathwaysDown)) # top 10 pos and neg 
+  topPathways <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
   GSEA_filtered <- GSEAres[pathway %in% topPathways]
   GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
-  GSEA_filtered$padj <- GSEA_filtered$padj /32 
   write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_conf","_fgseaRes.txt"),
               sep = "\t", row.names = FALSE)
   return(NULL)

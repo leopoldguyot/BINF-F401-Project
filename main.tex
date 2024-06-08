@@ -38,7 +38,7 @@
 %\addbibresource{references.bib}
 
 \title{\Large BINF-F401 Project \\
-\huge Analysis of the morphological clusters from heart and there associations with clinical and transcriptomic data.}
+\huge Analysis of the morphological clusters from heart and their associations with clinical and transcriptomic data.}
 
 
 \author{
@@ -64,7 +64,7 @@
 
 \begin{multicols}{2}
 
-\section{Introduction}
+\section*{Introduction}
 
 In this project, we investigated the relationship between morphological clusters from heart samples and their associated clinical data and their transcriptomic data.
 The data used in this project comes from the GTEx project \citep{lonsdale2013genotype}, a large-scale study that aims to characterize the human transcriptome and its association with genetic variation.
@@ -75,7 +75,7 @@ The morphological clusters based on the histological images were obtained as fol
 
 First each histological slide numeric image was divided into 5000 squares.
 Then each square was encoded into a 512 features vector using a deep learning model (bottleneck of a encoder/decoder learning procedure). 
-Then, the 512 features vector were used to cluster the squares into 32 clusters.
+Then, the 512 features vectors were used to cluster the squares into 32 clusters.
 Therefore, for each sample (histological slide) we have a 32 features vector that represent the number of square of each cluster present in the sample.
 This approach allow us to convert the complexity of an image to a count vector. 
 This allow the use of different statistical methods to investigate the relationship between the morphological clusters and other variables.
@@ -93,7 +93,7 @@ For each section, the associated script is indicated at the start of the section
 
 \section{Exploration of  clinical variables}
 
-There are 13 variables present in the clinical dataset, let's take a look at what it corresponds to . 
+There are 13 variables present in the clinical dataset.
 The variable AGE corresponds to the age at the time of death of the individual.
 The variable SEX corresponds to the sex of the donor, where 1 represents Male and 2 represents Female.
 The variable HGHT corresponds to the height of the donor, measured in inches.
@@ -104,15 +104,15 @@ The variable BMI corresponds to an indicator of the body fat of the donor, calcu
 $ BMI = (703*weight)/(height)^2$ 
 \\
 
-The variables described previously correspond to the non-technical variables.Now lest's look at the technical variable. 
-The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). 
+The variables described previously correspond to the clinical variables. Now let's look at the technical variable. 
+The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). % ajouter  une explication
 The variable TRISCHD corresponds to the time in minutes between the death of the donor and the collection of tissues.
 The variable DTHHRDY corresponds to the classification of death, where: 0 corresponds to ventilator cases before death (expected death),1 corresponds to violent and fast death due to accident,2 corresponds to violent and fast death due to natural causes,3 corresponds to patients who were ill but death was unexpected, and 4 corresponds to slow death (with a terminal phase longer than 1 day). 
-The variable DTHVNT corresponds to three classes:0, the donor was not directly on a ventilator after death, 1 the donor was directly on a ventilator after death, 99 If it is not known.
+The variable DTHVNT corresponds to three classes:0, the donor was not directly on a ventilator after death, 1 the donor was directly on a ventilator after death, 99 If it is unknown.
 
 Finaly let's look at the miscellaneous clinical data. 
 The variable SUBJID corresponds to the GTEx Public Donor ID. 
-The variable SMPLID to  the GTEx ID of the organ. 
+The variable SMPLID to the GTEx ID of the organ. 
 The variable SMPTHNTS corresponds to notes that were taken by the pathologist who examined the histological slices. 
 The variable IMGURL corresponds to a link to an interactively zoomable high-resolution scan of the histological slice. 
 \subsection{Distribution of the variables}
@@ -122,7 +122,9 @@ The variable IMGURL corresponds to a link to an interactively zoomable high-reso
 	\textbf{Associated script : \href{https://github.com/leopoldguyot/BINF-F401-Project/*}{.R}}
 \end{scriptsize}
 
-By examining the clinical variables through histograms, we can visualize their distribution. Most of the continuous variables do not seem to follow a normal distribution. For instance, the variable AGE appears to be asymmetric, exhibiting a right skew (fig X).
+By examining the clinical variables through histograms, we can visualize their distribution. 
+Most of the continuous variables do not seem to follow a normal distribution. 
+For instance, the variable AGE appears to be asymmetric, exhibiting a right skew (Fig \ref{fig:ageDistrib}).
 
 \begin{figure}[H]
 	\centering
@@ -131,14 +133,16 @@ By examining the clinical variables through histograms, we can visualize their d
 	\label{fig:ageDistrib}
 \end{figure}
 
-To now if the continuous variable were normally distributed, we used a Shapiro-Wilk Normality Test \citep{R:2024} . The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. However, for WGHT, it was higher than 5\%, so we didn’t reject the null hypothesis (Table X ) . 
+To know if the continuous variable were normally distributed, we used a Shapiro-Wilk Normality Test \citep{R:2024}. 
+The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. 
+However, for WGHT, it was higher than 5\%, so we didn’t reject the null hypothesis (Table \ref{tab:swNum}). 
 
 \begin{table}[H]
 \begin{center}
 	\setlength{\tabcolsep}{0.5pt}
 	\begin{tabular}{ |c|c|c|c|c|c| } 
 	\hline 
-	& P-value   \\[0.2cm] 
+	& p-value   \\[0.2cm] 
 	\hline
 	 AGE &\small $1.14*10^{-11} $   \\ [0.1cm]
 	\hline
@@ -153,8 +157,8 @@ To now if the continuous variable were normally distributed, we used a Shapiro-W
 	 
 \end{tabular}
 \end{center}
-\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
-\label{tab:swInt}
+\caption{Result of the Shapiro-Willk test on the continuous variables. H0 = the sample is drawn form a normally distributed population}
+\label{tab:swNum}
 \end{table}
 
 
@@ -162,21 +166,23 @@ To now if the continuous variable were normally distributed, we used a Shapiro-W
 
 
 
-To do further analysis, we need them to be normally distributed. We tried to apply various transformations like log, square root, square. Only the square transformation successfully normalized the AGE sample. 
-Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT) (Table X)  . that first convert the variable into ranks, then map it to a normal distribution. 
+To do further analysis, we need them to be normally distributed. 
+We tried to apply various transformations like log, square root, square. 
+Only the square transformation successfully normalized the AGE sample. 
+Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT) (Table \ref{tab:swInt})
+that first convert the variable into ranks, then map it to a normal distribution. 
+\\
+$ Y^t_{i}=  \Phi^{-1}(r_i-C/N-2C+1) $ % r ou ri ?
 \\
 
-$ Y^t_{i}=  \Phi^{-1}(r-C/N-2C+1) $
-\\
-
-where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and $\Phi^{-1}$ denotes the standard normal quantile (or probit) function.For the value of C we use C=3/8 \citep{beasley2009rank}.
-
+where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and $\Phi^{-1}$ denotes the standard normal quantile (or probit) function.
+For the value of C we use C=3/8 \citep{beasley2009rank}. % check age et taille
 \begin{table}[H]
 \begin{center}
 	\setlength{\tabcolsep}{0.5pt}
 	\begin{tabular}{ |c|c|c|c|c|c| } 
 	\hline 
-	& P-value   \\[0.2cm] 
+	& p-value   \\[0.2cm] 
 	\hline
 	 AGE &\small $0.11 $   \\ [0.1cm]
 	\hline
@@ -191,30 +197,36 @@ where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and
 	 
 \end{tabular}
 \end{center}
-\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT) }
-\label{tab:swInt2}
+\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT). HO = the sample is drawn form a normally distributed population.}
+\label{tab:swInt}
 \end{table}
-
-
-If we look at the discrete variable, we can see that we don't have a balanced distribution. For example, for the variable SEX, there are more than twice as many males as females (fig x). For DTHHRDY, we can observe that most of the deaths occurred in ventilator cases (fig x). When conducting analysis, it's essential to keep these observations in mind as they can significantly influence the interpretation. 
+If we look at the discrete variable, we can see that we don't have a balanced distribution. 
+For example, for the variable SEX, there are more than twice as many males as females (fig \ref{fig:sexDistrib}). 
+For DTHHRDY, we can observe that most of the deaths occurred in ventilator cases (fig \ref{fig:dthhrdyDistrib}). 
+When conducting analysis, it's essential to keep these observations in mind as they can significantly influence the interpretation. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/SEX}
-	\caption{SEX distribution histogram }
+	\caption{SEX distribution histogram. 1 = Male and 2 = Female}
 	\label{fig:sexDistrib}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/DTHHRDY}
-	\caption{DTHHRDY distribution histogram }
+	\caption{DTHHRDY distribution histogram. 0 = Ventilator cases before death, 1 = Violent and fast death due to accident, 2 = Violent and fast death due to natural causes, 3 = Patients who were ill but death was unexpected, 4 = Slow death (with a terminal phase longer than 1 day)}
 	\label{fig:dthhrdyDistrib}
 \end{figure}
 
 \subsection{Correlations between the clinical variables}
+In this section, we will explore the relations between the variables described in the previous section with different methods.
 
-Principal Component Analysis (PCA) is a method of determining individual profiles and linear relationships between variables, based on correlation coefficients. The various graphs produced by a PCA, notably the correlation circle, are therefore a good way of illustrating the links between different quantitative variables, and getting a general idea of these links. Nevertheless, the data we are considering here are also partly qualitative. It is therefore preferable to turn to a Factor Analysis of Mixed Data, i.e. an analysis that applies a PCA to quantitative variables and a Multiple Correspondence Analysis to qualitative variables. The various dimensions defined by this method can be used to characterize all the variables. The FAMD() function in the FactoMineR package was used, with the argument allowing the creation of a series of graphs.
+
+Principal Component Analysis (PCA) is a method of determining individual profiles and linear relationships between variables, based on correlation coefficients. 
+The various graphs produced by a PCA, notably the correlation circle, are therefore a good way of illustrating the links between different quantitative variables, and getting a general idea of these links. 
+Nevertheless, the data we are considering here are also partly qualitative. It is therefore preferable to turn to a Factor Analysis of Mixed Data, i.e. an analysis that applies a PCA to quantitative variables and a Multiple Correspondence Analysis to qualitative variables. 
+The various dimensions defined by this method can be used to characterize all the variables. The \textit{FAMD} function in the \textit{FactoMineR} package was used, with the argument allowing the creation of a series of graphs.
 
 \begin{figure}[H]
 	\centering
@@ -342,7 +354,7 @@ Age was anticipated to be associated with TRISCHD, DTHHRDY, and COHORT, while he
 Additionally, sex appeared correlated with DTHHRDY and COHORT. Surprisingly, BMI seemed uncorrelated with any technical variables.
 
 For the technical variable DTHHRDY, a decision was made to group the categories into three new categories: slow, intermediate, and fast.
-This choice was made since more observations by categories would enhance statistical power.
+This choice was made since more observations by categories would enhance statistical power and that the new groups are more balanced.
 
 Upon conducting linear regression (generalized linear regression in the case of the categorical variable sex), it was observed that age was dependent on cohort, sex was dependent on DTHHRDY, height was dependent on DTHHRDY, weight was dependent on DTHHRDY, and, surprisingly, BMI was dependent on both DTHHRDY and COHORT.
 
@@ -354,7 +366,7 @@ As we we will see in a next section, we decided to not use the residuals for the
 
 \section{Association between clinical variables and morphological data}
 
-\subsection{Method}
+\subsection*{Method}
 
 To investigate the relationship between clinical and morphological data, we treated this problem as a differential expression analysis. 
 In this case, the clinical data represents the samples metadata and the morphological data the features. 
@@ -377,7 +389,7 @@ To minimize the loss of statistical power due to multiple testing corrections, D
 For the question 2.1 and 2.2 we used each clinical variable and each technical variable as the contrast for the design of the differential analysis.
 For the question 2.3 we used a contrast composed of each clinical variable plus the technical variables that were significantly associated with the clinical variable in the previous section.
 By doing that we ensure that we adjust the analysis to take into account the confonding effect of the technical variables.
-Note that for numerical variables, we used the rank-based inverse normal transformated values obtained in the Question 1.1.
+Note that for numerical variables, we used the rank-based inverse normal transformated values obtained in the section 1.1.
 
 We also decided to make extra analysis by converting the numeric clinical data to binary data. By doing this we assume to obtain more significant results. 
 This can be explained by the fact that the DESeq2 method will in the case of continous variable report the log2 fold change per unit of change of that variable.
@@ -386,7 +398,7 @@ The binary conversion was done by taking the median of the variable as the thres
 
 Some other changes have been made for this analysis, they are listed in the following:
 \begin{itemize}
-	\item  The Hardy scale variable was converted to an 3 categories variable, by grouping the intermediate and slow categories together (cf. Q1)
+	\item  The Hardy scale variable was converted to an 3 categories variable, by grouping the intermediate and slow categories together (cf. section 1.3)
 	\item  Samples with DTHVNT unknown were discarded
 	\item  A pseudo-count of 1 was added to the count matrix to avoid log transformation of 0 values
 \end{itemize}
@@ -396,6 +408,8 @@ As for the interpretation of the results, we decided to fix the threshold values
 
 
 \subsection{Clinical data vs. morphological data}
+
+% Les individus ayant un poid supérieur à 82.1 kg présente plus de tuiles du cluster 2 que les individus ayant un poid inférieur à 82.1 kg.
 
 As a reminder, the clinical variables correspond to AGE, SEX, HGHT, WGHT and BMI. The results of the association of these variables with morphological clusters therefore correspond to the first five columns of Table \ref{tab:Q2FC}.
 For the AGE variable, we can see that there are no significant results, no fold change, simply by considering the standardized values of this variable. Nevertheless, by dividing these values into two age groups of over and under 56, we can observe 4 clusters with significant characteristics. Clusters 0 and 2 have positive fold change values, indicating that these two clusters are made up of parts of samples from donors aged over 56, unlike clusters 10 and 31. 
@@ -426,11 +440,11 @@ Looking at all the values, several clusters stand out for their absolute fold ch
 
 \subsection{Adjusted clinical data vs. morphological data}
 
-The analysis was redone for non-technical variables to incorporate adjustments for confounding variables. The non-technical variables include AGE, SEX, HGHT, WGHT, and BMI. These variables were adjusted for variations  of the technicals variables found to be dependent on them (cf. section 2.3). 
-Adjustments were applied only to categorized variables as they yielded more meaningful results.
+The analysis was redone for non-technical variables to incorporate adjustments for confounding variables. The non-technical variables include AGE, SEX, HGHT, WGHT, and BMI. These variables were adjusted for variations  of the technicals variables found to be dependent on them (cf. section 1.3). 
+Adjustments were applied only to categorized variables as they yielded more meaningful results (results on Table \ref{tab:Q2bFC}).
 
-Comparing Table 1 and Table 2, we observed significant changes. Initially, AGE displayed associations with 4 clusters. However, after adjustments, no clusters remained associated with AGE. This indicates that the clusters found in Table 1 were influenced by the confounding variable COHORT.
-For SEX, initially, 9 clusters were associated. However, after adjustment, SEX showed no association with any cluster, suggesting that the associations observed previously were due to the influence of DTHHTRDY.
+Comparing Table \ref{tab:Q2FC} and Table \ref{tab:Q2bFC}, we observed significant changes. Initially, AGE displayed associations with 4 clusters. However, after adjustments, no clusters remained associated with AGE. This indicates that the clusters found in Table \ref{tab:Q2FC} were influenced by the confounding variable COHORT.
+For SEX, initially, 9 clusters were associated. However, after adjustment, SEX showed no association with any cluster, suggesting that the associations observed previously were due to the influence of DTHHRDY.
 
 Regarding HGHT, adjustments reduced the number of associated clusters from 6 to 1(cluster 10). This cluster was the only one associated with HGHT, showing a log2 fold change of -1.32, indicating that it was 0.40 times less prevalent in individuals with a height over 71 pounds . 
 
@@ -442,7 +456,7 @@ Lastly, for BMI, initially 2 clusters were associated. However, after adjustment
 
 \section{Association between morphological data and gene expression}
 \subsection{Association analyses at the level of the transcript}
-
+% ajouter explications filtrage des transcripts
 We performed a differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster. Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
 
 Differential analysis was conducted for each of the 32 clusters to determine the transcripts that varied significantly in function of the clusters.
@@ -453,7 +467,7 @@ To verify our results, an additional differential analysis was performed correct
 The following criteria where used to determine the significance of the results:
 \begin{itemize}
     \item Log2 Fold Change Threshold: A threshold of 1 was set to consider significant changes in gene expression.
-    \item Adjusted P-value Threshold: P-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
+    \item Adjusted p-value Threshold: p-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
 \end{itemize}
 
 For each cluster, we report the following:
@@ -463,15 +477,16 @@ For each cluster, we report the following:
 \end{itemize}
 
 \subsection{Gene Set Enrichment Analysis}
+% reference
 GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
 The process involves calculating an ES value for each pathway. ES score are calculated by walking down the list of the ranked genes and increase a running-sum statistics if the gene is present in the set of gene for  a pathways and decreasing it if it is not present. The magnitude of the increase or decrease  depends of the correlation of the gene with the phenotype (\textcolor{red} {cluster ?}). The ES score of the pathways would be the running-sum statistics that is the farther from zero. 
-Then generating random gene sets of the same size and calculating an ES for each of these random sets. .The P-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
+Then generating random gene sets of the same size and calculating an ES for each of these random sets. The p-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
 
-Here, we are going to use FGSEA (Fast Gene Set Enrichment Analysis), which efficiently estimates the GSEA P-value for a collection of pathways. It uses FGSEA-simple and FGSEA-multilevel on the pathways that have a low P-value.
+Here, we are going to use FGSEA (Fast Gene Set Enrichment Analysis), which efficiently estimates the GSEA p-value for a collection of pathways. It uses FGSEA-simple and FGSEA-multilevel on the pathways that have a low p-value.
 
-FGSEA-simple calculates the estimated P-values efficiently and simultaneously for the whole collection of gene sets but with limited accuracy. It is based on the idea that random gene set samples can be shared between different input pathways. It estimates the P-value of a pathway with the largest gene set size “M” as a proportion of a sample of random gene sets of size KM, having the same or more extreme ES value as the pathway. For other pathways “j”, it constructs a set of independent samples of size Kj (Kj < KM) by considering the prefixes in each sample of the larger random gene set and then estimates the P-value using the set of independent samples. It also uses the idea that using the larger random gene sets, the ES values for all the prefixes can be calculated efficiently using a square root heuristic. It uses a variant of the enrichment curve where the enrichment curve is constructed starting with the gene that is the most up-regulated to the most down-regulated, with the curve going right if the gene is not present in the pathway and up if it is present. Then the enrichment score can be determined using the point that is furthest from the diagonal.
+FGSEA-simple calculates the estimated p-values efficiently and simultaneously for the whole collection of gene sets but with limited accuracy. It is based on the idea that random gene set samples can be shared between different input pathways. It estimates the p-value of a pathway with the largest gene set size “M” as a proportion of a sample of random gene sets of size KM, having the same or more extreme ES value as the pathway. For other pathways “j”, it constructs a set of independent samples of size Kj (Kj < KM) by considering the prefixes in each sample of the larger random gene set and then estimates the p-value using the set of independent samples. It also uses the idea that using the larger random gene sets, the ES values for all the prefixes can be calculated efficiently using a square root heuristic. It uses a variant of the enrichment curve where the enrichment curve is constructed starting with the gene that is the most up-regulated to the most down-regulated, with the curve going right if the gene is not present in the pathway and up if it is present. Then the enrichment score can be determined using the point that is furthest from the diagonal.
 
-FGSEA-multilevel can estimate low P-values (P-value < $10{-6}$) accurately but for individual gene sets. It is based on a multilevel split Monte Carlo scheme. It calculates the probability of a random gene set of size K to have an enrichment score no less than $\gamma$, where $\gamma$ is an ES value > 0 given as input. Successively, the method finds ES levels ($l_i$) where the probability of ES being greater than the ES levels ($l_i$) is equal to $2^{-i}$. Finally, the method stops when $ l_i $becomes greater than $\gamma$ and when the P-value approaches $2^{-i}$.\citep{korotkevich2016fast}.
+FGSEA-multilevel can estimate low p-values (p-value < $10{-6}$) accurately but for individual gene sets. It is based on a multilevel split Monte Carlo scheme. It calculates the probability of a random gene set of size K to have an enrichment score no less than $\gamma$, where $\gamma$ is an ES value > 0 given as input. Successively, the method finds ES levels ($l_i$) where the probability of ES being greater than the ES levels ($l_i$) is equal to $2^{-i}$. Finally, the method stops when $ l_i $becomes greater than $\gamma$ and when the p-value approaches $2^{-i}$.\citep{korotkevich2016fast}.
 
 fgsea take as input a ranked list of or genes differentially expressed, we ranked them by significance and by the direction of the change using the formula:
 \bigskip
@@ -481,9 +496,9 @@ fgsea take as input a ranked list of or genes differentially expressed, we ranke
 \bigskip
 Where FC is the log2(fold change).
 We used this formula instead of the log2fold to take into account genes with a large fold change but non-significant and for p-value that are really small the gene can get a ranking of infinity. To get finite numbers we converted them to large or small values. By replacing the infinite values by 10 times the maximum or minimum ranking .
- At the top, we have the most significant and up-regulated genes, and at the bottom, the most significant down-regulated genes. Then it needs a list of gene sets. We used “c2.cp.reactome.v7.5.1.symbols.gmt”. This list of gene sets has been filtered to only contain genes  that are present in the ranked list of differentially expressed genes and with at least 5 genes present. Finaly, we run fgsea  \citep{fgsea} and exclude pathways that have gene set with a length under 10 and pathways with a gene set of over 1000 genes (\textcolor{red} {jutification ?}).
+ At the top, we have the most significant and up-regulated genes, and at the bottom, the most significant down-regulated genes. Then it needs a list of gene sets. We used “c2.cp.reactome.v7.5.1.symbols.gmt”. This list of gene sets has been filtered to only contain genes  that are present in the ranked list of differentially expressed genes and with at least 5 genes present. Finaly, we run fgsea  \citep{fgsea} and exclude pathways that have gene set with a length under 10 and pathways with a gene set of over 1000 genes.
  
-  For each cluster we repported the top  10 most significant up-regulated genes and top 10 most significant dow-regulated genes. The list has been order by NES by decreasing order, NES is the ES that has been normalized for each gene set to account for the differences of gene set size. 
+For each cluster we reported the top  10 most significant up-regulated genes. The list has been order by NES by decreasing order, NES is the ES that has been normalized for each gene set to account for the differences of gene set size (cf. Annex).
 
 \subsection{Technical and biological analysis}
 
