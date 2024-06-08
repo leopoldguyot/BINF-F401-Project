@@ -1,97 +1,14 @@
-setwd("C:/Users/Draguet/Desktop/Cours/MA-BINF 2023-2024/BINF-F401 Computational Methods for Functional Genomics/project-BINF-F401-2024/Heart")
-
 library(ggplot2)
 library(corrplot)
-
-clinical <- read.table(file = "clinical_data.tsv", sep = "\t", header = TRUE)
-morpho <- read.table(file = "morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE)
-RNAcount <- read.table(file = "RNA_read_counts.tsv", sep = "\t", header = TRUE)
-
-# Morphological atlas with the different clusters
-# https://www-hpda.ulb.ac.be/iribhm/ai/atlases/lunit_dino/Heart/graphics/sankey.html
-
-
-# Q1 Explore clinical variables
-
-# AGE = Age at death
-# SEX = 1 (Male) & 2 (Female)
-# HGHT = height of donor (inch)
-# WGHT = weight of donor (pounds)
-# BMI = general body fat indicator (ratio of weight to height)
-# COHORT = Organ donor & Postmortem
-# TRISCHD = Ischemic Time in minutes (time btw death and tissue collection)
-# DTHHRDY = Hardy scale (type of death)
-# 0 = Ventilator Case
-# 1 = Violent and fast death
-# 2 = Fast death of natural causes
-# 3 = Intermediate death
-# 4 = Slow death
-# DTHVNT Was donor on a ventilator immediately prior to Death.
-# 0 = No
-# 1 = Yes
-# 98 = Not Reported
-# 99 = Unknown
-
-# Correlation
-val_matrix <- cbind(clinical[3:8], clinical[10:12])
-val_matrix$COHORT <- as.numeric(factor(val_matrix$COHORT))
-M_corr <- cor(val_matrix, method = "spearman")
-corrplot(M_corr, method = "circle")
-
-p_val_M_corr <- c(
-    0.6228, 0.7948, 0.9113, 0.001322, 2.2e-16, 0.001282, 2.693e-05,
-    2.2e-16, 0.00193, 0.5186
-)
-p.adjust(p_val_M_corr, method = "bonferroni") # stay the same
-cor.test(val_matrix$AGE, val_matrix$HGHT, method = "spearman") # not significant
-cor.test(val_matrix$AGE, val_matrix$WGHT, method = "spearman") # not significant
-cor.test(val_matrix$AGE, val_matrix$BMI, method = "spearman") # not significant
-cor.test(val_matrix$AGE, val_matrix$TRISCHD, method = "spearman") # significant
-
-cor.test(val_matrix$HGHT, val_matrix$WGHT, method = "spearman") # significant
-cor.test(val_matrix$HGHT, val_matrix$BMI, method = "spearman") # significant
-cor.test(val_matrix$HGHT, val_matrix$TRISCHD, method = "spearman") # significant
-
-cor.test(val_matrix$WGHT, val_matrix$BMI, method = "spearman") # significant
-cor.test(val_matrix$WGHT, val_matrix$TRISCHD, method = "spearman") # significant
-
-cor.test(val_matrix$BMI, val_matrix$TRISCHD, method = "spearman") # not significant
-
-# Q1.2. Are the clinical variables correlated ?
-
-# library(corrr)
 library(ggcorrplot)
 library(FactoMineR)
 library(factoextra)
 
-# Checking for null values
-colSums(is.na(clinical)) # no null values
-
-# Normalizing the data
-quant_variables <- cbind(clinical[5:8], clinical[10])
-data_normalized <- scale(quant_variables)
-
-# Computing correlation matrix
-corr_matrix <- cor(data_normalized)
-ggcorrplot(corr_matrix)
-
-# Applying PCA
-data_pca <- princomp(corr_matrix)
-summary(data_pca)
-
-# Visualization of the principal components
-fviz_eig(data_pca, addlabels = TRUE)
-fviz_pca_var(data_pca, col.var = "black")
-fviz_cos2(data_pca, choice = "var", axes = 1:2)
-fviz_pca_var(data_pca,
-    col.var = "cos2",
-    gradient.cols = c("black", "orange", "green"),
-    repel = TRUE
-)
+clinical <- read.table(file = "clinical_data.tsv", sep = "\t", header = TRUE)
 
 
+# Factorial Analysis of Mixed Data
 
-# Considering every variables Factorial Analysis of Mixed Data
 val_matrix <- cbind(clinical[3:8], clinical[10:12])
 
 sex_genre <- c()
@@ -144,17 +61,34 @@ val_matrix$DTHHRDY <- hardy_scale
 
 clinical_famd <- FAMD(val_matrix, ncp = 10, graph = TRUE)
 
-get_eigenvalue(clinical_famd)
-fviz_screeplot(clinical_famd) # scree plot (the percentages of inertia explained by each FAMD dimensions)
-fviz_famd_var(clinical_famd, repel = TRUE) # to plot both quantitative and qualitative variables
-fviz_contrib(clinical_famd, "var", axes = 1) # to visualize the contribution of variables to the principal dimensions
-fviz_contrib(clinical_famd, "var", axes = 2)
-fviz_famd_var(clinical_famd, "quanti.var", repel = TRUE, col.var = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")) # correlation circle for quantitative data
-fviz_famd_var(clinical_famd, "quali.var", col.var = "black", repel = TRUE)
-fviz_cos2(clinical_famd, choice = "var", axes = 1:2)
+
+# Correlation between quantitative variables
+
+val_matrix <- cbind(clinical[3:8], clinical[10:12])
+val_matrix$COHORT <- as.numeric(factor(val_matrix$COHORT))
+
+cor.test(val_matrix$AGE, val_matrix$HGHT, method = "spearman") # not significant
+cor.test(val_matrix$AGE, val_matrix$WGHT, method = "spearman") # not significant
+cor.test(val_matrix$AGE, val_matrix$BMI, method = "spearman") # not significant
+cor.test(val_matrix$AGE, val_matrix$TRISCHD, method = "spearman") # significant
+
+cor.test(val_matrix$HGHT, val_matrix$WGHT, method = "spearman") # significant
+cor.test(val_matrix$HGHT, val_matrix$BMI, method = "spearman") # significant
+cor.test(val_matrix$HGHT, val_matrix$TRISCHD, method = "spearman") # significant
+
+cor.test(val_matrix$WGHT, val_matrix$BMI, method = "spearman") # significant
+cor.test(val_matrix$WGHT, val_matrix$TRISCHD, method = "spearman") # significant
+
+cor.test(val_matrix$BMI, val_matrix$TRISCHD, method = "spearman") # not significant
+
+p_val_M_corr <- c(
+  0.6228, 0.7948, 0.9113, 0.001322, 2.2e-16, 0.001282, 2.693e-05,
+  2.2e-16, 0.00193, 0.5186
+)
+p.adjust(p_val_M_corr, method = "bonferroni") # stay the same
 
 # correlation matrix with mixed-data (or maybe need to make ANOVA, chi-square and Pearson's correlation test)
-library(ggcorrplot)
+
 test <- model.matrix(~ 0 + ., data = val_matrix)
 test_corr <- cor(test, use = "pairwise.complete.obs")
 ggcorrplot(test_corr, show.diag = FALSE, type = "lower", lab = TRUE, lab_size = 2)
@@ -186,185 +120,6 @@ results_categ <- data.frame(
     Pval = corrected_pval
 )
 results_categ # devrait pas avoir correlation entre sex et les autres ?
-
-
-# ANOVA between categ and continuous, dont know how to actually do something
-test_aov <- table()
-val_matrix_cont <- cbind(clinical[5:8], clinical[10])
-
-# Levene Test of homogeneity, maybe not useful
-library(car)
-leveneTest(AGE ~ COHORT, data = val_matrix)
-
-test_aov <- aov(AGE ~ COHORT, data = val_matrix)
-summary(test_aov) # signif difference
-leveneTest(log(val_matrix$AGE), factor(val_matrix$COHORT), data = val_matrix)
-
-model <- lm(AGE ~ COHORT, data = val_matrix)
-shapiro.test(residuals(model))
-
-
-
-
-
-# Correlation between binary variables and quantitative variables
-
-shap_pval <- c()
-shap_name <- c()
-wilcox_pval <- c()
-wilcox_name <- c()
-
-# Sex and Age
-
-res <- shapiro.test(val_matrix$AGE[val_matrix$SEX == "Male"]) # not a normal distribution
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "AgeMale")
-res <- shapiro.test(val_matrix$AGE[val_matrix$SEX == "Female"]) # not normal
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "AgeFemale")
-
-res <- wilcox.test(AGE ~ SEX, data = val_matrix) # pval = 0.1524 => H0: pas de différence entre les deux groupes
-wilcox_pval <- c(wilcox_pval, res$p.value) # pas de corrélation entre l'âge et le sexe
-wilcox_name <- c(wilcox_name, "AgeSex")
-# If we consider that the distrib are normal because central limit theorem
-t.test(AGE ~ SEX, data = val_matrix) # 0.06 pas de réelle différence entre les deux moyennes
-
-# Sex and Height
-
-res <- shapiro.test(val_matrix$HGHT[val_matrix$SEX == "Male"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "HeightMale")
-res <- shapiro.test(val_matrix$HGHT[val_matrix$SEX == "Female"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "HeightFemale")
-
-res <- wilcox.test(HGHT ~ SEX, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "HeightSex")
-
-# Sex and Weight
-
-res <- shapiro.test(val_matrix$WGHT[val_matrix$SEX == "Male"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "WeightMale")
-res <- shapiro.test(val_matrix$WGHT[val_matrix$SEX == "Female"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "WeightFemale")
-
-res <- wilcox.test(WGHT ~ SEX, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "WeightSex")
-
-# Sex and BMI
-
-res <- shapiro.test(val_matrix$BMI[val_matrix$SEX == "Male"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "BMIMale")
-res <- shapiro.test(val_matrix$BMI[val_matrix$SEX == "Female"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "BMIFemale")
-
-res <- wilcox.test(BMI ~ SEX, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "BMISex")
-
-# Sex and Trisch
-
-res <- shapiro.test(val_matrix$TRISCHD[val_matrix$SEX == "Male"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "TRISCHDMale")
-res <- shapiro.test(val_matrix$TRISCHD[val_matrix$SEX == "Female"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "TRISCHDFemale")
-
-res <- wilcox.test(TRISCHD ~ SEX, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "TRISCHDSex")
-
-# Cohort and Age
-
-res <- shapiro.test(val_matrix$AGE[val_matrix$COHORT == "Postmortem"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "AgePM")
-res <- shapiro.test(val_matrix$AGE[val_matrix$COHORT == "Organ Donor (OPO)"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "AgeOD")
-
-res <- wilcox.test(AGE ~ COHORT, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "AgeCohort")
-
-# Sex and Height
-
-res <- shapiro.test(val_matrix$HGHT[val_matrix$COHORT == "Postmortem"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "HeightPM")
-res <- shapiro.test(val_matrix$HGHT[val_matrix$COHORT == "Organ Donor (OPO)"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "HeightOD")
-
-res <- wilcox.test(HGHT ~ COHORT, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "HeightCohort")
-
-# Sex and Weight
-
-res <- shapiro.test(val_matrix$WGHT[val_matrix$COHORT == "Postmortem"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "WeightPM")
-res <- shapiro.test(val_matrix$WGHT[val_matrix$COHORT == "Organ Donor (OPO)"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "WeightOD")
-
-res <- wilcox.test(WGHT ~ COHORT, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "WeightCohort")
-
-# Sex and BMI
-
-res <- shapiro.test(val_matrix$BMI[val_matrix$COHORT == "Postmortem"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "BMIPM")
-res <- shapiro.test(val_matrix$BMI[val_matrix$COHORT == "Organ Donor (OPO)"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "BMIOD")
-
-res <- wilcox.test(BMI ~ COHORT, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "BMICohort")
-
-# Sex and Trisch
-
-res <- shapiro.test(val_matrix$TRISCHD[val_matrix$COHORT == "Postmortem"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "TRISCHDPM")
-res <- shapiro.test(val_matrix$TRISCHD[val_matrix$COHORT == "Organ Donor (OPO)"])
-shap_pval <- c(shap_pval, res$p.value)
-shap_name <- c(shap_name, "TRISCHDOD")
-
-res <- wilcox.test(TRISCHD ~ COHORT, data = val_matrix)
-wilcox_pval <- c(wilcox_pval, res$p.value)
-wilcox_name <- c(wilcox_name, "TRISCHDCohort")
-
-corrected_shap <- p.adjust(shap_pval, method = "bonferroni")
-corrected_wilc <- p.adjust(wilcox_pval, method = "bonferroni")
-shap_data <- data.frame(
-    pval = shap_pval,
-    pval_corrected = corrected_shap,
-    names = shap_name
-)
-# only weight variable has a normal distribution in the different groups (pval > 0.05)
-t.test(WGHT ~ SEX, data = val_matrix) # means are different, then some correlation
-t.test(WGHT ~ COHORT, data = val_matrix) # means not different, no correlation
-
-wilcox_data <- data.frame(
-    quant_var = c("Age", "Height", "Weight", "BMI", "Trisch"),
-    sex = corrected_wilc[1:5],
-    cohort = corrected_wilc[6:10]
-)
-# H0 => no significant differences between the two groups
-# Thus, there is a correlation between the Sex variable and HGHT, WGHT and TRISCH
-# Also correlation between COHORT and AGE, HGHT and TRISCHT
 
 
 # Correlation between categorical variables => Cramer's V
