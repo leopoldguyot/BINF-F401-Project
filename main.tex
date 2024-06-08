@@ -220,8 +220,8 @@ When conducting analysis, it's essential to keep these observations in mind as t
 \end{figure}
 
 \subsection{Correlations between the clinical variables}
-In this section, we will explore the relations between the variables described in the previous section with different methods.
 
+In this section, we will explore the relations between the variables described in the previous section with different methods.
 
 Principal Component Analysis (PCA) is a method of determining individual profiles and linear relationships between variables, based on correlation coefficients. 
 The various graphs produced by a PCA, notably the correlation circle, are therefore a good way of illustrating the links between different quantitative variables, and getting a general idea of these links. 
@@ -251,31 +251,31 @@ We can, however, point out that the variable AGE is weakly explained by the firs
 This indicates that this possible correlation may not be significant, since by considering other dimensions, the vectors could be significantly far apart.
 
 In contrast to the correlation circle, the level map represents the different categories or levels of categorical variables. 
-We can already see that gender is close to different clusters. 
+We can already see that gender is close to different groups of categories considering the first dimension, which explains a higher percentage of the data. 
 It would seem that there is a correlation between gender and type of death in these data, given that women seem to be more prone to ventilatory problems than men, which would explain the presence of a respirator before the person's death (Yes). 
 It also appears that women are more likely than men to be organ donors. This graph therefore shows a certain correlation between gender and organ donation, type of death, but also between type of death and the presence or absence of a respiratory system prior to death.
 
 Although these graphs illustrate the presence of possible correlations, they do not give any indication of their intensity, as they are not quantified. 
 This quantification of correlation is particularly complex, as there is no correlation coefficient that can be applied to either quantitative or qualitative variables, or between these two types of variable. 
 It was therefore decided to use different coefficients depending on the type of comparison, although this choice does not allow all correlations to be compared with each other. 
-Correlations between quantitative variables were established using the cor() function with Spearman's method. 
+Correlations between quantitative variables were established using the \textit{cor}  function with Spearman's method \citep{R:2024} on untransformed data. 
 This correlation was chosen because it does not require normally distributed variables, which is not the case for most of the variables considered. 
 This coefficient is the only one to consider negative correlations.
 Cramer's V was used to determine correlations between categorical variables, a coefficient based on the Chi-square statistic, and which is non-parametric. 
-This correlation was calculated using the cramerV() function in the rcompanion package, with a bias correction given that this test tends to overestimate the relationships between categorical variables.
+This correlation was calculated using the \textit{cramerV} function in the rcompanion package \citep{rcomp}, with a bias correction given that this test tends to overestimate the relationships between categorical variables.
 Logistic regression is used to determine the correlation between a quantitative variable and a binomial categorical variable, in this case gender and cohort. 
-Finally, Cramer's V is applied to the H statistic of the Kruskall-Willis test between categorical and quantitative variables, as this statistic is the Kruskall-Willis chi-square. This application simply involves calculating the square root of the H statistic divided by the number of observations, the H statistic coming from the kruskall.willis() function.
+Finally, Cramer's V is applied to the H statistic of the Kruskall-Willis test between categorical and quantitative variables, as this statistic is the Kruskall-Willis chi-square. This application simply involves calculating the square root of the H statistic divided by the number of observations, the H statistic coming from the \textit{kruskal.test} function \citep{R:2024}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_correlation_plots/corrected_allCorrelations2}
-	\caption{Correlation matrix of all the variables}
+	\caption{Correlation matrix of all the variables, only significant correlations are shown, and the associated color corresponds to the magnitude of the correlation coefficient.}
 	\label{fig:allCor}
 \end{figure}
 
 Looking at all the results together, we can see that there is a significant correlation between gender and height, which can simply be explained by the fact that men are generally taller than women. 
 The correlation between height and weight, as well as between weight and BMI, can be explained as described above. 
-Nevertheless, the absence of any significant correlation between height and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. 
+Nevertheless, the fact that the correlation between height and BMI is not as important as between weight and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. 
 There is also a correlation between cohort and both type of death (DTHHRDY) and use of artificial ventilation before death (DTHVNT). 
 There is a certain logic behind these correlations: the cohort variable divides people into organ donors and postmortem donors, i.e. victims of brain or cardiac death, thus depending on the type of death, but we can also consider that people with brain death are generally assisted with artificial ventilation before death. 
 There also seems to be a correlation between the time between the individual's death and the removal of his or her organs and the type of death, but also the presence of a ventilatory apparatus. 
@@ -412,9 +412,9 @@ As for the interpretation of the results, we decided to fix the threshold values
 % Les individus ayant un poid supérieur à 82.1 kg présente plus de tuiles du cluster 2 que les individus ayant un poid inférieur à 82.1 kg.
 
 As a reminder, the clinical variables correspond to AGE, SEX, HGHT, WGHT and BMI. The results of the association of these variables with morphological clusters therefore correspond to the first five columns of Table \ref{tab:Q2FC}.
-For the AGE variable, we can see that there are no significant results, no fold change, simply by considering the standardized values of this variable. Nevertheless, by dividing these values into two age groups of over and under 56, we can observe 4 clusters with significant characteristics. Clusters 0 and 2 have positive fold change values, indicating that these two clusters are made up of parts of samples from donors aged over 56, unlike clusters 10 and 31. 
+For the AGE variable, we can see that there are no significant results, no fold change, simply by considering the standardized values of this variable. Nevertheless, by dividing these values into two age groups of over and under 56, we can observe 4 clusters with significant characteristics. Clusters 0 and 2 have positive fold change values, indicating that individuals over 56 have more squares in these two clusters, while those under 56 have more squares in clusters 10 and 31.
 
-In terms of sex, clusters 0, 2 and 21 have negative values, indicating a greater representation of male donors in these clusters, in contrast to clusters 6, 8, 10, 20, 23 and 25. It should be noted, however, that a relatively large number of clusters are characterized by females, even though these represent a certain minority of the data used. 
+In terms of sex, clusters 0, 2 and 21 have negative values, indicating male donors are more represented in these clusters, in contrast to clusters 6, 8, 10, 20, 23 and 25. It should be noted, however, that females are more present in an important amount of clusters compared to males, even though these represent a certain minority of the data used. 
 
 With normalized values for individual height, only cluster 6 shows a fold change whose negative value seems to indicate a certain number of shorter donors. This cluster is also repeated when we categorize this variable, but with a more pronounced fold change. We also find clusters 10, 23, 25, 27 and 31. All these clusters have a negative fold change for this categorized variable, indicating the presence of sample parts from relatively smaller donors, measuring less than 71 inch or 180cm. The term 'relatively' is important here, as the median is particularly high in this dataset.
 
@@ -430,11 +430,11 @@ Technical variables include COHORT, TRISCHD, DTHVNT and DTHHRDY. Their associati
 
 The COHORT variable represents the type of organ donor, and since we are comparing the post-mortem class with simple organ donors, positive values correspond to a higher proportion of tiles from post-mortem, brain-dead donors. Particularly negative values can be seen for clusters 6, 10, 23, 25, 27 and 31, indicating a particularly high proportion of classic organ donors.
 
-Comparing normalized and categorized ischemic time, we can again see that cluster 18 returns a significant result in the former case, but not the latter. Following the same logic as above, we can assume that this cluster contains a significant proportion of tiles from organs with relatively low ischemic times, but that the distribution of these times within the cluster does not appear to differ significantly on either side of the overall median. Surprisingly, this kind of result only appears for cluster 18. Although a negative value here corresponds to an ischemic time of less than 50 minutes, and vice-versa for positive values.
+Comparing normalized and categorized ischemic time, we can again see that cluster 18 returns a significant result in the former case, but not the latter. Following the same logic as above, we can assume that organs with relatively low ischemic times constitutes this particular cluster, but that the distribution of these times within the cluster does not appear to differ significantly on either side of the overall median. Surprisingly, this kind of result only appears for cluster 18. Although a negative value here corresponds to an ischemic time of less than 50 minutes, and vice-versa for positive values.
 
 As previously mentioned, the DTHVNT variable corresponds to the presence or absence of respiratory assistance prior to the patient's death. Since we are comparing the presence with the absence of such assistance, positive results correspond to a relative abundance of individuals with respiratory assistance in the cluster, and vice versa for negative values. A certain inverse relationship can be observed between the COHORT and DTHVNT variables: among common clusters, the results are of opposite signs, and the importance of these values is comparable. This observation can be explained by the fact that there is a correlation between these two variables. Comparison with the TRISCHD results, which are of opposite sign for common clusters, highlights the correlation that also exists between the two variables. 
 
-The DTHHRDY variable contains the types of death, considered here as slow, intermediate and fast. The last two types are compared with slow death. We can see that the vast majority of clusters with a result for one comparison also return a result of the same sign for the other comparison. Thus, a double positive result implies that the cluster contains mainly tiles from people with relatively rapid or intermediate death, and by extension a very small amount of tiles from patients with slow death. Conversely, a double-negative result implies that the cluster is particularly characterized by slow deaths. Cluster 16, on the other hand, is characterized by intermediate death, and cluster 17 by only a low rate of rapid death. As before, these results also express correlations between DTHHRDY and the variables COHORT, TRISCHD and DTHVNT. 
+The DTHHRDY variable contains the types of death, considered here as slow, intermediate and fast. The last two types are compared with slow death. We can see that the vast majority of clusters with a result for one comparison also return a result of the same sign for the other comparison. Thus, a double positive result implies that people with relatively rapid or intermediate death constitute mainly these clusters, and by extension patients with slow death are present in low numbers in these clusters. Conversely, a double-negative result implies that patients with a slow death are contained more in that kind of cluster. Cluster 16, on the other hand, is characterized by intermediate death, and cluster 17 by only a low rate of rapid death. As before, these results also express correlations between DTHHRDY and the variables COHORT, TRISCHD and DTHVNT. 
 
 Looking at all the values, several clusters stand out for their absolute fold change values for each technical variable, but also for the presence of certain patterns. For example, clusters 6, 10, 23, 25, 27 and 31 each have particularly negative values, except for the DTHVNT variable, which has very positive values. These similarities also appear in the morphological atlas, in terms of their position in relation to each other. We've already highlighted the fact that clusters 10 and 31 follow one another, but clusters 23, 27 and 6 also follow one another, but are simply separated by a different cluster. Since they are relatively close, we can assume that some of their similarities can be explained by tiles from previous clusters (G3) in common. Conversely, some clusters have positive values for all technical variables except DTHVNT, i.e. clusters 0, 2, 21, 22, 24 and 26. Their positions in the morpholigic atlas allow us to determine that their tiles come from common clusters, notably G3\_C7.
 
@@ -509,7 +509,7 @@ Among these common genes, ENSG00000215182.8 and ENSG00000223609.7 are present in
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final_analysis/SigGenesConsideringConf}
-	\caption{Genes present in at least 2 clusters, considering the confounder's effect}
+	\caption{Genes from tops 10, present in at least 2 clusters, considering the confounder's effect}
 	\label{fig:genesOcc}
 \end{figure}
 
