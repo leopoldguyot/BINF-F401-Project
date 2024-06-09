@@ -54,9 +54,9 @@ main.*
 !main.pdf
 !references.bib
 
-annexe.*
-!annexe.tex
-!annexe.pdf
-!annexe_generation.R
+annex.*
+!annex.tex
+!annex.pdf
+!annex_generation.R
 
 .DS_Store
