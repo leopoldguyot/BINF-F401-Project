@@ -63,7 +63,7 @@ for (i in 1:length(q3_2)) {
     cluster_number <- str_extract(q3_2[i], "(?<=G4_)\\d+")
     q3_2_df[[cluster_number]] <- read.table(q3_2[i], header=TRUE, sep="\t")
 }
-q3_2_conf_df <- q3_2_conf_df[order(as.numeric(names(q3_2_conf_df)))]
+q3_2_df <- q3_2_df[order(as.numeric(names(q3_2_df)))]
 # write tables
 
 write("\\section{Q3.1 Top 10 up-regulated transcripts without adjustement for confondant effect}", "annex.tex", append=TRUE, sep="\n")
