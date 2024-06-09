@@ -97,7 +97,7 @@ for (i in 1:length(q3_2_df)) {
         write("No significant pathway", "annex.tex", append=TRUE, sep="\n")
         next
     }
-    table <- q3_2_df[[i]][1:10, -3]
+    table <- q3_2_df[[i]][, -3]
     table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
     latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_df)[i]), label=paste0("tab:q3_2_", names(q3_2_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
@@ -111,7 +111,7 @@ for (i in 1:length(q3_2_conf_df)) {
         write("No significant pathway", "annex.tex", append=TRUE, sep="\n")
         next
     }
-    table <- q3_2_conf_df[[i]][1:10, -3]
+    table <- q3_2_conf_df[[i]][, -3]
     table$pathway <- sapply(table$pathway, function(x) gsub("_", " ", x))
     latex_code <- capture.output(print(xtable(table, caption=paste("Top 10 up-regulated pathways for cluster", names(q3_2_conf_df)[i], "with adjustement for confondant effect"), label=paste0("tab:q3_2_conf_", names(q3_2_conf_df)[i]), digits=4, align = c("p{0.05\\linewidth}","p{0.7\\linewidth}", "p{0.1\\linewidth}", "p{0.1\\linewidth}")), type = "latex", table.placement = "H"))
 
