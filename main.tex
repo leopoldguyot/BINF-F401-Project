@@ -105,7 +105,7 @@ $ BMI = (703*weight)/(height)^2$
 \\
 
 The variables described previously correspond to the clinical variables. Now let's look at the technical variable. 
-The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). % ajouter  une explication
+The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). Where "organ donor" corresponds to a heart from a donor that stopped beating, and "postmortem donor " refers to a donor who is brain dead but whose heart keeps on beating.
 The variable TRISCHD corresponds to the time in minutes between the death of the donor and the collection of tissues.
 The variable DTHHRDY corresponds to the classification of death, where: 0 corresponds to ventilator cases before death (expected death),1 corresponds to violent and fast death due to accident,2 corresponds to violent and fast death due to natural causes,3 corresponds to patients who were ill but death was unexpected, and 4 corresponds to slow death (with a terminal phase longer than 1 day). 
 The variable DTHVNT corresponds to three classes:0, the donor was not directly on a ventilator after death, 1 the donor was directly on a ventilator after death, 99 If it is unknown.
@@ -457,7 +457,9 @@ Lastly, for BMI, initially 2 clusters were associated. However, after adjustment
 \section{Association between morphological data and gene expression}
 \subsection{Association analyses at the level of the transcript}
 % ajouter explications filtrage des transcripts
-We performed a differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster. Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
+We performed a differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster.
+But before doing the diffrential gene expression we filtered or transcript. In order to keep only the transcript that have the most variablility we ranked or transcript using the Median Absolute Deviation with the mad() function and kept only the top half with the bigest mad value . But there was still transcripts that had  mad value of 0 , they were removed finaly , because we do not need transcript with low expresion we decided to get rid of transcript that had a total count under 500. 
+ Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
 
 Differential analysis was conducted for each of the 32 clusters to determine the transcripts that varied significantly in function of the clusters.
 
@@ -479,7 +481,7 @@ For each cluster, we report the following:
 \subsection{Gene Set Enrichment Analysis}
 % reference
 GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
-The process involves calculating an ES value for each pathway. ES score are calculated by walking down the list of the ranked genes and increase a running-sum statistics if the gene is present in the set of gene for  a pathways and decreasing it if it is not present. The magnitude of the increase or decrease  depends of the correlation of the gene with the phenotype (\textcolor{red} {cluster ?}). The ES score of the pathways would be the running-sum statistics that is the farther from zero. 
+The process involves calculating an ES value for each pathway. ES score are calculated by walking down the list of the ranked genes and increase a running-sum statistics if the gene is present in the set of gene for  a pathways and decreasing it if it is not present\citep{GSEA}. The magnitude of the increase or decrease  depends of the correlation of the gene with the phenotype (\textcolor{red} {cluster ?}). The ES score of the pathways would be the running-sum statistics that is the farther from zero. 
 Then generating random gene sets of the same size and calculating an ES for each of these random sets. The p-value is estimated as the number of gene sets that have an ES value equals or more extreme and divided by the total number of generated random gene sets. But to have a good statistical power it needs a large number of gene set samples.
 
 Here, we are going to use FGSEA (Fast Gene Set Enrichment Analysis), which efficiently estimates the GSEA p-value for a collection of pathways. It uses FGSEA-simple and FGSEA-multilevel on the pathways that have a low p-value.
