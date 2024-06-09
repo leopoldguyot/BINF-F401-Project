@@ -72,6 +72,9 @@ GSEA <- function(name,transcript_count){
   #saveRDS(GSEAres, file = paste0(filename2,name,'_gsea_results.rds'))
   topPathways <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
   GSEA_filtered <- GSEAres[pathway %in% topPathways]
+  GSEA_filtered <- GSEA_filtered[GSEA_filtered$padj < (0.05/32)]
+  nb_patwhays <- sum(GSEA_filtered[, padj < (0.05/32)])
+  print(nb_patwhays)
   GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
   write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_conf","_fgseaRes.txt"),
               sep = "\t", row.names = FALSE)
@@ -108,15 +111,16 @@ GSEA2 <- function(name,transcript_count){
                    maxSize = 1000,
                    nproc = 1) # for parallelisation
   filename = 'data_output/fgsea_result_not_conf/'
-  topPathwaysUp <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
-  topPathwaysDown <- GSEAres[ES < 0][head(order(padj), n = 10), pathway]
-  topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
+  topPathways <- GSEAres[ES > 0][head(order(padj), n = 10), pathway]
   GSEA_filtered <- GSEAres[pathway %in% topPathways]
+  GSEA_filtered <- GSEA_filtered[GSEA_filtered$padj < (0.05/32)]
+  nb_patwhays <- sum(GSEA_filtered[, padj < (0.05/32)])
+  print(nb_patwhays)
   GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
-  GSEA_filtered$padj <- GSEA_filtered$padj /32 
+
   write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_fgseaRes.txt"),
               sep = "\t", row.names = FALSE)
-  return(NULL)
+  return(nb_patwhays)
 }
 
 features_count <- read.table("data/morphological_counts_lunit_dino.tsv", sep = "\t", header = TRUE, row.names = 1)
@@ -125,7 +129,31 @@ transcript_count <- read.table("data/RNA_read_counts.tsv", sep = "\t", header = 
 cluster_name<- names(features_count)
 
 lapply(cluster_name, GSEA,transcript_count = transcript_count)
+
+
 lapply(cluster_name, GSEA2,transcript_count = transcript_count)
+
+
+#########
+
+genes_diff <- read.table(paste0("data_output/desq2_outputs_q3/","Mophological.cluster.G4_6","_confounders.tsv"),
+                         sep = "\t", header = TRUE, stringsAsFactors = TRUE)
+genes_diff$Name <- row.names(genes_diff)
+merged_df <- merge(genes_diff, transcript_count[, c("Description", "Name")], by = "Name", all.x = FALSE)
+genes1 <- merged_df$Description
+bg_genes <- prepare_gmt(genes1)
+GSEA <- readRDS("data_output/fgsea_result2/Mophological.cluster.G4_0_gsea_results.rds",refhook = NULL)
+rankings <- sign(genes_diff$log2FoldChange)*(-log10(genes_diff$padj))  # ou juste utulise log2foldchange 
+names(rankings) <- merged_df$Description
+rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
+topPathways <- GSEA[ES > 0][head(order(padj), n = 10), pathway]
+GSEA_filtered <- GSEA[pathway %in% topPathways]
+GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
+nb_patwhays <- sum(GSEA_filtered[, padj < 0.5])
+fwrite(GSEA_filtered[1:5,c(-2,-4,-7,-8)], file="data_output/table_reactome/fgseaRes.txt", sep="\t", sep2=c("", " ", ""))
+write.table(GSEA_filtered[1:5,c(-2,-4,-7,-8)],file="data_output/table_reactome/fgseaRes2.txt",sep = "\t", row.names = FALSE)
+
+setwd("/Users/godinmax/Desktop/bioinf/geno_projet ")
 
 
 
