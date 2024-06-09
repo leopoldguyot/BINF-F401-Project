@@ -78,7 +78,7 @@ GSEA <- function(name,transcript_count){
   GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
   write.table(GSEA_filtered[,c(-2,-4,-7,-8)],file= paste0("data_output/table_reactome/",name,"_conf","_fgseaRes.txt"),
               sep = "\t", row.names = FALSE)
-  return(NULL)
+  return(nb_patwhays)
 }
 
 GSEA2 <- function(name,transcript_count){
@@ -128,32 +128,18 @@ transcript_count <- read.table("data/RNA_read_counts.tsv", sep = "\t", header = 
 
 cluster_name<- names(features_count)
 
-lapply(cluster_name, GSEA,transcript_count = transcript_count)
+list_path <- lapply(cluster_name, GSEA,transcript_count = transcript_count)
+significant_pathways <- sapply(list_path[1:32], function(x) x[[1]])
+results_df <- data.frame(Cluster = cluster_name, SignificantPathways = significant_pathways)
 
+write.table(results_df,file= "data_output/nb_of_in_clusters/nb_pathways_Clusters_conf.txt",
+            sep = "\t", row.names = FALSE)
 
-lapply(cluster_name, GSEA2,transcript_count = transcript_count)
-
-
-#########
-
-genes_diff <- read.table(paste0("data_output/desq2_outputs_q3/","Mophological.cluster.G4_6","_confounders.tsv"),
-                         sep = "\t", header = TRUE, stringsAsFactors = TRUE)
-genes_diff$Name <- row.names(genes_diff)
-merged_df <- merge(genes_diff, transcript_count[, c("Description", "Name")], by = "Name", all.x = FALSE)
-genes1 <- merged_df$Description
-bg_genes <- prepare_gmt(genes1)
-GSEA <- readRDS("data_output/fgsea_result2/Mophological.cluster.G4_0_gsea_results.rds",refhook = NULL)
-rankings <- sign(genes_diff$log2FoldChange)*(-log10(genes_diff$padj))  # ou juste utulise log2foldchange 
-names(rankings) <- merged_df$Description
-rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
-topPathways <- GSEA[ES > 0][head(order(padj), n = 10), pathway]
-GSEA_filtered <- GSEA[pathway %in% topPathways]
-GSEA_filtered <- GSEA_filtered[order(GSEA_filtered$NES , decreasing = TRUE)]
-nb_patwhays <- sum(GSEA_filtered[, padj < 0.5])
-fwrite(GSEA_filtered[1:5,c(-2,-4,-7,-8)], file="data_output/table_reactome/fgseaRes.txt", sep="\t", sep2=c("", " ", ""))
-write.table(GSEA_filtered[1:5,c(-2,-4,-7,-8)],file="data_output/table_reactome/fgseaRes2.txt",sep = "\t", row.names = FALSE)
-
-setwd("/Users/godinmax/Desktop/bioinf/geno_projet ")
+list_path2 <- lapply(cluster_name, GSEA2,transcript_count = transcript_count)
+significant_pathways2 <- sapply(list_path2[1:32], function(x) x[[1]])
+results_df2 <- data.frame(Cluster = cluster_name, SignificantPathways = significant_pathways2)
+write.table(results_df2,file= "data_output/nb_of_in_clusters/nb_pathways_Clusters.txt",
+            sep = "\t", row.names = FALSE)
 
 
 
