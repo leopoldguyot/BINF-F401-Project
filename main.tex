@@ -587,6 +587,19 @@ Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E7
 
 In addition to the biological analysis of these genes, it is also interesting to consider the number of significant genes in common between each cluster. First of all, we can see the importance of confounding effects, with a large number of similarities disappearing completely or decreasing drastically. One might also expect to observe the same patterns as in Table 1, since these results are also driven by clinical variables, but several examples demonstrate that this is not the case. Cluster 0 shares 7 genes with cluster 28, not taking confounding effects into account, but the latter is not linked to any significant fold change, and therefore shows no particular pattern according to the variables. Cluster 0 also contains 5 genes in common with clusters 29, which also have no particular profile, 21 and 26, which are relatively similar to 0, 5 and 17, which have very few similar or inverse fold changes. On the other hand, it's not surprising to observe a genetic similarity between clusters 6 and 10 (Table 2), as they show negative fold changes for the weight variable, indicating profiles with low enough weight not to impact particular pathologies.
 
+\begin{table}[H]
+\begin{tabular}{c|cc}
+Cluster & \multicolumn{1}{c|}{Count non confounders} & Count confounders \\ \hline
+6 & 0 & 2 \\
+10 & 1 & 6 \\
+25 & 1 & 0 \\
+27 & 3 & 0 \\
+31 & 2 & 0
+\end{tabular}
+\caption{Number of significant pathways per cluster and according to the confounder's effect or not. The clusters with no significant results were not included.}
+\label{tab:sigPath}
+\end{table}
+
 For this project, pathways are also studied and, as with genes, confounding effects have been considered. Without this kind of effect, 4 different pathways were detected among the 4 clusters presenting significant results: clusters 10, 25, 27 and 31. Among these pathways, it is interesting to note that the signaling by rho GTPases, miro GTPases and RHOBTB3 is present in every cluster. By considering the confounder's effect, the number of cluster presenting significant reactomes is largely decreased, only the clusters 6 and 10 display this kind of results. The pathway highlighted before is still present in these clusters, thus is studied in the following paragraphs. In addition to having this pathway in common, clusters 6 and 10 also both feature the metabolism of RNA pathway, which will also be described later. However, it is surprising to observe that some pathways become significant after considering the confounding effect, whereas throughout this report we have always observed a decrease in significant results after considering this effect.
 
 \begin{table*}[t]
