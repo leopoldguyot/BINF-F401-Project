@@ -75,7 +75,9 @@ The morphological clusters based on the histological images were obtained as fol
 
 First each histological slide numeric image was divided into 5000 squares.
 Then each square was encoded into a 512 features vector using a deep learning model (bottleneck of a encoder/decoder learning procedure). 
-Then, the 512 features vectors were used to cluster the squares into 32 clusters.
+Then, the 512 features vectors were used to cluster the squares into clusters. 
+There are different level of clustering, here we used the 32 clusters level.
+Other levels of clustering are differentiated by a GX prefix where X denotes the level of clustering (Here we used G4).
 Therefore, for each sample (histological slide) we have a 32 features vector that represent the number of square of each cluster present in the sample.
 This approach allow us to convert the complexity of an image to a count vector. 
 This allow the use of different statistical methods to investigate the relationship between the morphological clusters and other variables.
@@ -350,8 +352,8 @@ To decouple the impact of technical variables from the data of interest, linear 
 Prior to regression, the data underwent transformation using inverse data normalization for numerical variables (cf. section 1.1).
 
 From the preceding section where correlations between variables were examined, certain expectations were established.
-Age was anticipated to be associated with TRISCHD, DTHHRDY, and COHORT, while height and weight were expected to be linked to the same variables.
-Additionally, sex appeared correlated with DTHHRDY and COHORT. Surprisingly, BMI seemed uncorrelated with any technical variables.
+Age and HGHT was anticipated to be associated with TRISCHD, DTHHRDY, and COHORT, while WGHT was expected to be linked to TRISCHD and DTHHRDY.
+Additionally, sex appeared correlated with DTHHRDY, DTHVNT and COHORT. Surprisingly, BMI seemed uncorrelated with any technical variables.
 
 For the technical variable DTHHRDY, a decision was made to group the categories into three new categories: slow, intermediate, and fast.
 This choice was made since more observations by categories would enhance statistical power and that the new groups are more balanced.
