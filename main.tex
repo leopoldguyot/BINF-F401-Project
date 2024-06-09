@@ -466,8 +466,10 @@ FGSEA-multilevel can estimate low p-values (p-value < $10{-6}$) accurately but f
 
 fgsea take as input a ranked list of or genes differentially expressed, we ranked them by significance and by the direction of the change using the formula:
 \bigskip
+
  $ RANK =sign(FC)* -log_{10}(p-value)  $
 \bigskip
+
 Where FC is the log2(fold change).
 We used this formula instead of the log2fold to take into account genes with a large fold change but non-significant and for p-value that are really small the gene can get a ranking of infinity. To get finite numbers we converted them to large or small values. By replacing the infinite values by 10 times the maximum or minimum ranking .
  At the top, we have the most significant and up-regulated genes, and at the bottom, the most significant down-regulated genes. Then it needs a list of gene sets. We used “c2.cp.reactome.v7.5.1.symbols.gmt”. This list of gene sets has been filtered to only contain genes  that are present in the ranked list of differentially expressed genes and with at least 5 genes present. Finaly, we run fgsea  \citep{fgsea} and exclude pathways that have gene set with a length under 10 and pathways with a gene set of over 1000 genes.
