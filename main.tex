@@ -22,6 +22,8 @@
 
 \usepackage{natbib}
 
+\usepackage{tabularx}
+
 \bibliographystyle{abbrvnat}
 \setcitestyle{authoryear,open={(},close={)}}
 
@@ -38,7 +40,7 @@
 %\addbibresource{references.bib}
 
 \title{\Large BINF-F401 Project \\
-\huge Analysis of the morphological clusters from heart and their associations with clinical and transcriptomic data.}
+\huge Analysis of the morphological clusters from heart and their associations with clinical and transcriptomic data}
 
 
 \author{
@@ -65,11 +67,9 @@
 \begin{multicols}{2}
 
 \section*{Introduction}
-
 In this project, we investigated the relationship between morphological clusters from heart samples and their associated clinical data and their transcriptomic data.
 The data used in this project comes from the GTEx project \citep{lonsdale2013genotype}, a large-scale study that aims to characterize the human transcriptome and its association with genetic variation.
 The GTEx project provides a large dataset that includes clinical data, transcriptomic data, and histological images from various tissues, including the heart.
-
 
 The morphological clusters based on the histological images were obtained as follow by the laboratory of Pr. Vincent Detours: 
 
@@ -94,7 +94,6 @@ All the scripts used for the analysis are available on the following GitHub repo
 For each section, the associated script is indicated at the start of the section.
 
 \section{Exploration of  clinical variables}
-
 There are 13 variables present in the clinical dataset.
 The variable AGE corresponds to the age at the time of death of the individual.
 The variable SEX corresponds to the sex of the donor, where 1 represents Male and 2 represents Female.
@@ -102,10 +101,8 @@ The variable HGHT corresponds to the height of the donor, measured in inches.
 The variable WGHT corresponds to weight of the donor, measured in pounds. 
 The variable BMI corresponds to an indicator of the body fat of the donor, calculated based on the ratio of weight to height. Using this formula: 
 \\
-
 $ BMI = (703*weight)/(height)^2$ 
 \\
-
 The variables described previously correspond to the clinical variables. Now let's look at the technical variable. 
 The variables COHORT correspond to the group the donor correspond to (Organ donor and postmortem donor). Where "organ donor" corresponds to a heart from a donor that stopped beating, and "postmortem donor " refers to a donor who is brain dead but whose heart keeps on beating.
 The variable TRISCHD corresponds to the time in minutes between the death of the donor and the collection of tissues.
@@ -116,29 +113,25 @@ Finaly let's look at the miscellaneous clinical data.
 The variable SUBJID corresponds to the GTEx Public Donor ID. 
 The variable SMPLID to the GTEx ID of the organ. 
 The variable SMPTHNTS corresponds to notes that were taken by the pathologist who examined the histological slices. 
-The variable IMGURL corresponds to a link to an interactively zoomable high-resolution scan of the histological slice. 
-\subsection{Distribution of the variables}
+The variable IMGURL corresponds to a link to an interactively zoomable high-resolution scan of the histological slice.
 
+\subsection{Distribution of the variables}
 \begin{scriptsize}	
-	
-	\textbf{Associated script : \href{https://github.com/leopoldguyot/BINF-F401-Project/*}{.R}}
+	\textbf{Associated script: \href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_1_1.R}{question\_1\_1.R}}
 \end{scriptsize}
 
 By examining the clinical variables through histograms, we can visualize their distribution. 
 Most of the continuous variables do not seem to follow a normal distribution. 
 For instance, the variable AGE appears to be asymmetric, exhibiting a right skew (Fig \ref{fig:ageDistrib}).
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/AGE}
 	\caption{Age distribution histogram }
 	\label{fig:ageDistrib}
 \end{figure}
-
 To know if the continuous variable were normally distributed, we used a Shapiro-Wilk Normality Test \citep{R:2024}. 
 The results showed that AGE, HGHT, BMI, TRISCHD all had p-value under 5\%, leading us to reject the null hypothesis, which say that the sample is drawn form a normally distributed population. 
 However, for WGHT, it was higher than 5\%, so we didn’t reject the null hypothesis (Table \ref{tab:swNum}). 
-
 \begin{table}[H]
 \begin{center}
 	\setlength{\tabcolsep}{0.5pt}
@@ -162,46 +155,16 @@ However, for WGHT, it was higher than 5\%, so we didn’t reject the null hypoth
 \caption{Result of the Shapiro-Willk test on the continuous variables. H0 = the sample is drawn form a normally distributed population}
 \label{tab:swNum}
 \end{table}
-
-
-
-
-
-
 To do further analysis, we need them to be normally distributed. 
 We tried to apply various transformations like log, square root, square. 
 Only the square transformation successfully normalized the AGE sample. 
-Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT) (Table \ref{tab:swInt})
-that first convert the variable into ranks, then map it to a normal distribution. 
+Because we needed it to work on all the continuous variable, we finally chose to use the rank-based inverse normal transformation (INT) that first convert the variable into ranks, then map it to a normal distribution. 
 \\
 $ Y^t_{i}=  \Phi^{-1}(r_i-C/N-2C+1) $ % r ou ri ?
 \\
-
-where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and $\Phi^{-1}$ denotes the standard normal quantile (or probit) function.
+Where $r_i$ is the ordinary rank of the $_ith$ case among the N observations and $\Phi^{-1}$ denotes the standard normal quantile (or probit) function.
 For the value of C we use C=3/8 \citep{beasley2009rank}. % check age et taille
-\begin{table}[H]
-\begin{center}
-	\setlength{\tabcolsep}{0.5pt}
-	\begin{tabular}{ |c|c|c|c|c|c| } 
-	\hline 
-	& p-value   \\[0.2cm] 
-	\hline
-	 AGE &\small $0.11 $   \\ [0.1cm]
-	\hline
-	 HGHT & \small $0.063 $ \\[0.1cm]
-	\hline
-	 WGHT & \small $ 1 $   \\[0.1cm]
-	\hline
-	 BMI &  \small $1 $\\[0.1cm]
-	\hline
-	 TRISCHD &\small $1$  \\[0.1cm]
-	\hline
-	 
-\end{tabular}
-\end{center}
-\caption{Result of the Shapiro-Willk test on the continuous variables after rank-based inverse normal transformation (INT). HO = the sample is drawn form a normally distributed population.}
-\label{tab:swInt}
-\end{table}
+
 If we look at the discrete variable, we can see that we don't have a balanced distribution. 
 For example, for the variable SEX, there are more than twice as many males as females (fig \ref{fig:sexDistrib}). 
 For DTHHRDY, we can observe that most of the deaths occurred in ventilator cases (fig \ref{fig:dthhrdyDistrib}). 
@@ -213,7 +176,6 @@ When conducting analysis, it's essential to keep these observations in mind as t
 	\caption{SEX distribution histogram. 1 = Male and 2 = Female}
 	\label{fig:sexDistrib}
 \end{figure}
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_data_var_dist/DTHHRDY}
@@ -222,6 +184,9 @@ When conducting analysis, it's essential to keep these observations in mind as t
 \end{figure}
 
 \subsection{Correlations between the clinical variables}
+\begin{scriptsize}	
+	\textbf{Associated script: \href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_1_2.R}{question\_1\_2.R}}
+\end{scriptsize}
 
 In this section, we will explore the relations between the variables described in the previous section with different methods.
 
@@ -229,21 +194,18 @@ Principal Component Analysis (PCA) is a method of determining individual profile
 The various graphs produced by a PCA, notably the correlation circle, are therefore a good way of illustrating the links between different quantitative variables, and getting a general idea of these links. 
 Nevertheless, the data we are considering here are also partly qualitative. It is therefore preferable to turn to a Factor Analysis of Mixed Data, i.e. an analysis that applies a PCA to quantitative variables and a Multiple Correspondence Analysis to qualitative variables. 
 The various dimensions defined by this method can be used to characterize all the variables. The \textit{FAMD} function in the \textit{FactoMineR} package was used, with the argument allowing the creation of a series of graphs.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_correlation_plots/all_quant_Dim2}
 	\caption{Correlation circle of the continuous variables}
 	\label{fig:corCircle}
 \end{figure}
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_correlation_plots/all_categ_Dim}
 	\caption{Level maps of all the different categories in the qualitative variables}
 	\label{fig:lvlMap}
 \end{figure}
-
 The correlation circle allows us to represent quantitative variables according to the relationships they might have with each other, and the degree of explanation of these variables provided by the chosen dimensions. 
 In this case, the two dimensions represented together explain only 48.72\% of the data, suggesting a certain complexity. 
 This graph shows some correlation between the variables height (HGHT), weight (WGHT) and body mass index (BMI), which is not surprising given that taller people tend to be heavier, and also given that BMI is a function of height and weight. 
@@ -267,14 +229,12 @@ Cramer's V was used to determine correlations between categorical variables, a c
 This correlation was calculated using the \textit{cramerV} function in the rcompanion package \citep{rcomp}, with a bias correction given that this test tends to overestimate the relationships between categorical variables.
 Logistic regression is used to determine the correlation between a quantitative variable and a binomial categorical variable, in this case gender and cohort. 
 Finally, Cramer's V is applied to the H statistic of the Kruskall-Willis test between categorical and quantitative variables, as this statistic is the Kruskall-Willis chi-square. This application simply involves calculating the square root of the H statistic divided by the number of observations, the H statistic coming from the \textit{kruskal.test} function \citep{R:2024}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/clinical_correlation_plots/corrected_allCorrelations2}
 	\caption{Correlation matrix of all the variables, only significant correlations are shown, and the associated color corresponds to the magnitude of the correlation coefficient.}
 	\label{fig:allCor}
 \end{figure}
-
 Looking at all the results together, we can see that there is a significant correlation between gender and height, which can simply be explained by the fact that men are generally taller than women. 
 The correlation between height and weight, as well as between weight and BMI, can be explained as described above. 
 Nevertheless, the fact that the correlation between height and BMI is not as important as between weight and BMI is rather odd given that the BMI calculation takes into account both height and weight, and that the correlation circle has positioned the corresponding vectors relatively close to each other. 
@@ -282,8 +242,7 @@ There is also a correlation between cohort and both type of death (DTHHRDY) and 
 There is a certain logic behind these correlations: the cohort variable divides people into organ donors and postmortem donors, i.e. victims of brain or cardiac death, thus depending on the type of death, but we can also consider that people with brain death are generally assisted with artificial ventilation before death. 
 There also seems to be a correlation between the time between the individual's death and the removal of his or her organs and the type of death, but also the presence of a ventilatory apparatus. 
 Finally, DTHVNT and DTHHRDY are also correlated.
-
-\begin{table*}[t]
+\begin{table*}[h]
 \footnotesize
 \makebox[\linewidth]{
 \begin{tabular}{|c|c c|c|c c|c c|c c|c|c c|c|cc|}
@@ -346,6 +305,9 @@ Finally, DTHVNT and DTHHRDY are also correlated.
 \end{table*}
 
 \subsection{Impact of technical variables on clinical variables}
+\begin{scriptsize}	
+	\textbf{Associated script: \href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_1_3.R}{question\_1\_3.R}}
+\end{scriptsize}
 
 In this section, we investigate the influence of technical variables on clinical data and describe the methodology employed to isolate their effects.
 To decouple the impact of technical variables from the data of interest, linear regression analyses were conducted.
@@ -367,8 +329,15 @@ These residuals represent the data of interest with the unwanted effects of the 
 As we we will see in a next section, we decided to not use the residuals for the differential expression analysis. This is because the method used (DESeq2 \citep{DESeq2:2014}), allow to use the technical variables as a contrast in the design of the analysis. By doing that we can adjust the analysis to take into account the confonding effect of the technical variables.
 
 \section{Association between clinical variables and morphological data}
-
 \subsection*{Method}
+\begin{scriptsize}
+	\textbf{Associated scripts:\\
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_2_preprocessing_exp_dif.R}{question\_2\_preprocessing\_exp\_dif.R},\\
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_2_desq2_workflow.R}{question\_2\_desq2\_workflow.R},\\
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_2_1_and_2_2.R}{question\_2\_1\_and\_2\_2.R},\\
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_2_3.R}{question\_2\_3.R}
+	}
+\end{scriptsize}
 
 To investigate the relationship between clinical and morphological data, we treated this problem as a differential expression analysis. 
 In this case, the clinical data represents the samples metadata and the morphological data the features. 
@@ -404,15 +373,10 @@ Some other changes have been made for this analysis, they are listed in the foll
 	\item  Samples with DTHVNT unknown were discarded
 	\item  A pseudo-count of 1 was added to the count matrix to avoid log transformation of 0 values
 \end{itemize}
-
-
 As for the interpretation of the results, we decided to fix the threshold values as follow, alpha at 0.05 and log2 fold change at 1.
 
-
 \subsection{Clinical data vs. morphological data}
-
 % Les individus ayant un poid supérieur à 82.1 kg présente plus de tuiles du cluster 2 que les individus ayant un poid inférieur à 82.1 kg.
-
 As a reminder, the clinical variables correspond to AGE, SEX, HGHT, WGHT and BMI. The results of the association of these variables with morphological clusters therefore correspond to the first five columns of Table \ref{tab:Q2FC}.
 For the AGE variable, we can see that there are no significant results, no fold change, simply by considering the standardized values of this variable. Nevertheless, by dividing these values into two age groups of over and under 56, we can observe 4 clusters with significant characteristics. Clusters 0 and 2 have positive fold change values, indicating that individuals over 56 have more squares in these two clusters, while those under 56 have more squares in clusters 10 and 31.
 
@@ -427,7 +391,6 @@ The same observations regarding cluster 18 can be made with the BMI variable. Fu
 From a more global point of view, clusters 10 and 31 are particularly similar, and this similarity can be explained by the fact that they are very close to each other in the morphological atlas of the organ studied. As such, they have similar characteristics, as the different tiles that constitute them largely originate from the same anterior cluster (G3\_C1). The different results also underline the correlations determined previously, notably the correlation between sex and height, and between weight and BMI.
 
 \subsection{Technical data vs. morphological data}
-
 Technical variables include COHORT, TRISCHD, DTHVNT and DTHHRDY. Their associations with the various clusters are therefore shown in the last 4 columns of Table \ref{tab:Q2FC}. 
 
 The COHORT variable represents the type of organ donor, and since we are comparing the post-mortem class with simple organ donors, positive values correspond to a higher proportion of tiles from post-mortem, brain-dead donors. Particularly negative values can be seen for clusters 6, 10, 23, 25, 27 and 31, indicating a particularly high proportion of classic organ donors.
@@ -441,7 +404,6 @@ The DTHHRDY variable contains the types of death, considered here as slow, inter
 Looking at all the values, several clusters stand out for their absolute fold change values for each technical variable, but also for the presence of certain patterns. For example, clusters 6, 10, 23, 25, 27 and 31 each have particularly negative values, except for the DTHVNT variable, which has very positive values. These similarities also appear in the morphological atlas, in terms of their position in relation to each other. We've already highlighted the fact that clusters 10 and 31 follow one another, but clusters 23, 27 and 6 also follow one another, but are simply separated by a different cluster. Since they are relatively close, we can assume that some of their similarities can be explained by tiles from previous clusters (G3) in common. Conversely, some clusters have positive values for all technical variables except DTHVNT, i.e. clusters 0, 2, 21, 22, 24 and 26. Their positions in the morpholigic atlas allow us to determine that their tiles come from common clusters, notably G3\_C7.
 
 \subsection{Adjusted clinical data vs. morphological data}
-
 The analysis was redone for non-technical variables to incorporate adjustments for confounding variables. The non-technical variables include AGE, SEX, HGHT, WGHT, and BMI. These variables were adjusted for variations  of the technicals variables found to be dependent on them (cf. section 1.3). 
 Adjustments were applied only to categorized variables as they yielded more meaningful results (results on Table \ref{tab:Q2bFC}).
 
@@ -458,13 +420,19 @@ Lastly, for BMI, initially 2 clusters were associated. However, after adjustment
 
 \section{Association between morphological data and gene expression}
 \subsection{Association analyses at the level of the transcript}
+\begin{scriptsize}	
+	\textbf{Associated scripts:\\ 
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_3_filter_transcript.R}{question\_3\_filter\_transcript.R},\\
+	\href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_3_1.R}{question\_3\_1.R}
+	}
+\end{scriptsize}
+
 % ajouter explications filtrage des transcripts
 We performed a differential gene expression analysis to identify significant up-regulated and down-regulated genes associated with each morphological cluster.
 But before doing the diffrential gene expression we filtered or transcript. In order to keep only the transcript that have the most variablility we ranked or transcript using the Median Absolute Deviation with the mad() function and kept only the top half with the bigest mad value . But there was still transcripts that had  mad value of 0 , they were removed finaly , because we do not need transcript with low expresion we decided to get rid of transcript that had a total count under 500. 
  Using the DESeq2 method, the analysis was carried out for each cluster, considering both the presence and absence of technical variable corrections. 
 
 Differential analysis was conducted for each of the 32 clusters to determine the transcripts that varied significantly in function of the clusters.
-
 
 To verify our results, an additional differential analysis was performed correcting for potential confounding effects of technical variables.
 
@@ -473,7 +441,6 @@ The following criteria where used to determine the significance of the results:
     \item Log2 Fold Change Threshold: A threshold of 1 was set to consider significant changes in gene expression.
     \item Adjusted p-value Threshold: p-values were adjusted for multiple comparisons using Bonferroni correction. With 32 clusters, the adjusted significance threshold was set at 0.05/32.
 \end{itemize}
-
 For each cluster, we report the following:
 \begin{itemize}
     \item Number of significant up-regulated and down-regulated genes, identified based on the set thresholds.
@@ -481,6 +448,11 @@ For each cluster, we report the following:
 \end{itemize}
 
 \subsection{Gene Set Enrichment Analysis}
+\begin{scriptsize}	
+	\textbf{Associated script: \href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_3_2.R}{question\_3\_2.R}
+	}
+\end{scriptsize}
+
 % reference
 GSEA (Gene Set Enrichment Analysis) is a preranked method used to analyze gene expression data, allowing us to determine if genes within a given gene set exhibit non-random behavior. However, this method can be slow because the analytical form of the null distribution for the Enrichment Score (ES) statistic is not known, necessitating the calculation of an empirical null distribution.
 The process involves calculating an ES value for each pathway. ES score are calculated by walking down the list of the ranked genes and increase a running-sum statistics if the gene is present in the set of gene for  a pathways and decreasing it if it is not present\citep{GSEA}. The magnitude of the increase or decrease  depends of the correlation of the gene with the clusters. The ES score of the pathways would be the running-sum statistics that is the farther from zero. 
@@ -494,9 +466,7 @@ FGSEA-multilevel can estimate low p-values (p-value < $10{-6}$) accurately but f
 
 fgsea take as input a ranked list of or genes differentially expressed, we ranked them by significance and by the direction of the change using the formula:
 \bigskip
-
  $ RANK =sign(FC)* -log_{10}(p-value)  $
- 
 \bigskip
 Where FC is the log2(fold change).
 We used this formula instead of the log2fold to take into account genes with a large fold change but non-significant and for p-value that are really small the gene can get a ranking of infinity. To get finite numbers we converted them to large or small values. By replacing the infinite values by 10 times the maximum or minimum ranking .
@@ -505,61 +475,64 @@ We used this formula instead of the log2fold to take into account genes with a l
 For each cluster we reported the top  10 most significant up-regulated genes. The list has been order by NES by decreasing order, NES is the ES that has been normalized for each gene set to account for the differences of gene set size (cf. Annex).
 
 \subsection{Technical and biological analysis}
+\begin{scriptsize}	
+	\textbf{Associated script: \href{https://github.com/leopoldguyot/BINF-F401-Project/blob/main/question_3_3.R}{question\_3\_3.R}
+	}
+\end{scriptsize}
 
 \begin{table}[H]
-\begin{tabular}{lll}
-Cluster & Count non confounders & Count confounders \\ \hline
-0 & 53 & 2 \\
-1 & 40 & 23 \\
-10 & 99 & 4 \\
-11 & 612 & 86 \\
-12 & 21 & 12 \\
-13 & 126 & 13 \\
-14 & 68 & 25 \\
-15 & 35 & 3 \\
-16 & 622 & 40 \\
-17 & 140 & 81 \\
-18 & 8 & 7 \\
-19 & 197 & 53 \\
-2 & 9 & 0 \\
-20 & 144 & 19 \\
-21 & 54 & 1 \\
-22 & 207 & 9 \\
-23 & 190 & 7 \\
-24 & 38 & 1 \\
-25 & 63 & 8 \\
-26 & 34 & 2 \\
-27 & 55 & 12 \\
-28 & 60 & 10 \\
-29 & 452 & 165 \\
-3 & 120 & 11 \\
-30 & 15 & 8 \\
-31 & 10 & 0 \\
-4 & 1360 & 117 \\
-5 & 55 & 5 \\
-6 & 86 & 2 \\
-7 & 37 & 23 \\
-8 & 2797 & 378 \\
-9 & 17 & 2 \\ \hline
-Total & 7824 & 1129
-\end{tabular}
-\caption{Number of significant genes per cluster and according to the confounder's effect or not}
-\label{tab:sigCount}
-\end{table}
-
+	\begin{tabularx}{\textwidth}{|X|X|X|}
+	\hline
+	Cluster & Count non confounders & Count confounders \\ \hline
+	0 & 53 & 2 \\ \hline
+	1 & 40 & 23 \\ \hline
+	10 & 99 & 4 \\ \hline
+	11 & 612 & 86 \\ \hline
+	12 & 21 & 12 \\ \hline
+	13 & 126 & 13 \\ \hline
+	14 & 68 & 25 \\ \hline
+	15 & 35 & 3 \\ \hline
+	16 & 622 & 40 \\ \hline
+	17 & 140 & 81 \\ \hline
+	18 & 8 & 7 \\ \hline
+	19 & 197 & 53 \\ \hline
+	2 & 9 & 0 \\ \hline
+	20 & 144 & 19 \\ \hline
+	21 & 54 & 1 \\ \hline
+	22 & 207 & 9 \\ \hline
+	23 & 190 & 7 \\ \hline
+	24 & 38 & 1 \\ \hline
+	25 & 63 & 8 \\ \hline
+	26 & 34 & 2 \\ \hline
+	27 & 55 & 12 \\ \hline
+	28 & 60 & 10 \\ \hline
+	29 & 452 & 165 \\ \hline
+	3 & 120 & 11 \\ \hline
+	30 & 15 & 8 \\ \hline
+	31 & 10 & 0 \\ \hline
+	4 & 1360 & 117 \\ \hline
+	5 & 55 & 5 \\ \hline
+	6 & 86 & 2 \\ \hline
+	7 & 37 & 23 \\ \hline
+	8 & 2797 & 378 \\ \hline
+	9 & 17 & 2 \\ \hline
+	Total & 7824 & 1129 \\ \hline
+	\end{tabularx}
+	\caption{Number of significant genes per cluster and according to the confounder's effect or not}
+	\label{tab:sigCount}
+	\end{table}
 From the table above, we can see that when the confounding effect is taken into account, a very large number of genes are no longer considered significant: this number is practically divided by 7. This observation allows us to estimate that the effect of the technical variables was particularly important.
 
 From a purely numerical point of view, all clusters contain 102 significant genes, 47 of which are present in more than one cluster. However, when the confounding effects of technical variables are taken into account, these numbers fall to 82 significant genes for 24 genes common to several clusters. 
 
-Among these common genes, ENSG00000215182.8 and ENSG00000223609.7 are present in 5 clusters, while ENSG00000095752.6, ENSG00000159261.10 and ENSG00000163435.15 are present in 4 clusters. Some of these genes are also found in common clusters, notably 11, 16, 21, 22, 23 and 26. But these similarities do not correspond to common morphological profiles, whether or not confounding effects are considered. 
-
+Among these common genes,\\
+ENSG00000215182.8 and ENSG00000223609.7 are present in 5 clusters, while ENSG00000095752.6, ENSG00000159261.10 and ENSG00000163435.15 are present in 4 clusters. Some of these genes are also found in common clusters, notably 11, 16, 21, 22, 23 and 26. But these similarities do not correspond to common morphological profiles, whether or not confounding effects are considered. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final_analysis/SigGenesConsideringConf}
 	\caption{Genes from tops 10, present in at least 2 clusters, considering the confounder's effect}
 	\label{fig:genesOcc}
 \end{figure}
-
 ENSG00000215182.8 corresponds to the MUC5AC gene encoding mucin-5AC, a glycoprotein that forms a gel mainly in gastric and respiratory epithelia. This gel protects the mucosa from infection and chemical damage in the gastric and respiratory tracts. This gene is also expressed in cardiac myxoma \citep{Islam2022}, a very common cardiac tumor corresponding to an abnormal mass of tissue. This tumor is biologically benign, but functionally malignant due to its position in the heart and the emboli it can generate  \citep{Chu2004}. This gene is up-regulated in clusters 3, 12, 16, 20 and 29, but they do not share common morphological profiles or similar death patterns. One might expect the presence of this gene to imply rapid deaths, since emboli can lead to relatively fulminant deaths, but the absence of this observation indicates that, for the majority of individuals considered, this myxoma was not the cause of their death. 
 
 ENSG00000223609.7 is the HBD gene coding for the delta subunit of hemoglobin, a constituent of one type of erythrocyte. Expression of this gene in the heart may, at first glance, appear suspicious, since erythrocyte formation takes place mainly in the bone marrow. However, expression of this gene is also observed in various types of tissue, including cardyomyocytes  \citep{Keller2022}, the cardiac muscles that make up a very large part of the heart. The gene appears to be particularly expressed in clusters 0, 4, 11, 15 and 16, suggesting that these clusters are made up of a large number of cardiac muscle cells. 
@@ -569,40 +542,34 @@ ENSG00000095752.6 also designates the IL11 gene, coding for interleukin 11, a pr
 ENSG00000159261.10, better known as CLDN14, is a gene encoding claudin 14, a membrane protein that enables the formation of tight junctions between cells. This gene is expressed in clusters 3, 4, 16 and 28. Disconcertingly, clusters 4 and 16 are up-regulated for this gene and HBD, the latter indicating the presence of cardiac muscles, which do not have tight junctions  \citep{Severs1985}. Nevertheless, the presence of this type of intercellular junction may well be present in the heart, since it contains various epithelial tissues, such as the endocardium.
 
 Finally, ENSG00000163435.15 corresponds to the ELF3 gene. This gene codes for E74 like ETS transcription factor 3, a transcription factor involved in the inflammatory response, up-regulation of transcription by RNA polymerase II. It's quite astonishing that this gene is particularly expressed in the heart, and what's more that it's among the 5 most present genes in the various clusters, since this gene shouldn't be expressed in the heart or that this expression is detectable. Indeed, it has been estimated that this gene is only detected in organs of epithelial origin, and it should be noted that the heart is of mesodermal origin. Nevertheless, this gene appears to be overexpressed in clusters 5, 11, 26 and 28.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final_analysis/SimilGenes}
 	\caption{Comparison of commun genes in the top 10 of all the clusters}
 	\label{fig:similGenes}
 \end{figure}
-
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final_analysis/SimilConsideringConf}
 	\caption{Comparison of commun genes in the top 10 of all the clusters, considering the confounder effect}
 	\label{fig:similGenesConf}
 \end{figure}
-
 In addition to the biological analysis of these genes, it is also interesting to consider the number of significant genes in common between each cluster. First of all, we can see the importance of confounding effects, with a large number of similarities disappearing completely or decreasing drastically. One might also expect to observe the same patterns as in Table 1, since these results are also driven by clinical variables, but several examples demonstrate that this is not the case. Cluster 0 shares 7 genes with cluster 28, not taking confounding effects into account, but the latter is not linked to any significant fold change, and therefore shows no particular pattern according to the variables. Cluster 0 also contains 5 genes in common with clusters 29, which also have no particular profile, 21 and 26, which are relatively similar to 0, 5 and 17, which have very few similar or inverse fold changes. On the other hand, it's not surprising to observe a genetic similarity between clusters 6 and 10 (Table 2), as they show negative fold changes for the weight variable, indicating profiles with low enough weight not to impact particular pathologies.
-
 \begin{table}[H]
-\begin{tabular}{c|cc}
-Cluster & \multicolumn{1}{c|}{Count non confounders} & Count confounders \\ \hline
-6 & 0 & 2 \\
-10 & 1 & 6 \\
-25 & 1 & 0 \\
-27 & 3 & 0 \\
-31 & 2 & 0
-\end{tabular}
-\caption{Number of significant pathways per cluster and according to the confounder's effect or not. The clusters with no significant results were not included.}
-\label{tab:sigPath}
+	\begin{tabularx}{\textwidth}{|X|X|X|}
+	\hline
+	Cluster & \multicolumn{1}{c|}{Count non confounders} & Count confounders \\ \hline
+	6 & 0 & 2 \\ \hline
+	10 & 1 & 6 \\ \hline
+	25 & 1 & 0 \\ \hline
+	27 & 3 & 0 \\ \hline
+	31 & 2 & 0 \\ \hline
+	\end{tabularx}
+	\caption{Number of significant pathways per cluster and according to the confounder's effect or not. The clusters with no significant results were not included.}
+	\label{tab:sigPath}
 \end{table}
-
 For this project, pathways are also studied and, as with genes, confounding effects have been considered. Without this kind of effect, 4 different pathways were detected among the 4 clusters presenting significant results: clusters 10, 25, 27 and 31. Among these pathways, it is interesting to note that the signaling by rho GTPases, miro GTPases and RHOBTB3 is present in every cluster. By considering the confounder's effect, the number of cluster presenting significant reactomes is largely decreased, only the clusters 6 and 10 display this kind of results. The pathway highlighted before is still present in these clusters, thus is studied in the following paragraphs. In addition to having this pathway in common, clusters 6 and 10 also both feature the metabolism of RNA pathway, which will also be described later. However, it is surprising to observe that some pathways become significant after considering the confounding effect, whereas throughout this report we have always observed a decrease in significant results after considering this effect.
-
-\begin{table*}[t]
+\begin{table*}[h]
 \footnotesize
 \makebox[\linewidth]{
 \begin{tabular}{|c |c |c |c| c | c| c|}
@@ -655,7 +622,6 @@ For this project, pathways are also studied and, as with genes, confounding effe
 \end{table*}
 
 \section*{Conclusion}
-
 This project involved a comprehensive examination of the relationships between clinical and technical variables in our sample data.
 Initially, we explored these variables and identified correlations between technical and clinical variables.
 We then analyzed the association between morphological clusters and sample variables, finding that these variables exhibited differential presence across clusters.
@@ -670,7 +636,6 @@ We also conducted a differential analysis of different gene sets, yielding simil
 
 Given these findings, we suggest further research to investigate the biological significance of these clusters through histological analysis.
 This approach would provide an alternative perspective to validate and enhance our understanding of the results obtained in this study.
-
 
 \bibliography{references}
 
