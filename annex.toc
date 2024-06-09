@@ -88,8 +88,8 @@
 \contentsline {subsection}{\numberline {3.21}Cluster 27 }{19}{subsection.3.21}%
 \contentsline {subsection}{\numberline {3.22}Cluster 28 }{19}{subsection.3.22}%
 \contentsline {subsection}{\numberline {3.23}Cluster 29 }{19}{subsection.3.23}%
-\contentsline {subsection}{\numberline {3.24}Cluster 3 }{19}{subsection.3.24}%
-\contentsline {subsection}{\numberline {3.25}Cluster 30 }{19}{subsection.3.25}%
+\contentsline {subsection}{\numberline {3.24}Cluster 3 }{20}{subsection.3.24}%
+\contentsline {subsection}{\numberline {3.25}Cluster 30 }{20}{subsection.3.25}%
 \contentsline {subsection}{\numberline {3.26}Cluster 31 }{20}{subsection.3.26}%
 \contentsline {subsection}{\numberline {3.27}Cluster 4 }{20}{subsection.3.27}%
 \contentsline {subsection}{\numberline {3.28}Cluster 5 }{20}{subsection.3.28}%
@@ -99,7 +99,7 @@
 \contentsline {subsection}{\numberline {3.32}Cluster 9 }{20}{subsection.3.32}%
 \contentsline {section}{\numberline {4}Q3.2 Top 10 up-regulated pathways with adjustement for confondant effect}{20}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Cluster 0 }{20}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Cluster 1 }{21}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.2}Cluster 1 }{20}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Cluster 2 }{21}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Cluster 3 }{21}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Cluster 4 }{21}{subsection.4.5}%
@@ -108,7 +108,7 @@
 \contentsline {subsection}{\numberline {4.8}Cluster 7 }{21}{subsection.4.8}%
 \contentsline {subsection}{\numberline {4.9}Cluster 8 }{21}{subsection.4.9}%
 \contentsline {subsection}{\numberline {4.10}Cluster 9 }{21}{subsection.4.10}%
-\contentsline {subsection}{\numberline {4.11}Cluster 10 }{22}{subsection.4.11}%
+\contentsline {subsection}{\numberline {4.11}Cluster 10 }{21}{subsection.4.11}%
 \contentsline {subsection}{\numberline {4.12}Cluster 11 }{22}{subsection.4.12}%
 \contentsline {subsection}{\numberline {4.13}Cluster 12 }{22}{subsection.4.13}%
 \contentsline {subsection}{\numberline {4.14}Cluster 13 }{22}{subsection.4.14}%
@@ -120,11 +120,11 @@
 \contentsline {subsection}{\numberline {4.20}Cluster 19 }{22}{subsection.4.20}%
 \contentsline {subsection}{\numberline {4.21}Cluster 20 }{22}{subsection.4.21}%
 \contentsline {subsection}{\numberline {4.22}Cluster 21 }{22}{subsection.4.22}%
-\contentsline {subsection}{\numberline {4.23}Cluster 22 }{23}{subsection.4.23}%
-\contentsline {subsection}{\numberline {4.24}Cluster 23 }{23}{subsection.4.24}%
-\contentsline {subsection}{\numberline {4.25}Cluster 24 }{23}{subsection.4.25}%
-\contentsline {subsection}{\numberline {4.26}Cluster 25 }{23}{subsection.4.26}%
-\contentsline {subsection}{\numberline {4.27}Cluster 26 }{23}{subsection.4.27}%
+\contentsline {subsection}{\numberline {4.23}Cluster 22 }{22}{subsection.4.23}%
+\contentsline {subsection}{\numberline {4.24}Cluster 23 }{22}{subsection.4.24}%
+\contentsline {subsection}{\numberline {4.25}Cluster 24 }{22}{subsection.4.25}%
+\contentsline {subsection}{\numberline {4.26}Cluster 25 }{22}{subsection.4.26}%
+\contentsline {subsection}{\numberline {4.27}Cluster 26 }{22}{subsection.4.27}%
 \contentsline {subsection}{\numberline {4.28}Cluster 27 }{23}{subsection.4.28}%
 \contentsline {subsection}{\numberline {4.29}Cluster 28 }{23}{subsection.4.29}%
 \contentsline {subsection}{\numberline {4.30}Cluster 29 }{23}{subsection.4.30}%
